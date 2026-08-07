@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Обфускатор HTML</title>
+  <style>
+    body { background: #0f0e13; color: #eee; font-family: monospace; padding: 2rem; }
+    textarea { width: 100%; height: 300px; background: #1e1e2f; color: #fff; border: 2px solid #facc15; border-radius: 12px; padding: 1rem; font-size: 14px; }
+    button { background: #facc15; color: #0f0e13; border: none; padding: 0.8rem 2rem; border-radius: 30px; font-weight: bold; cursor: pointer; margin: 1rem 0; }
+    button:hover { background: #fde047; }
+    .output { background: #1e1e2f; padding: 1rem; border-radius: 12px; border: 1px solid #333; white-space: pre-wrap; word-break: break-all; max-height: 400px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1 style="color:#facc15;">🛡️ Обфускатор HTML/JS</h1>
+  <p>Вставьте ваш HTML-код в поле ниже и нажмите «Обфусцировать».</p>
+  <textarea id="inputCode" placeholder="Вставьте сюда ваш HTML..."></textarea><br>
+  <button onclick="obfuscate()">🔒 Обфусцировать</button>
+  <button onclick="copyResult()">📋 Скопировать результат</button>
+  <h3>Результат (скопируйте и сохраните как .html):</h3>
+  <div id="output" class="output"></div>
+
+  <script>
+    function obfuscate() {
+      const input = document.getElementById('inputCode').value;
+      if (!input) { alert('Введите код!'); return; }
+
+      // Превращаем в строку с экранированием
+      const escaped = input.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+
+      // Генерируем обфусцированный скрипт
+      const obfuscated = `
+      <!DOCTYPE html>
+      <html>
+      <head><meta charset="UTF-8"><title>Игрострой</title></head>
+      <body>
+      <script>
+        (function(){
+          const encoded = \`${escaped}\`;
+          document.write(encoded);
+        })();
+      <\/script>
+      </body>
+      </html>
+      `;
+
+      document.getElementById('output').textContent = obfuscated;
+    }
+
+    function copyResult() {
+      const output = document.getElementById('output').textContent;
+      if (!output) { alert('Сначала обфусцируйте код.'); return; }
+      navigator.clipboard.writeText(output).then(() => {
+        alert('Результат скопирован в буфер обмена!');
+      }).catch(() => {
+        const range = document.createRange();
+        range.selectNode(document.getElementById('output'));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        alert('Результат скопирован!');
+      });
+    }
+  </script>
+</body>
+</html>
