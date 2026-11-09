@@ -6,7 +6,9 @@
 <title>Типография Екатеринбургской Епархии — Калькулятор печати</title>
 <style>
   :root{
-    --bg:#eef1f7; --card:#fff; --ink:#16202e; --muted:#6b7a90;
+    /* ИЗМЕНЕНО: Фон страницы теперь белый */
+    --bg:#ffffff; 
+    --card:#fff; --ink:#16202e; --muted:#6b7a90;
     --line:#e2e8f2; --accent:#2b5ce6; --price:#ff6b35; --ok:#1a7f37;
   }
   html{scroll-behavior:smooth;}
@@ -34,8 +36,10 @@
     .header-contacts{text-align:left;margin-top:10px}
   }
 
+  /* ИЗМЕНЕНО: Добавлена тонкая рамка, чтобы карточки выделялись на белом фоне */
   .card{background:var(--card);border-radius:16px;padding:22px;
-    box-shadow:0 6px 24px rgba(20,40,80,.08);margin-bottom:16px}
+    border: 1px solid var(--line);
+    box-shadow:0 4px 16px rgba(20,40,80,.04);margin-bottom:16px}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:560px){.grid{grid-template-columns:1fr}}
@@ -63,7 +67,6 @@
   .seg input:checked + span{background:var(--accent);color:#fff;border-color:var(--accent);
     box-shadow:0 4px 12px rgba(43,92,230,.25)}
   .seg input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
-  /* Стили для заблокированной кнопки */
   .seg input:disabled + span {opacity: 0.5; cursor: not-allowed; background: #eef1f7; box-shadow: none;}
 
   fieldset{border:none;padding:0;margin:18px 0 0}
@@ -80,7 +83,7 @@
     background:#fff8e6;border:1px solid #ffe0a3;color:#7a5a00}
   .hint.ok{background:#e7f7ec;border-color:#b7e4c7;color:var(--ok)}
 
-  .result{background:linear-gradient(135deg,#16202e,#243a5e);color:#fff}
+  .result{background:linear-gradient(135deg,#16202e,#243a5e);color:#fff;border:none;}
   .row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:14px;
     border-bottom:1px solid rgba(255,255,255,.09)}
   .row:last-of-type{border-bottom:none}
@@ -123,8 +126,10 @@
 
   .note{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5}
 
+  /* ИЗМЕНЕНО: Добавлена рамка для подвала */
   .footer{background:#fff;border-radius:16px;padding:20px 22px;margin-top:24px;
-    box-shadow:0 6px 24px rgba(20,40,80,.08);display:flex;justify-content:space-between;
+    border: 1px solid var(--line);
+    box-shadow:0 4px 16px rgba(20,40,80,.04);display:flex;justify-content:space-between;
     align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
@@ -172,7 +177,6 @@
       <div>
         <label>Тираж, шт</label>
         <input type="number" id="tirage" value="100" min="1" max="100000" step="1" inputmode="numeric">
-        <!-- Сюда будет выводиться подсказка про кратность 28 -->
         <div id="tirage-note" style="display:none; font-size:12px; color:var(--price); margin-top:6px; font-weight:600;"></div>
       </div>
     </div>
@@ -233,7 +237,6 @@
           <span data-fs-error="email"></span>
         </div>
 
-        <!-- Скрытые параметры расчёта -->
         <input type="hidden" name="print_type" id="h-printtype">
         <input type="hidden" name="product"    id="h-product">
         <input type="hidden" name="paper"      id="h-paper">
@@ -317,7 +320,6 @@
 <!-- ============ Логика калькулятора ============ -->
 <script>
 const PRODUCTS = {
-  // Добавили multiple: 28 (кратность) и onlyDigital: true (только цифра)
   vizitka: { name:'Визитки 90×50 мм',        area: 0.0045, multiple: 28, onlyDigital: true,
              offset:  { setup: 1200, price100: 400 },
              digital: { setup: 0,    price100: 600 } },
@@ -374,7 +376,7 @@ const LAM_PER_M2     = 250;
 const ROUND_PER_UNIT = 1.5;
 const FOLD_PER_UNIT  = 2.0;
 const RUSH_MARKUP    = 0.30;
-const MIN_ORDER      = 0; // Убрали минимальную сумму
+const MIN_ORDER      = 0;
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
 
@@ -406,7 +408,6 @@ function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, fold, r
   if (round) postSum += ROUND_PER_UNIT * fT * n;
   if (fold)  postSum += FOLD_PER_UNIT  * fT * n;
 
-  // Убрали проверку Math.max, теперь просто сумма
   let total = baseSum + lamSum + postSum; 
   const rushSum = rush ? total * RUSH_MARKUP : 0;
   total += rushSum;
@@ -440,7 +441,6 @@ function calc(){
   const prodKey = el.product.value;
   const p = PRODUCTS[prodKey];
   
-  // --- ЛОГИКА БЛОКИРОВКИ ОФСЕТА ДЛЯ ВИЗИТОК ---
   const offsetRadio = document.querySelector('input[name="printtype"][value="offset"]');
   const digitalRadio = document.querySelector('input[name="printtype"][value="digital"]');
   
@@ -451,7 +451,6 @@ function calc(){
     offsetRadio.disabled = false;
   }
 
-  // --- ЛОГИКА ОКРУГЛЕНИЯ ТИРАЖА ДО 28 ---
   let rawN = Math.round(+el.tirage.value || 1);
   let n = rawN;
 
@@ -494,7 +493,6 @@ function calc(){
      </div>
      <div class="perunit">${(cur.total / n).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
 
-  // Если это визитки, скрываем подсказку о выгоде офсета, так как офсет заблокирован
   if (p.onlyDigital) {
     el.hint.style.display = 'none';
   } else {
@@ -509,7 +507,6 @@ function calc(){
     }
   }
 
-  // Скрытые поля
   $('h-printtype').value = type === 'offset' ? 'Офсетная' : 'Цифровая';
   $('h-product').value   = p.name;
   $('h-paper').value     = PAPERS[paperKey].name;
