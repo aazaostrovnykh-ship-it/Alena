@@ -1,66 +1,248 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Обфускатор HTML</title>
-  <style>
-    body { background: #0f0e13; color: #eee; font-family: monospace; padding: 2rem; }
-    textarea { width: 100%; height: 300px; background: #1e1e2f; color: #fff; border: 2px solid #facc15; border-radius: 12px; padding: 1rem; font-size: 14px; }
-    button { background: #facc15; color: #0f0e13; border: none; padding: 0.8rem 2rem; border-radius: 30px; font-weight: bold; cursor: pointer; margin: 1rem 0; }
-    button:hover { background: #fde047; }
-    .output { background: #1e1e2f; padding: 1rem; border-radius: 12px; border: 1px solid #333; white-space: pre-wrap; word-break: break-all; max-height: 400px; overflow: auto; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Калькулятор полиграфии</title>
+<style>
+  :root{
+    --bg:#eef1f7; --card:#fff; --ink:#16202e; --muted:#6b7a90;
+    --line:#e2e8f2; --accent:#2b5ce6; --price:#ff6b35;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:32px 16px; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  .calc{max-width:760px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 4px}
+  .sub{margin:0 0 22px;color:var(--muted);font-size:14px}
+
+  .card{background:var(--card);border-radius:16px;padding:22px;
+        box-shadow:0 6px 24px rgba(20,40,80,.08);margin-bottom:16px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}}
+
+  label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+  select,input[type=number]{
+    width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;
+    font-size:15px;color:var(--ink);background:#fbfcfe;outline:none;transition:.15s;
+    font-family:inherit;
+  }
+  select:focus,input:focus{border-color:var(--accent);background:#fff;
+    box-shadow:0 0 0 3px rgba(43,92,230,.12)}
+
+  fieldset{border:none;padding:0;margin:18px 0 0}
+  fieldset legend{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;padding:0}
+  .chks{display:flex;flex-wrap:wrap;gap:10px}
+  .chk{display:flex;align-items:center;gap:7px;background:#f6f8fc;border:1.5px solid var(--line);
+       padding:9px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;
+       color:var(--ink);margin:0;transition:.15s}
+  .chk:hover{border-color:#c9d6ec}
+  .chk input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer}
+  .chk.on{background:#eaf0ff;border-color:var(--accent)}
+
+  .result{background:linear-gradient(135deg,#16202e,#243a5e);color:#fff}
+  .row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;
+       font-size:14px;border-bottom:1px solid rgba(255,255,255,.09)}
+  .row:last-of-type{border-bottom:none}
+  .row span:first-child{color:#a8b8d4}
+  .total{display:flex;justify-content:space-between;align-items:baseline;
+         margin-top:16px;padding-top:16px;border-top:1.5px solid rgba(255,255,255,.18)}
+  .total .lbl{font-size:14px;color:#a8b8d4}
+  .total .val{font-size:34px;font-weight:800;color:var(--price);letter-spacing:-.5px}
+  .perunit{text-align:right;font-size:13px;color:#a8b8d4;margin-top:4px}
+  .note{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5}
+</style>
 </head>
 <body>
-  <h1 style="color:#facc15;">🛡️ Обфускатор HTML/JS</h1>
-  <p>Вставьте ваш HTML-код в поле ниже и нажмите «Обфусцировать».</p>
-  <textarea id="inputCode" placeholder="Вставьте сюда ваш HTML..."></textarea><br>
-  <button onclick="obfuscate()">🔒 Обфусцировать</button>
-  <button onclick="copyResult()">📋 Скопировать результат</button>
-  <h3>Результат (скопируйте и сохраните как .html):</h3>
-  <div id="output" class="output"></div>
 
-  <script>
-    function obfuscate() {
-      const input = document.getElementById('inputCode').value;
-      if (!input) { alert('Введите код!'); return; }
+<div class="calc">
+  <h1>Калькулятор печати</h1>
+  <p class="sub">Выберите параметры — стоимость посчитается автоматически</p>
 
-      // Превращаем в строку с экранированием
-      const escaped = input.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+  <div class="card">
+    <div class="grid">
+      <div><label>Продукция</label><select id="product"></select></div>
+      <div><label>Бумага</label><select id="paper"></select></div>
+      <div><label>Красочность</label><select id="print"></select></div>
+      <div><label>Тираж, шт</label>
+        <input type="number" id="tirage" value="100" min="1" max="100000" step="1">
+      </div>
+    </div>
 
-      // Генерируем обфусцированный скрипт
-      const obfuscated = `
-      <!DOCTYPE html>
-      <html>
-      <head><meta charset="UTF-8"><title>Игрострой</title></head>
-      <body>
-      <script>
-        (function(){
-          const encoded = \`${escaped}\`;
-          document.write(encoded);
-        })();
-      <\/script>
-      </body>
-      </html>
-      `;
+    <fieldset>
+      <legend>Дополнительно</legend>
+      <div class="grid">
+        <div><label>Ламинация</label><select id="lam"></select></div>
+        <div class="chks" style="align-items:flex-end">
+          <label class="chk"><input type="checkbox" id="round"> Скругление углов</label>
+          <label class="chk"><input type="checkbox" id="fold"> Биговка / фальц</label>
+          <label class="chk"><input type="checkbox" id="rush"> Срочно</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
 
-      document.getElementById('output').textContent = obfuscated;
-    }
+  <div class="card result" id="result"></div>
 
-    function copyResult() {
-      const output = document.getElementById('output').textContent;
-      if (!output) { alert('Сначала обфусцируйте код.'); return; }
-      navigator.clipboard.writeText(output).then(() => {
-        alert('Результат скопирован в буфер обмена!');
-      }).catch(() => {
-        const range = document.createRange();
-        range.selectNode(document.getElementById('output'));
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        document.execCommand('copy');
-        alert('Результат скопирован!');
-      });
-    }
-  </script>
+  <p class="note">
+    Расчёт ориентировочный. Итоговая стоимость зависит от макета, цветопробы и постпечатной обработки.
+  </p>
+</div>
+
+<script>
+/* ============================================================
+   ЦЕНЫ — меняйте под свой прайс
+   base  — стоимость 100 шт при 130 г/м² мелованной, 4+4
+   area  — площадь изделия в м² (для ламинации)
+   ============================================================ */
+const PRODUCTS = {
+  vizitka: { name:'Визитки 90×50 мм',        base: 900,  area: 0.0045 },
+  a6:      { name:'Листовки A6 (105×148)',   base: 1100, area: 0.0155 },
+  a5:      { name:'Листовки A5 (148×210)',   base: 1600, area: 0.0311 },
+  a4:      { name:'Листовки A4 (210×297)',   base: 2800, area: 0.0624 },
+  a3:      { name:'Листовки A3 (297×420)',   base: 4600, area: 0.1247 },
+  evro:    { name:'Евробуклет A4 (210×297)', base: 4200, area: 0.0624 },
+  buklet:  { name:'Буклет A5 (148×210)',     base: 3000, area: 0.0311 },
+};
+
+// f — коэффициент к цене бумаги
+const PAPERS = {
+  offset80:  { name:'Офсетная 80 г/м²',           f: 0.80 },
+  offset120: { name:'Офсетная 120 г/м²',          f: 0.88 },
+  matte130:  { name:'Мелованная мат. 130 г/м²',   f: 1.00 },
+  matte170:  { name:'Мелованная мат. 170 г/м²',   f: 1.12 },
+  matte250:  { name:'Мелованная мат. 250 г/м²',   f: 1.30 },
+  matte300:  { name:'Мелованная мат. 300 г/м²',   f: 1.42 },
+  gloss130:  { name:'Мелованная глянц. 130 г/м²', f: 1.04 },
+  gloss250:  { name:'Мелованная глянц. 250 г/м²', f: 1.34 },
+  designer:  { name:'Дизайнерская',               f: 1.90 },
+};
+
+const PRINTS = {
+  '4+4': { name:'Цветная 4+4 (двусторонняя)', f: 1.00 },
+  '4+0': { name:'Цветная 4+0 (односторонняя)',f: 0.72 },
+  '1+1': { name:'Ч/б 1+1',                    f: 0.55 },
+  '1+0': { name:'Ч/б 1+0',                    f: 0.42 },
+};
+
+const LAM = {
+  none:  { name:'Без ламинации', f: 0 },
+  matte: { name:'Матовая',       f: 1.00 },
+  gloss: { name:'Глянцевая',     f: 1.00 },
+  soft:  { name:'Софт-тач',      f: 1.45 },
+};
+
+// Множитель цены за штуку в зависимости от тиража
+const TIERS = [[100,1.00],[250,0.72],[500,0.55],[1000,0.42],
+               [2000,0.33],[5000,0.25],[10000,0.20]];
+
+const LAM_PER_M2     = 250;  // ₽/м² ламинации
+const ROUND_PER_UNIT = 1.5;  // ₽/шт скругление
+const FOLD_PER_UNIT  = 2.0;  // ₽/шт биговка
+const RUSH_MARKUP    = 0.30; // +30% за срочность
+const MIN_ORDER      = 600;  // минимальный заказ, ₽
+
+/* ---------- утилиты ---------- */
+const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
+
+function tirageFactor(n){
+  if (n <= TIERS[0][0]) return TIERS[0][1];
+  for (let i = 1; i < TIERS.length; i++){
+    const [t1,f1] = TIERS[i-1], [t2,f2] = TIERS[i];
+    if (n <= t2) return f1 + (f2 - f1) * (n - t1) / (t2 - t1);
+  }
+  const [t1,f1] = TIERS[TIERS.length-2], [t2,f2] = TIERS[TIERS.length-1];
+  const k = (f2 - f1) / (t2 - t1);
+  return Math.max(0.10, f2 + k * (n - t2));
+}
+
+function fillSelect(el, obj, sel){
+  el.innerHTML = Object.entries(obj)
+    .map(([k,v]) => `<option value="${k}"${k===sel?' selected':''}>${v.name}</option>`)
+    .join('');
+}
+
+/* ---------- инициализация ---------- */
+const $ = id => document.getElementById(id);
+const el = {
+  product:$('product'), paper:$('paper'), print:$('print'),
+  tirage:$('tirage'), lam:$('lam'),
+  round:$('round'), fold:$('fold'), rush:$('rush'),
+  result:$('result')
+};
+
+fillSelect(el.product, PRODUCTS, 'vizitka');
+fillSelect(el.paper,   PAPERS,   'matte130');
+fillSelect(el.print,   PRINTS,   '4+4');
+fillSelect(el.lam,     LAM,      'none');
+
+/* ---------- расчёт ---------- */
+function calc(){
+  const p     = PRODUCTS[el.product.value];
+  const n     = Math.max(1, Math.min(100000, Math.round(+el.tirage.value || 1)));
+  const fT    = tirageFactor(n);
+  const paperF = PAPERS[el.paper.value].f;
+  const printF = PRINTS[el.print.value].f;
+
+  // база: печать + бумага
+  const unitBase = (p.base / 100) * fT * paperF * printF;
+  const baseSum  = unitBase * n;
+
+  // ламинация
+  const lamSum = LAM[el.lam.value].f
+    ? p.area * LAM_PER_M2 * fT * n * LAM[el.lam.value].f
+    : 0;
+
+  // постобработка
+  let postSum = 0;
+  if (el.round.checked) postSum += ROUND_PER_UNIT * fT * n;
+  if (el.fold.checked)  postSum += FOLD_PER_UNIT  * fT * n;
+
+  // итог
+  let total = Math.max(baseSum + lamSum + postSum, MIN_ORDER);
+  const rushSum = el.rush.checked ? total * RUSH_MARKUP : 0;
+  total += rushSum;
+
+  total = Math.round(total / 10) * 10;
+  const perUnit = total / n;
+
+  // вывод
+  const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
+
+  el.result.innerHTML =
+    row('Продукция',       p.name) +
+    row('Тираж',           fmt(n) + ' шт') +
+    row('Печать и бумага', fmt(baseSum) + ' ₽') +
+    (lamSum  ? row('Ламинация',       fmt(lamSum)  + ' ₽') : '') +
+    (postSum ? row('Постобработка',   fmt(postSum) + ' ₽') : '') +
+    (rushSum ? row('Срочность (+30%)',fmt(rushSum) + ' ₽') : '') +
+    `<div class="total">
+       <span class="lbl">Итого</span>
+       <span class="val">${fmt(total)} ₽</span>
+     </div>
+     <div class="perunit">${perUnit.toFixed(2).replace('.', ',')} ₽ / шт</div>`;
+}
+
+/* ---------- события ---------- */
+['change','input'].forEach(ev => {
+  el.product.addEventListener(ev, calc);
+  el.paper.addEventListener(ev, calc);
+  el.print.addEventListener(ev, calc);
+  el.lam.addEventListener(ev, calc);
+  el.tirage.addEventListener(ev, calc);
+});
+[el.round, el.fold, el.rush].forEach(c => c.addEventListener('change', calc));
+
+// подсветка выбранных чекбоксов
+document.querySelectorAll('.chk input').forEach(i => {
+  const sync = () => i.closest('.chk').classList.toggle('on', i.checked);
+  i.addEventListener('change', sync); sync();
+});
+
+calc();
+</script>
 </body>
 </html>
