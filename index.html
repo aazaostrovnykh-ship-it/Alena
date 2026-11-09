@@ -9,6 +9,9 @@
     --bg:#eef1f7; --card:#fff; --ink:#16202e; --muted:#6b7a90;
     --line:#e2e8f2; --accent:#2b5ce6; --price:#ff6b35; --ok:#1a7f37;
   }
+  /* Плавная прокрутка для всей страницы */
+  html{scroll-behavior:smooth;}
+  
   *{box-sizing:border-box}
   body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -87,6 +90,55 @@
   .total .val{font-size:34px;font-weight:800;color:var(--price);letter-spacing:-.5px}
   .perunit{text-align:right;font-size:13px;color:#a8b8d4;margin-top:4px}
 
+  /* ======== НОВЫЙ БЛОК: СТРЕЛОЧКА ВНИЗ ======== */
+  .scroll-down-banner {
+    text-align: center;
+    padding: 16px 20px;
+    background: #fff5e6;
+    border: 2px dashed #ffb84d;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    transition: transform 0.3s;
+  }
+  .scroll-down-banner:hover {
+    transform: scale(1.01);
+    background: #ffedd1;
+  }
+  .scroll-down-banner p {
+    margin: 0 0 12px;
+    font-weight: 600;
+    color: #7a5a00;
+    font-size: 16px;
+  }
+  .scroll-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--price);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 15px;
+    transition: background 0.2s;
+    box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+  }
+  .scroll-btn:hover {
+    background: #e55b2b;
+  }
+  /* Анимация прыгающей стрелки */
+  .arrow-down {
+    animation: bounce 1.5s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+  /* Отступ при прокрутке к форме, чтобы шапка не перекрывала */
+  #custom-order { scroll-margin-top: 20px; }
+  /* ============================================= */
+
   h2{font-size:18px;margin:0 0 4px}
   .sub-block{margin:0 0 16px;color:var(--muted);font-size:14px}
   
@@ -111,11 +163,9 @@
   .footer a:hover{color:var(--accent)}
   @media(max-width:560px){.footer{flex-direction:column;align-items:flex-start}}
 
-  /* Сетка для двух форм внизу (Смета и Индивидуальный заказ) */
   .forms-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
   @media(max-width:780px){.forms-grid{grid-template-columns:1fr}}
   
-  /* Стили для блока индивидуального заказа */
   .custom-order-card{border-top:4px solid var(--price)}
 </style>
 </head>
@@ -173,6 +223,19 @@
 
   <div class="card result" id="result"></div>
 
+  <!-- ================= НАВИГАЦИЯ ВНИЗ ================= -->
+  <div class="scroll-down-banner">
+    <p>У вас книга, пакет или другой нестандартный тираж?</p>
+    <a href="#custom-order" class="scroll-btn">
+      Вам ниже
+      <!-- Анимированная стрелочка вниз (SVG) -->
+      <svg class="arrow-down" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <polyline points="19 12 12 19 5 12"></polyline>
+      </svg>
+    </a>
+  </div>
+
   <!-- ================= ДВЕ ФОРМЫ ВНИЗУ ================= -->
   <div class="forms-grid">
     
@@ -182,7 +245,6 @@
       <p class="sub-block">Отправим точную смету на почту и свяжемся с вами</p>
 
       <form id="calc-form" action="https://formspree.io/f/xzeeleoo" method="POST">
-        <!-- Скрытое поле, чтобы вы понимали, откуда пришла заявка -->
         <input type="hidden" name="form_type" value="Расчет из калькулятора">
 
         <div class="field">
@@ -219,13 +281,13 @@
       </form>
     </div>
 
-    <!-- Форма 2: Индивидуальный заказ (третий столбик) -->
-    <div class="card custom-order-card">
+    <!-- Форма 2: Индивидуальный заказ -->
+    <!-- Добавлен id="custom-order" для работы ссылки -->
+    <div class="card custom-order-card" id="custom-order">
       <h2>Индивидуальный заказ</h2>
       <p class="sub-block">Книги, пакеты, коробки, сувениры и другие нестандартные задачи</p>
 
       <form id="custom-form" action="https://formspree.io/f/xzeeleoo" method="POST">
-        <!-- Скрытое поле, чтобы вы понимали, откуда пришла заявка -->
         <input type="hidden" name="form_type" value="Индивидуальный заказ (книга, пакет и т.д.)">
 
         <div class="field">
@@ -278,7 +340,6 @@
   window.formspree = window.formspree || function () {
     (formspree.q = formspree.q || []).push(arguments);
   };
-  // Инициализируем сразу ДВЕ формы
   formspree('initForm', { formElement: '#calc-form', formId: 'xzeeleoo' });
   formspree('initForm', { formElement: '#custom-form', formId: 'xzeeleoo' });
 </script>
