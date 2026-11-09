@@ -366,11 +366,12 @@ const PAPERS = {
   designer:  { name:'Дизайнерская',               f: 1.90 },
 };
 
+/* ИЗМЕНЕНО: Базовая цена (100/60) — это 4+0 (коэфф. 1.0). Двусторонняя (4+4) — это +20% (коэфф. 1.2) */
 const PRINTS = {
-  '4+4': { name:'Цветная 4+4', f: 1.00 },
-  '4+0': { name:'Цветная 4+0', f: 0.72 },
-  '1+1': { name:'Ч/б 1+1',     f: 0.55 },
-  '1+0': { name:'Ч/б 1+0',     f: 0.42 },
+  '4+0': { name:'Цветная 4+0 (односторонняя)', f: 1.00 },
+  '4+4': { name:'Цветная 4+4 (двусторонняя)',  f: 1.20 },
+  '1+0': { name:'Ч/б 1+0 (односторонняя)',     f: 0.50 },
+  '1+1': { name:'Ч/б 1+1 (двусторонняя)',      f: 0.60 },
 };
 
 /* Двусторонняя ламинация (коэффициент 1.8) */
@@ -464,7 +465,7 @@ function fillSelect(sel, obj, val){
 
 fillSelect(el.product, PRODUCTS, 'a6'); 
 fillSelect(el.paper,   PAPERS,   'matte130');
-fillSelect(el.print,   PRINTS,   '4+4');
+fillSelect(el.print,   PRINTS,   '4+0'); // По умолчанию ставим одностороннюю
 fillSelect(el.lam,     LAM,      'none');
 
 const getPrintType = () =>
@@ -490,7 +491,6 @@ function calc(){
   const printKey = el.print.value;
   const lamKey   = el.lam.value;
   
-  /* Считываем количество биговок */
   const r = el.round.checked, foldCount = parseInt(el.fold.value) || 0, ru = el.rush.checked;
 
   let rawN = Math.round(+el.tirage.value || 1);
