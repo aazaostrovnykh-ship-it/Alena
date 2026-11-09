@@ -1,2 +1,2 @@
-# obsifikator
-Обсификатор
+# calculator
+Калькулятор
