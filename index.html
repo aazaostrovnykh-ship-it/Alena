@@ -31,9 +31,8 @@
   .brand-left{display:flex;align-items:center;gap:18px}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
   
-  /* Название цветом из логотипа */
-  .brand h1{font-size:22px;margin:0 0 3px;line-height:1.15;color:var(--logo-dark);}
-  .brand .sub{margin:0;color:var(--muted);font-size:13px}
+  /* Название калькулятора цветом из логотипа */
+  .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--logo-dark); font-weight: 700;}
   
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
   .header-contacts a{color:var(--logo-dark);text-decoration:none;font-weight:600;transition:.15s}
@@ -42,7 +41,7 @@
 
   @media(max-width:780px){
     .brand{flex-direction:column;align-items:flex-start}
-    .brand img{height:48px} .brand h1{font-size:18px}
+    .brand img{height:48px} .brand h1{font-size:20px}
     .header-contacts{text-align:left;margin-top:10px}
   }
 
@@ -161,13 +160,12 @@
 
 <div class="calc">
 
-  <!-- Шапка -->
+  <!-- Шапка (ИЗМЕНЕНО: убрали дубль названия) -->
   <header class="brand">
     <div class="brand-left">
       <img src="logo.png" alt="Типография Екатеринбургской Епархии" onerror="this.style.display='none'">
       <div>
-        <h1>Типография Екатеринбургской Епархии</h1>
-        <p class="sub">Калькулятор стоимости полиграфии</p>
+        <h1>Калькулятор стоимости полиграфии</h1>
       </div>
     </div>
     
