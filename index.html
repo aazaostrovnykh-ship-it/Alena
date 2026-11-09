@@ -6,17 +6,21 @@
 <title>Типография Екатеринбургской Епархии</title>
 <style>
   :root{
-    /* ОБНОВЛЕННЫЕ ЦВЕТА ПОД ЛОГОТИП */
-    --angel-blue: #6EA6D8; /* Яркий голубой (одеяние) */
-    --logo-dark: #004A99;  /* Насыщенный синий (буквы) */
+    /* ЯГОДНЫЙ И ГОЛУБОЙ ЦВЕТА ИЗ ЛОГОТИПА */
+    --berry: #8B1C42;       /* Насыщенный ягодный (малиново-бордовый) */
+    --berry-light: #FCF2F5; /* Нежный розовый фон для карточек */
+    --angel-blue: #6EA6D8;  /* Нежно-голубой из одеяния */
     
-    --bg: #ffffff;         /* Фон страницы белый */
-    --card: var(--angel-blue); /* Фон блоков */
-    --ink: #16202e;        /* Темный текст */
-    --muted: #4a5f74;      /* Второстепенный текст */
-    --line: #9dc1e3;       /* Рамки элементов */
-    --accent: var(--logo-dark);
-    --price: #ff6b35;      /* Оранжевый для цены */
+    --bg: #ffffff;          /* Фон страницы белый */
+    --card: var(--berry-light); 
+    --ink: #1a1a1a;         /* Темный текст */
+    --muted: #666666;       /* Второстепенный текст */
+    --line: #e5ccd5;        /* Рамки */
+    --accent: var(--berry);
+    
+    /* ИЗМЕНЕНО: Оранжевый заменен на нежно-голубой */
+    --price: var(--angel-blue); 
+    
     --ok: #1a7f37;
   }
   html{scroll-behavior:smooth;}
@@ -31,11 +35,11 @@
   .brand-left{display:flex;align-items:center;gap:18px}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
   
-  .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--logo-dark); font-weight: 800;}
+  .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--berry); font-weight: 800;}
   
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
-  .header-contacts a{color:var(--logo-dark);text-decoration:none;font-weight:700;transition:.15s}
-  .header-contacts a:hover{color:var(--price)}
+  .header-contacts a{color:var(--berry);text-decoration:none;font-weight:700;transition:.15s}
+  .header-contacts a:hover{color:var(--angel-blue)}
   .header-contacts .addr{color:var(--muted);font-size:13px;margin-top:4px; font-weight: 500;}
 
   @media(max-width:780px){
@@ -46,22 +50,22 @@
 
   /* Блоки */
   .card{background:var(--card);border-radius:16px;padding:22px;
-    box-shadow:0 6px 24px rgba(0,74,153,.15);margin-bottom:16px}
+    box-shadow:0 6px 24px rgba(139,28,66,.08);margin-bottom:16px; border: 1px solid rgba(139,28,66,0.05);}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:560px){.grid{grid-template-columns:1fr}}
 
-  label{display:block;font-size:13px;font-weight:700;color:var(--logo-dark);margin-bottom:6px}
+  label{display:block;font-size:13px;font-weight:700;color:var(--berry);margin-bottom:6px}
   
   /* Поля ввода */
   select,input[type=number],input[type=text],input[type=email],input[type=tel],textarea{
     width:100%;padding:11px 12px;border:1.5px solid transparent;border-radius:10px;
     font-size:15px;color:var(--ink);background:#ffffff;outline:none;
-    font-family:inherit;transition:.15s;box-shadow:0 2px 6px rgba(0,0,0,0.08);
+    font-family:inherit;transition:.15s;box-shadow:0 2px 6px rgba(0,0,0,0.04);
   }
   textarea{resize:vertical}
-  select:focus,input:focus,textarea:focus{border-color:var(--logo-dark);
-    box-shadow:0 0 0 3px rgba(0,74,153,.2)}
+  select:focus,input:focus,textarea:focus{border-color:var(--berry);
+    box-shadow:0 0 0 3px rgba(139,28,66,.15)}
   
   .field{margin-bottom:14px}
   [data-fs-error]{display:block;color:#d33;font-size:12px;margin-top:4px;font-weight:600}
@@ -71,25 +75,25 @@
   .segmented{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
   .seg{position:relative;margin:0}
   .seg input{position:absolute;opacity:0;pointer-events:none}
-  .seg span{display:block;text-align:center;padding:13px 12px;border:1.5px solid rgba(255,255,255,0.4);
-    border-radius:10px;cursor:pointer;font-weight:700;color:var(--logo-dark);
+  .seg span{display:block;text-align:center;padding:13px 12px;border:1.5px solid rgba(139,28,66,0.15);
+    border-radius:10px;cursor:pointer;font-weight:700;color:var(--berry);
     background:rgba(255,255,255,0.6);transition:.15s;font-size:15px}
-  .seg input:checked + span{background:var(--logo-dark);color:#fff;border-color:var(--logo-dark);
-    box-shadow:0 4px 12px rgba(0,74,153,.3)}
-  .seg input:focus-visible + span{outline:2px solid var(--logo-dark);outline-offset:2px}
+  .seg input:checked + span{background:var(--berry);color:#fff;border-color:var(--berry);
+    box-shadow:0 4px 12px rgba(139,28,66,.25)}
+  .seg input:focus-visible + span{outline:2px solid var(--berry);outline-offset:2px}
   .seg input:disabled + span {opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,0.3); box-shadow: none;}
 
   fieldset{border:none;padding:0;margin:18px 0 0}
-  fieldset legend{font-size:13px;font-weight:700;color:var(--logo-dark);margin-bottom:10px;padding:0}
+  fieldset legend{font-size:13px;font-weight:700;color:var(--berry);margin-bottom:10px;padding:0}
   .chks{display:flex;flex-wrap:wrap;gap:10px}
   
   /* Чекбоксы */
   .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.6);
     border:1.5px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;
-    font-size:14px;font-weight:700;color:var(--logo-dark);margin:0;transition:.15s}
-  .chk:hover{background:rgba(255,255,255,0.8)}
-  .chk input{accent-color:var(--logo-dark);width:16px;height:16px;cursor:pointer}
-  .chk.on{background:#fff;border-color:var(--logo-dark);box-shadow:0 2px 6px rgba(0,0,0,0.05)}
+    font-size:14px;font-weight:700;color:var(--berry);margin:0;transition:.15s}
+  .chk:hover{background:rgba(255,255,255,0.9)}
+  .chk input{accent-color:var(--berry);width:16px;height:16px;cursor:pointer}
+  .chk.on{background:#fff;border-color:var(--berry);box-shadow:0 2px 6px rgba(0,0,0,0.05)}
 
   .hint{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.45;
     background:#fff8e6;border:1px solid #ffe0a3;color:#7a5a00;font-weight:600}
@@ -98,9 +102,9 @@
   /* Результат */
   .result{
     background: #ffffff; 
-    color: var(--logo-dark); 
+    color: var(--berry); 
     border: 2px solid var(--angel-blue);
-    box-shadow: 0 8px 24px rgba(0,74,153,.08);
+    box-shadow: 0 8px 24px rgba(139,28,66,.08);
   }
   .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;
     border-bottom:1px solid var(--line)}
@@ -110,34 +114,43 @@
   
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;
     padding-top:20px;border-top:2px solid var(--angel-blue)}
-  .total .lbl{font-size:16px;color:var(--logo-dark); font-weight: 800;}
+  .total .lbl{font-size:16px;color:var(--berry); font-weight: 800;}
+  /* ИЗМЕНЕНО: Цифра цены теперь голубая */
   .total .val{font-size:38px;font-weight:800;color:var(--price);letter-spacing:-.5px}
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 600;}
 
-  /* Баннер */
+  /* Баннер со стрелочкой */
   .scroll-down-banner {
-    text-align: center; padding: 16px 20px; background: #fff5e6;
-    border: 2px dashed #ffb84d; border-radius: 16px; margin-bottom: 24px; transition: transform 0.3s;
+    text-align: center; padding: 16px 20px; background: #f0f7fc; /* Нежно-голубой фон */
+    border: 2px dashed var(--price); /* Голубая рамка */
+    border-radius: 16px; margin-bottom: 24px; transition: transform 0.3s;
   }
-  .scroll-down-banner:hover { transform: scale(1.01); background: #ffedd1; }
-  .scroll-down-banner p { margin: 0 0 12px; font-weight: 700; color: #7a5a00; font-size: 16px; }
+  .scroll-down-banner:hover { transform: scale(1.01); background: #e1f0fa; }
+  .scroll-down-banner p { margin: 0 0 12px; font-weight: 700; color: var(--berry); font-size: 16px; }
+  
+  /* Кнопка "Вам ниже" */
   .scroll-btn {
     display: inline-flex; align-items: center; gap: 8px; background: var(--price); color: #fff;
     text-decoration: none; padding: 10px 24px; border-radius: 30px; font-weight: 800; font-size: 15px;
-    transition: background 0.2s; box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+    transition: background 0.2s; box-shadow: 0 4px 12px rgba(110,166,216,0.4);
   }
-  .scroll-btn:hover { background: #e55b2b; }
+  .scroll-btn:hover { background: #4a8cc7; } /* Темнее при наведении */
+  
   .arrow-down { animation: bounce 1.5s infinite; }
   @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
   #custom-order { scroll-margin-top: 20px; }
 
-  h2{font-size:18px;margin:0 0 4px;color:var(--logo-dark); font-weight: 800;}
-  .sub-block{margin:0 0 16px;color:var(--logo-dark);font-size:14px;opacity:0.9; font-weight: 500;}
+  h2{font-size:18px;margin:0 0 4px;color:var(--berry); font-weight: 800;}
+  .sub-block{margin:0 0 16px;color:var(--muted);font-size:14px;font-weight: 500;}
   
-  .btn-submit{width:100%;margin-top:8px;padding:14px;background:var(--logo-dark);color:#fff;
+  .btn-submit{width:100%;margin-top:8px;padding:14px;background:var(--berry);color:#fff;
     border:none;border-radius:10px;font-size:16px;font-weight:800;cursor:pointer;
-    font-family:inherit;transition:.15s;box-shadow:0 4px 12px rgba(0,74,153,.2);}
-  .btn-submit:hover{background:#003875;}
+    font-family:inherit;transition:.15s;box-shadow:0 4px 12px rgba(139,28,66,.2);}
+  .btn-submit:hover{background:#6c1230;}
+  
+  /* Кнопка "Обсудить заказ" (в голубом цвете) */
+  .btn-submit.custom-btn { background: var(--price); box-shadow: 0 4px 12px rgba(110,166,216,.3); }
+  .btn-submit.custom-btn:hover { background: #4a8cc7; }
   .btn-submit:disabled{opacity:.6;cursor:not-allowed}
 
   [data-fs-success]{background:#fff;color:var(--ok);padding:12px 14px;border-radius:10px;
@@ -147,17 +160,20 @@
   .note{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5; font-weight: 500;}
 
   /* Подвал */
-  .footer{background:var(--angel-blue);border-radius:16px;padding:20px 22px;margin-top:24px;
-    box-shadow:0 6px 24px rgba(0,74,153,.15);display:flex;justify-content:space-between;
-    align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink)}
+  .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:24px;
+    box-shadow:0 6px 24px rgba(139,28,66,.08);display:flex;justify-content:space-between;
+    align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);
+    border: 1px solid rgba(139,28,66,0.1);}
   .footer-col{display:flex;flex-direction:column;gap:6px}
-  .footer-col strong{font-size:13px;color:var(--logo-dark);font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-  .footer a{color:var(--logo-dark);text-decoration:none;font-weight:800;font-size:16px;transition:.15s}
+  .footer-col strong{font-size:13px;color:var(--berry);font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+  .footer a{color:var(--berry);text-decoration:none;font-weight:800;font-size:16px;transition:.15s}
   .footer a:hover{color:var(--price)}
   @media(max-width:560px){.footer{flex-direction:column;align-items:flex-start}}
 
   .forms-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
   @media(max-width:780px){.forms-grid{grid-template-columns:1fr}}
+  
+  /* ИЗМЕНЕНО: Рамка индивидуального заказа стала голубой */
   .custom-order-card{border-top:4px solid var(--price)}
 </style>
 </head>
@@ -193,7 +209,7 @@
       <div>
         <label>Тираж, шт</label>
         <input type="number" id="tirage" value="100" min="1" max="100000" step="1" inputmode="numeric">
-        <div id="tirage-note" style="display:none; font-size:12px; color:var(--logo-dark); background:#fff; padding:6px 10px; border-radius:6px; margin-top:6px; font-weight:700;"></div>
+        <div id="tirage-note" style="display:none; font-size:12px; color:var(--berry); background:#fff; padding:6px 10px; border-radius:6px; margin-top:6px; font-weight:700;"></div>
       </div>
     </div>
 
@@ -289,7 +305,8 @@
           <span data-fs-error="order_description"></span>
         </div>
 
-        <button type="submit" class="btn-submit" data-fs-submit-btn style="background:var(--price);">Обсудить заказ</button>
+        <!-- ИЗМЕНЕНО: Добавлен класс custom-btn, чтобы кнопка стала голубой -->
+        <button type="submit" class="btn-submit custom-btn" data-fs-submit-btn>Обсудить заказ</button>
         <div data-fs-success></div>
         <div class="form-errors" data-fs-error></div>
       </form>
@@ -308,7 +325,7 @@
     </div>
     <div class="footer-col">
       <strong>Приехать</strong>
-      <span style="font-size:15px; font-weight:800; color:var(--logo-dark);">г. Екатеринбург, ул. Репина, 6а</span>
+      <span style="font-size:15px; font-weight:800; color:var(--berry);">г. Екатеринбург, ул. Репина, 6а</span>
     </div>
   </footer>
 
