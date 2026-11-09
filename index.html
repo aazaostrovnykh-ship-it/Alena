@@ -3,27 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Типография Екатеринбургской Епархии</title>
+<title>Типография Екатеринбургской Епархии — Расчет стоимости полиграфии</title>
+<meta name="description" content="Типография Екатеринбургской Епархии в Екатеринбурге. Оперативная цифровая и офсетная печать: визитки, листовки, буклеты, книги. Рассчитайте стоимость онлайн и отправьте заявку на изготовление!">
+<meta name="keywords" content="типография, Екатеринбург, печать визиток, офсетная печать, цифровая печать, полиграфия, типография епархии, расчет стоимости">
 <style>
   :root{
-    --berry: #8B1C42;       /* Ягодный */
+    /* ЯГОДНЫЙ И ГОЛУБОЙ ЦВЕТА ИЗ ЛОГОТИПА */
+    --berry: #8B1C42;       /* Насыщенный ягодный */
     --berry-light: #FCF2F5; /* Нежный розовый фон */
     --angel-blue: #6EA6D8;  /* Нежно-голубой */
     
-    --bg: #ffffff;          
+    --bg: #ffffff;          /* Белый фон */
     --card: var(--berry-light); 
-    --ink: #1a1a1a;         
-    --muted: #666666;       
-    --line: #e5ccd5;        
+    --ink: #1a1a1a;         /* Темный текст */
+    --muted: #666666;       /* Серый текст */
+    --line: #e5ccd5;        /* Рамки */
     --accent: var(--berry);
-    --price: var(--angel-blue); 
+    --price: var(--angel-blue); /* Цвет цены и акцентов */
     --ok: #1a7f37;
   }
   
   *{box-sizing:border-box}
   body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    font-weight: 400;
+    font-weight: 400; /* Тонкий базовый шрифт */
     -webkit-font-smoothing: antialiased;
   }
   .calc{max-width:980px;margin:0 auto}
@@ -33,6 +36,7 @@
   .brand-left{display:flex;align-items:center;gap:18px}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
   
+  /* Тонкий заголовок */
   .brand h1{font-size:26px;margin:0;line-height:1.15;color:var(--berry); font-weight: 500; letter-spacing: 0.5px;}
   
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
@@ -69,7 +73,7 @@
   [data-fs-error]{display:block;color:#d33;font-size:12px;margin-top:4px;font-weight:400}
   [data-fs-error]:empty{display:none}
 
-  /* Переключатель */
+  /* Переключатель офсет / цифра */
   .segmented{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
   .seg{position:relative;margin:0}
   .seg input{position:absolute;opacity:0;pointer-events:none}
@@ -119,6 +123,7 @@
     padding-top:20px;border-top:2px solid var(--angel-blue)}
   .total .lbl{font-size:16px;color:var(--berry); font-weight: 500;}
   
+  /* Тонкая, но крупная цифра цены */
   .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px}
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 400;}
 
@@ -130,6 +135,7 @@
     font-family:inherit;transition:.15s;box-shadow:0 4px 12px rgba(139,28,66,.15);}
   .btn-submit:hover{background:#6c1230;}
   
+  /* Кнопка "Обсудить заказ" */
   .btn-submit.custom-btn { background: var(--price); box-shadow: 0 4px 12px rgba(110,166,216,.2); }
   .btn-submit.custom-btn:hover { background: #4a8cc7; }
   .btn-submit:disabled{opacity:.6;cursor:not-allowed}
@@ -198,7 +204,6 @@
       <div class="grid">
         <div><label>Ламинация</label><select id="lam"></select></div>
         
-        <!-- Обновленный блок с биговкой и скруглением -->
         <div class="chks" style="align-items:flex-end;">
           <label class="chk"><input type="checkbox" id="round"> Скругление</label>
           
@@ -368,7 +373,7 @@ const PRINTS = {
   '1+0': { name:'Ч/б 1+0',     f: 0.42 },
 };
 
-/* ОБНОВЛЕНО: Добавлена двусторонняя ламинация (коэффициент 1.8) */
+/* Двусторонняя ламинация (коэффициент 1.8) */
 const LAM = {
   none:   { name:'Без ламинации', f: 0 },
   matte1: { name:'Матовая (1 сторона)', f: 1.00 },
@@ -485,7 +490,7 @@ function calc(){
   const printKey = el.print.value;
   const lamKey   = el.lam.value;
   
-  /* ОБНОВЛЕНО: Считываем количество биговок */
+  /* Считываем количество биговок */
   const r = el.round.checked, foldCount = parseInt(el.fold.value) || 0, ru = el.rush.checked;
 
   let rawN = Math.round(+el.tirage.value || 1);
