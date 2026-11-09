@@ -12,7 +12,7 @@
   *{box-sizing:border-box}
   body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-  .calc{max-width:780px;margin:0 auto}
+  .calc{max-width:980px;margin:0 auto}
 
   /* Шапка с логотипом и контактами */
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
@@ -21,13 +21,12 @@
   .brand h1{font-size:22px;margin:0 0 3px;line-height:1.15}
   .brand .sub{margin:0;color:var(--muted);font-size:13px}
   
-  /* Контакты в шапке */
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
   .header-contacts a{color:var(--ink);text-decoration:none;font-weight:600;transition:.15s}
   .header-contacts a:hover{color:var(--accent)}
   .header-contacts .addr{color:var(--muted);font-size:13px;margin-top:4px}
 
-  @media(max-width:680px){
+  @media(max-width:780px){
     .brand{flex-direction:column;align-items:flex-start}
     .brand img{height:48px} .brand h1{font-size:18px}
     .header-contacts{text-align:left;margin-top:10px}
@@ -90,6 +89,7 @@
 
   h2{font-size:18px;margin:0 0 4px}
   .sub-block{margin:0 0 16px;color:var(--muted);font-size:14px}
+  
   .btn-submit{width:100%;margin-top:8px;padding:14px;background:var(--accent);color:#fff;
     border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;
     font-family:inherit;transition:.15s}
@@ -102,7 +102,6 @@
 
   .note{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5}
 
-  /* Подвал сайта с контактами */
   .footer{background:#fff;border-radius:16px;padding:20px 22px;margin-top:24px;
     box-shadow:0 6px 24px rgba(20,40,80,.08);display:flex;justify-content:space-between;
     align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink)}
@@ -111,6 +110,13 @@
   .footer a{color:var(--ink);text-decoration:none;font-weight:600;font-size:16px;transition:.15s}
   .footer a:hover{color:var(--accent)}
   @media(max-width:560px){.footer{flex-direction:column;align-items:flex-start}}
+
+  /* Сетка для двух форм внизу (Смета и Индивидуальный заказ) */
+  .forms-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  @media(max-width:780px){.forms-grid{grid-template-columns:1fr}}
+  
+  /* Стили для блока индивидуального заказа */
+  .custom-order-card{border-top:4px solid var(--price)}
 </style>
 </head>
 <body>
@@ -127,7 +133,6 @@
       </div>
     </div>
     
-    <!-- Контакты в шапке -->
     <div class="header-contacts">
       <a href="tel:+79960320581">+7 (996) 032-05-81</a><br>
       <a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a>
@@ -168,13 +173,18 @@
 
   <div class="card result" id="result"></div>
 
-  <!-- ================= ОТПРАВКА РАСЧЁТА ================= -->
-  <div class="card">
-    <h2>Получить смету</h2>
-    <p class="sub-block">Отправим точный расчёт на почту и свяжемся для уточнения деталей</p>
+  <!-- ================= ДВЕ ФОРМЫ ВНИЗУ ================= -->
+  <div class="forms-grid">
+    
+    <!-- Форма 1: Отправка расчёта -->
+    <div class="card">
+      <h2>Отправить расчёт</h2>
+      <p class="sub-block">Отправим точную смету на почту и свяжемся с вами</p>
 
-    <form id="calc-form" action="https://formspree.io/f/xzeeleoo" method="POST">
-      <div class="grid">
+      <form id="calc-form" action="https://formspree.io/f/xzeeleoo" method="POST">
+        <!-- Скрытое поле, чтобы вы понимали, откуда пришла заявка -->
+        <input type="hidden" name="form_type" value="Расчет из калькулятора">
+
         <div class="field">
           <label for="f-name">Имя</label>
           <input id="f-name" name="name" type="text" autocomplete="name" data-fs-field required>
@@ -185,40 +195,64 @@
           <input id="f-phone" name="phone" type="tel" autocomplete="tel" data-fs-field required>
           <span data-fs-error="phone"></span>
         </div>
-      </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" data-fs-field required>
+          <span data-fs-error="email"></span>
+        </div>
 
-      <div class="field">
-        <label for="f-email">Email</label>
-        <input id="f-email" name="email" type="email" autocomplete="email" data-fs-field required>
-        <span data-fs-error="email"></span>
-      </div>
+        <!-- Скрытые параметры расчёта -->
+        <input type="hidden" name="print_type" id="h-printtype">
+        <input type="hidden" name="product"    id="h-product">
+        <input type="hidden" name="paper"      id="h-paper">
+        <input type="hidden" name="color"      id="h-color">
+        <input type="hidden" name="tirage"     id="h-tirage">
+        <input type="hidden" name="lamination" id="h-lam">
+        <input type="hidden" name="extras"     id="h-extras">
+        <input type="hidden" name="rush"       id="h-rush">
+        <input type="hidden" name="total"      id="h-total">
+        <input type="hidden" name="summary"    id="h-summary">
 
-      <div class="field">
-        <label for="f-comment">Комментарий</label>
-        <textarea id="f-comment" name="comment" rows="3" data-fs-field></textarea>
-        <span data-fs-error="comment"></span>
-      </div>
+        <button type="submit" class="btn-submit" data-fs-submit-btn>Отправить расчёт</button>
+        <div data-fs-success></div>
+        <div class="form-errors" data-fs-error></div>
+      </form>
+    </div>
 
-      <!-- Параметры расчёта (заполняются автоматически) -->
-      <input type="hidden" name="print_type" id="h-printtype">
-      <input type="hidden" name="product"    id="h-product">
-      <input type="hidden" name="paper"      id="h-paper">
-      <input type="hidden" name="color"      id="h-color">
-      <input type="hidden" name="tirage"     id="h-tirage">
-      <input type="hidden" name="lamination" id="h-lam">
-      <input type="hidden" name="extras"     id="h-extras">
-      <input type="hidden" name="rush"       id="h-rush">
-      <input type="hidden" name="total"      id="h-total">
-      <input type="hidden" name="summary"    id="h-summary">
+    <!-- Форма 2: Индивидуальный заказ (третий столбик) -->
+    <div class="card custom-order-card">
+      <h2>Индивидуальный заказ</h2>
+      <p class="sub-block">Книги, пакеты, коробки, сувениры и другие нестандартные задачи</p>
 
-      <button type="submit" class="btn-submit" data-fs-submit-btn>Отправить расчёт</button>
+      <form id="custom-form" action="https://formspree.io/f/xzeeleoo" method="POST">
+        <!-- Скрытое поле, чтобы вы понимали, откуда пришла заявка -->
+        <input type="hidden" name="form_type" value="Индивидуальный заказ (книга, пакет и т.д.)">
 
-      <div data-fs-success></div>
-      <div class="form-errors" data-fs-error></div>
-    </form>
+        <div class="field">
+          <label for="c-name">Ваше имя</label>
+          <input id="c-name" name="name" type="text" autocomplete="name" data-fs-field required>
+          <span data-fs-error="name"></span>
+        </div>
+        <div class="field">
+          <label for="c-phone">Телефон</label>
+          <input id="c-phone" name="phone" type="tel" autocomplete="tel" data-fs-field required>
+          <span data-fs-error="phone"></span>
+        </div>
+        <div class="field">
+          <label for="c-desc">Опишите, что нужно сделать</label>
+          <textarea id="c-desc" name="order_description" rows="4" placeholder="Например: Книга в твердом переплете, формат А5, 100 страниц, тираж 500 шт. Или: Брендированные бумажные пакеты..." data-fs-field required></textarea>
+          <span data-fs-error="order_description"></span>
+        </div>
+
+        <button type="submit" class="btn-submit" data-fs-submit-btn style="background:var(--price);">Обсудить заказ</button>
+        <div data-fs-success></div>
+        <div class="form-errors" data-fs-error></div>
+      </form>
+    </div>
+
   </div>
 
-  <!-- ================= ПОДВАЛ С КОНТАКТАМИ ================= -->
+  <!-- ================= ПОДВАЛ ================= -->
   <footer class="footer">
     <div class="footer-col">
       <strong>Позвонить</strong>
@@ -244,7 +278,9 @@
   window.formspree = window.formspree || function () {
     (formspree.q = formspree.q || []).push(arguments);
   };
+  // Инициализируем сразу ДВЕ формы
   formspree('initForm', { formElement: '#calc-form', formId: 'xzeeleoo' });
+  formspree('initForm', { formElement: '#custom-form', formId: 'xzeeleoo' });
 </script>
 <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 
