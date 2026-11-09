@@ -6,10 +6,18 @@
 <title>Типография Екатеринбургской Епархии — Калькулятор печати</title>
 <style>
   :root{
-    /* ИЗМЕНЕНО: Фон страницы теперь белый */
-    --bg:#ffffff; 
-    --card:#fff; --ink:#16202e; --muted:#6b7a90;
-    --line:#e2e8f2; --accent:#2b5ce6; --price:#ff6b35; --ok:#1a7f37;
+    /* ЦВЕТА ИЗ ЛОГОТИПА */
+    --angel-blue: #81B0D2; /* Одеяние ангела (Pantone 2169 C) */
+    --logo-dark: #1C4E80;  /* Темно-синий цвет букв (Pantone 7684 C) */
+    
+    --bg: #eef2f6;         /* Светло-серый фон страницы, чтобы блоки выделялись */
+    --card: var(--angel-blue); /* Фон блоков */
+    --ink: #16202e;        /* Темный текст внутри блоков */
+    --muted: #3d556e;      /* Второстепенный текст */
+    --line: #b5d4ea;       /* Рамки элементов на голубом фоне */
+    --accent: var(--logo-dark); /* Кнопки и активные элементы */
+    --price: #ff6b35;      /* Оранжевый для цены */
+    --ok: #1a7f37;
   }
   html{scroll-behavior:smooth;}
   
@@ -22,12 +30,14 @@
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
   .brand-left{display:flex;align-items:center;gap:18px}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
-  .brand h1{font-size:22px;margin:0 0 3px;line-height:1.15}
+  
+  /* Название цветом из логотипа */
+  .brand h1{font-size:22px;margin:0 0 3px;line-height:1.15;color:var(--logo-dark);}
   .brand .sub{margin:0;color:var(--muted);font-size:13px}
   
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
-  .header-contacts a{color:var(--ink);text-decoration:none;font-weight:600;transition:.15s}
-  .header-contacts a:hover{color:var(--accent)}
+  .header-contacts a{color:var(--logo-dark);text-decoration:none;font-weight:600;transition:.15s}
+  .header-contacts a:hover{color:var(--price)}
   .header-contacts .addr{color:var(--muted);font-size:13px;margin-top:4px}
 
   @media(max-width:780px){
@@ -36,60 +46,66 @@
     .header-contacts{text-align:left;margin-top:10px}
   }
 
-  /* ИЗМЕНЕНО: Добавлена тонкая рамка, чтобы карточки выделялись на белом фоне */
+  /* Блоки теперь голубые */
   .card{background:var(--card);border-radius:16px;padding:22px;
-    border: 1px solid var(--line);
-    box-shadow:0 4px 16px rgba(20,40,80,.04);margin-bottom:16px}
+    box-shadow:0 6px 24px rgba(28,78,128,.15);margin-bottom:16px}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:560px){.grid{grid-template-columns:1fr}}
 
-  label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+  label{display:block;font-size:13px;font-weight:600;color:var(--logo-dark);margin-bottom:6px}
+  
+  /* Поля ввода делаем белыми для контраста */
   select,input[type=number],input[type=text],input[type=email],input[type=tel],textarea{
-    width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;
-    font-size:15px;color:var(--ink);background:#fbfcfe;outline:none;
-    font-family:inherit;transition:.15s;
+    width:100%;padding:11px 12px;border:1.5px solid transparent;border-radius:10px;
+    font-size:15px;color:var(--ink);background:#ffffff;outline:none;
+    font-family:inherit;transition:.15s;box-shadow:0 2px 6px rgba(0,0,0,0.05);
   }
   textarea{resize:vertical}
-  select:focus,input:focus,textarea:focus{border-color:var(--accent);background:#fff;
-    box-shadow:0 0 0 3px rgba(43,92,230,.12)}
+  select:focus,input:focus,textarea:focus{border-color:var(--logo-dark);
+    box-shadow:0 0 0 3px rgba(28,78,128,.2)}
+  
   .field{margin-bottom:14px}
-  [data-fs-error]{display:block;color:#d33;font-size:12px;margin-top:4px}
+  [data-fs-error]{display:block;color:#d33;font-size:12px;margin-top:4px;font-weight:600}
   [data-fs-error]:empty{display:none}
 
   /* Переключатель офсет / цифра */
   .segmented{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
   .seg{position:relative;margin:0}
   .seg input{position:absolute;opacity:0;pointer-events:none}
-  .seg span{display:block;text-align:center;padding:13px 12px;border:1.5px solid var(--line);
-    border-radius:10px;cursor:pointer;font-weight:600;color:var(--muted);
-    background:#fbfcfe;transition:.15s;font-size:15px}
-  .seg input:checked + span{background:var(--accent);color:#fff;border-color:var(--accent);
-    box-shadow:0 4px 12px rgba(43,92,230,.25)}
-  .seg input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
-  .seg input:disabled + span {opacity: 0.5; cursor: not-allowed; background: #eef1f7; box-shadow: none;}
+  .seg span{display:block;text-align:center;padding:13px 12px;border:1.5px solid rgba(255,255,255,0.4);
+    border-radius:10px;cursor:pointer;font-weight:600;color:var(--logo-dark);
+    background:rgba(255,255,255,0.6);transition:.15s;font-size:15px}
+  .seg input:checked + span{background:var(--logo-dark);color:#fff;border-color:var(--logo-dark);
+    box-shadow:0 4px 12px rgba(28,78,128,.3)}
+  .seg input:focus-visible + span{outline:2px solid var(--logo-dark);outline-offset:2px}
+  .seg input:disabled + span {opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,0.3); box-shadow: none;}
 
   fieldset{border:none;padding:0;margin:18px 0 0}
-  fieldset legend{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;padding:0}
+  fieldset legend{font-size:13px;font-weight:600;color:var(--logo-dark);margin-bottom:10px;padding:0}
   .chks{display:flex;flex-wrap:wrap;gap:10px}
-  .chk{display:flex;align-items:center;gap:7px;background:#f6f8fc;border:1.5px solid var(--line);
-    padding:9px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;
-    color:var(--ink);margin:0;transition:.15s}
-  .chk:hover{border-color:#c9d6ec}
-  .chk input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer}
-  .chk.on{background:#eaf0ff;border-color:var(--accent)}
+  
+  /* Чекбоксы */
+  .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.6);
+    border:1.5px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;
+    font-size:14px;font-weight:600;color:var(--logo-dark);margin:0;transition:.15s}
+  .chk:hover{background:rgba(255,255,255,0.8)}
+  .chk input{accent-color:var(--logo-dark);width:16px;height:16px;cursor:pointer}
+  .chk.on{background:#fff;border-color:var(--logo-dark);box-shadow:0 2px 6px rgba(0,0,0,0.05)}
 
   .hint{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.45;
-    background:#fff8e6;border:1px solid #ffe0a3;color:#7a5a00}
+    background:#fff8e6;border:1px solid #ffe0a3;color:#7a5a00;font-weight:500}
   .hint.ok{background:#e7f7ec;border-color:#b7e4c7;color:var(--ok)}
 
-  .result{background:linear-gradient(135deg,#16202e,#243a5e);color:#fff;border:none;}
+  /* Блок результата в цвете логотипа */
+  .result{background:linear-gradient(135deg, #1C4E80, #102c4d);color:#fff;border:none;
+    box-shadow:0 8px 24px rgba(28,78,128,.3);}
   .row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:14px;
-    border-bottom:1px solid rgba(255,255,255,.09)}
+    border-bottom:1px solid rgba(255,255,255,.15)}
   .row:last-of-type{border-bottom:none}
   .row span:first-child{color:#a8b8d4}
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;
-    padding-top:16px;border-top:1.5px solid rgba(255,255,255,.18)}
+    padding-top:16px;border-top:1.5px solid rgba(255,255,255,.25)}
   .total .lbl{font-size:14px;color:#a8b8d4}
   .total .val{font-size:34px;font-weight:800;color:var(--price);letter-spacing:-.5px}
   .perunit{text-align:right;font-size:13px;color:#a8b8d4;margin-top:4px}
@@ -111,30 +127,29 @@
   @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
   #custom-order { scroll-margin-top: 20px; }
 
-  h2{font-size:18px;margin:0 0 4px}
-  .sub-block{margin:0 0 16px;color:var(--muted);font-size:14px}
+  h2{font-size:18px;margin:0 0 4px;color:var(--logo-dark);}
+  .sub-block{margin:0 0 16px;color:var(--logo-dark);font-size:14px;opacity:0.85;}
   
-  .btn-submit{width:100%;margin-top:8px;padding:14px;background:var(--accent);color:#fff;
+  .btn-submit{width:100%;margin-top:8px;padding:14px;background:var(--logo-dark);color:#fff;
     border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;
-    font-family:inherit;transition:.15s}
-  .btn-submit:hover{background:#1e4bc7}
+    font-family:inherit;transition:.15s;box-shadow:0 4px 12px rgba(28,78,128,.2);}
+  .btn-submit:hover{background:#12365e;}
   .btn-submit:disabled{opacity:.6;cursor:not-allowed}
 
-  [data-fs-success]{background:#e7f7ec;color:var(--ok);padding:12px 14px;border-radius:10px;
-    margin-top:12px;font-size:14px;font-weight:500}
+  [data-fs-success]{background:#fff;color:var(--ok);padding:12px 14px;border-radius:10px;
+    margin-top:12px;font-size:14px;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,0.05);}
   [data-fs-success]:empty{display:none}
 
   .note{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5}
 
-  /* ИЗМЕНЕНО: Добавлена рамка для подвала */
-  .footer{background:#fff;border-radius:16px;padding:20px 22px;margin-top:24px;
-    border: 1px solid var(--line);
-    box-shadow:0 4px 16px rgba(20,40,80,.04);display:flex;justify-content:space-between;
+  /* Подвал в цвете одеяния */
+  .footer{background:var(--angel-blue);border-radius:16px;padding:20px 22px;margin-top:24px;
+    box-shadow:0 6px 24px rgba(28,78,128,.15);display:flex;justify-content:space-between;
     align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
-  .footer-col strong{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-  .footer a{color:var(--ink);text-decoration:none;font-weight:600;font-size:16px;transition:.15s}
-  .footer a:hover{color:var(--accent)}
+  .footer-col strong{font-size:13px;color:var(--logo-dark);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+  .footer a{color:var(--logo-dark);text-decoration:none;font-weight:700;font-size:16px;transition:.15s}
+  .footer a:hover{color:var(--price)}
   @media(max-width:560px){.footer{flex-direction:column;align-items:flex-start}}
 
   .forms-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
@@ -177,7 +192,7 @@
       <div>
         <label>Тираж, шт</label>
         <input type="number" id="tirage" value="100" min="1" max="100000" step="1" inputmode="numeric">
-        <div id="tirage-note" style="display:none; font-size:12px; color:var(--price); margin-top:6px; font-weight:600;"></div>
+        <div id="tirage-note" style="display:none; font-size:12px; color:var(--logo-dark); background:#fff; padding:6px 10px; border-radius:6px; margin-top:6px; font-weight:700;"></div>
       </div>
     </div>
 
@@ -298,7 +313,7 @@
     </div>
     <div class="footer-col">
       <strong>Приехать</strong>
-      <span style="font-size:15px; font-weight:600;">г. Екатеринбург, ул. Репина, 6а</span>
+      <span style="font-size:15px; font-weight:600; color:var(--logo-dark);">г. Екатеринбург, ул. Репина, 6а</span>
     </div>
   </footer>
 
