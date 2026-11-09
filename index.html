@@ -9,7 +9,6 @@
     --bg:#eef1f7; --card:#fff; --ink:#16202e; --muted:#6b7a90;
     --line:#e2e8f2; --accent:#2b5ce6; --price:#ff6b35; --ok:#1a7f37;
   }
-  /* Плавная прокрутка для всей страницы */
   html{scroll-behavior:smooth;}
   
   *{box-sizing:border-box}
@@ -17,7 +16,7 @@
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
   .calc{max-width:980px;margin:0 auto}
 
-  /* Шапка с логотипом и контактами */
+  /* Шапка */
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
   .brand-left{display:flex;align-items:center;gap:18px}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
@@ -64,6 +63,8 @@
   .seg input:checked + span{background:var(--accent);color:#fff;border-color:var(--accent);
     box-shadow:0 4px 12px rgba(43,92,230,.25)}
   .seg input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+  /* Стили для заблокированной кнопки */
+  .seg input:disabled + span {opacity: 0.5; cursor: not-allowed; background: #eef1f7; box-shadow: none;}
 
   fieldset{border:none;padding:0;margin:18px 0 0}
   fieldset legend{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;padding:0}
@@ -90,54 +91,22 @@
   .total .val{font-size:34px;font-weight:800;color:var(--price);letter-spacing:-.5px}
   .perunit{text-align:right;font-size:13px;color:#a8b8d4;margin-top:4px}
 
-  /* ======== НОВЫЙ БЛОК: СТРЕЛОЧКА ВНИЗ ======== */
+  /* Блок со стрелочкой */
   .scroll-down-banner {
-    text-align: center;
-    padding: 16px 20px;
-    background: #fff5e6;
-    border: 2px dashed #ffb84d;
-    border-radius: 16px;
-    margin-bottom: 24px;
-    transition: transform 0.3s;
+    text-align: center; padding: 16px 20px; background: #fff5e6;
+    border: 2px dashed #ffb84d; border-radius: 16px; margin-bottom: 24px; transition: transform 0.3s;
   }
-  .scroll-down-banner:hover {
-    transform: scale(1.01);
-    background: #ffedd1;
-  }
-  .scroll-down-banner p {
-    margin: 0 0 12px;
-    font-weight: 600;
-    color: #7a5a00;
-    font-size: 16px;
-  }
+  .scroll-down-banner:hover { transform: scale(1.01); background: #ffedd1; }
+  .scroll-down-banner p { margin: 0 0 12px; font-weight: 600; color: #7a5a00; font-size: 16px; }
   .scroll-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--price);
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 24px;
-    border-radius: 30px;
-    font-weight: 700;
-    font-size: 15px;
-    transition: background 0.2s;
-    box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+    display: inline-flex; align-items: center; gap: 8px; background: var(--price); color: #fff;
+    text-decoration: none; padding: 10px 24px; border-radius: 30px; font-weight: 700; font-size: 15px;
+    transition: background 0.2s; box-shadow: 0 4px 12px rgba(255,107,53,0.3);
   }
-  .scroll-btn:hover {
-    background: #e55b2b;
-  }
-  /* Анимация прыгающей стрелки */
-  .arrow-down {
-    animation: bounce 1.5s infinite;
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(5px); }
-  }
-  /* Отступ при прокрутке к форме, чтобы шапка не перекрывала */
+  .scroll-btn:hover { background: #e55b2b; }
+  .arrow-down { animation: bounce 1.5s infinite; }
+  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
   #custom-order { scroll-margin-top: 20px; }
-  /* ============================================= */
 
   h2{font-size:18px;margin:0 0 4px}
   .sub-block{margin:0 0 16px;color:var(--muted);font-size:14px}
@@ -165,7 +134,6 @@
 
   .forms-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
   @media(max-width:780px){.forms-grid{grid-template-columns:1fr}}
-  
   .custom-order-card{border-top:4px solid var(--price)}
 </style>
 </head>
@@ -201,8 +169,11 @@
       <div><label>Продукция</label><select id="product"></select></div>
       <div><label>Бумага</label><select id="paper"></select></div>
       <div><label>Красочность</label><select id="print"></select></div>
-      <div><label>Тираж, шт</label>
+      <div>
+        <label>Тираж, шт</label>
         <input type="number" id="tirage" value="100" min="1" max="100000" step="1" inputmode="numeric">
+        <!-- Сюда будет выводиться подсказка про кратность 28 -->
+        <div id="tirage-note" style="display:none; font-size:12px; color:var(--price); margin-top:6px; font-weight:600;"></div>
       </div>
     </div>
 
@@ -228,7 +199,6 @@
     <p>У вас книга, пакет или другой нестандартный тираж?</p>
     <a href="#custom-order" class="scroll-btn">
       Вам ниже
-      <!-- Анимированная стрелочка вниз (SVG) -->
       <svg class="arrow-down" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
         <line x1="12" y1="5" x2="12" y2="19"></line>
         <polyline points="19 12 12 19 5 12"></polyline>
@@ -282,7 +252,6 @@
     </div>
 
     <!-- Форма 2: Индивидуальный заказ -->
-    <!-- Добавлен id="custom-order" для работы ссылки -->
     <div class="card custom-order-card" id="custom-order">
       <h2>Индивидуальный заказ</h2>
       <p class="sub-block">Книги, пакеты, коробки, сувениры и другие нестандартные задачи</p>
@@ -348,7 +317,8 @@
 <!-- ============ Логика калькулятора ============ -->
 <script>
 const PRODUCTS = {
-  vizitka: { name:'Визитки 90×50 мм',        area: 0.0045,
+  // Добавили multiple: 28 (кратность) и onlyDigital: true (только цифра)
+  vizitka: { name:'Визитки 90×50 мм',        area: 0.0045, multiple: 28, onlyDigital: true,
              offset:  { setup: 1200, price100: 400 },
              digital: { setup: 0,    price100: 600 } },
   a6:      { name:'Листовки A6 (105×148)',   area: 0.0155,
@@ -404,8 +374,7 @@ const LAM_PER_M2     = 250;
 const ROUND_PER_UNIT = 1.5;
 const FOLD_PER_UNIT  = 2.0;
 const RUSH_MARKUP    = 0.30;
-const MIN_ORDER      = 600;
-const OFFSET_MIN     = 250;
+const MIN_ORDER      = 0; // Убрали минимальную сумму
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
 
@@ -437,7 +406,8 @@ function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, fold, r
   if (round) postSum += ROUND_PER_UNIT * fT * n;
   if (fold)  postSum += FOLD_PER_UNIT  * fT * n;
 
-  let total = Math.max(baseSum + lamSum + postSum, MIN_ORDER);
+  // Убрали проверку Math.max, теперь просто сумма
+  let total = baseSum + lamSum + postSum; 
   const rushSum = rush ? total * RUSH_MARKUP : 0;
   total += rushSum;
   total = Math.round(total / 10) * 10;
@@ -450,7 +420,7 @@ const el = {
   product: $('product'), paper: $('paper'), print: $('print'),
   tirage: $('tirage'), lam: $('lam'),
   round: $('round'), fold: $('fold'), rush: $('rush'),
-  result: $('result'), hint: $('hint')
+  result: $('result'), hint: $('hint'), tirageNote: $('tirage-note')
 };
 
 function fillSelect(sel, obj, val){
@@ -467,20 +437,46 @@ const getPrintType = () =>
   document.querySelector('input[name="printtype"]:checked').value;
 
 function calc(){
+  const prodKey = el.product.value;
+  const p = PRODUCTS[prodKey];
+  
+  // --- ЛОГИКА БЛОКИРОВКИ ОФСЕТА ДЛЯ ВИЗИТОК ---
+  const offsetRadio = document.querySelector('input[name="printtype"][value="offset"]');
+  const digitalRadio = document.querySelector('input[name="printtype"][value="digital"]');
+  
+  if (p.onlyDigital) {
+    digitalRadio.checked = true;
+    offsetRadio.disabled = true;
+  } else {
+    offsetRadio.disabled = false;
+  }
+
+  // --- ЛОГИКА ОКРУГЛЕНИЯ ТИРАЖА ДО 28 ---
+  let rawN = Math.round(+el.tirage.value || 1);
+  let n = rawN;
+
+  if (p.multiple) {
+    n = Math.ceil(rawN / p.multiple) * p.multiple;
+    if (n !== rawN) {
+      el.tirageNote.style.display = 'block';
+      el.tirageNote.textContent = `Тираж округлен до ${n} шт (кратно ${p.multiple})`;
+    } else {
+      el.tirageNote.style.display = 'none';
+    }
+  } else {
+    el.tirageNote.style.display = 'none';
+  }
+
   const type    = getPrintType();
   const altType = type === 'offset' ? 'digital' : 'offset';
-
-  const prodKey  = el.product.value;
   const paperKey = el.paper.value;
   const printKey = el.print.value;
   const lamKey   = el.lam.value;
-  const n        = Math.max(1, Math.min(100000, Math.round(+el.tirage.value || 1)));
   const r = el.round.checked, f = el.fold.checked, ru = el.rush.checked;
 
   const cur = computeFor(type,    prodKey, n, paperKey, printKey, lamKey, r, f, ru);
   const alt = computeFor(altType, prodKey, n, paperKey, printKey, lamKey, r, f, ru);
 
-  const p   = PRODUCTS[prodKey];
   const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
 
   el.result.innerHTML =
@@ -498,18 +494,22 @@ function calc(){
      </div>
      <div class="perunit">${(cur.total / n).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
 
-  if (alt.total < cur.total){
-    const diff = cur.total - alt.total;
-    el.hint.className = 'hint';
-    el.hint.innerHTML = `💡 При тираже ${fmt(n)} шт выгоднее <b>${altType === 'offset' ? 'офсетная' : 'цифровая'}</b> печать — экономия <b>${fmt(diff)} ₽</b>.`;
+  // Если это визитки, скрываем подсказку о выгоде офсета, так как офсет заблокирован
+  if (p.onlyDigital) {
+    el.hint.style.display = 'none';
   } else {
-    el.hint.className = 'hint ok';
-    let msg = `✓ Выбранный способ печати оптимален для тиража ${fmt(n)} шт.`;
-    if (type === 'offset' && n < OFFSET_MIN)
-      msg += ` Офсет обычно выгоден от ${OFFSET_MIN} шт.`;
-    el.hint.innerHTML = msg;
+    el.hint.style.display = 'block';
+    if (alt.total < cur.total){
+      const diff = cur.total - alt.total;
+      el.hint.className = 'hint';
+      el.hint.innerHTML = `💡 При тираже ${fmt(n)} шт выгоднее <b>${altType === 'offset' ? 'офсетная' : 'цифровая'}</b> печать — экономия <b>${fmt(diff)} ₽</b>.`;
+    } else {
+      el.hint.className = 'hint ok';
+      el.hint.innerHTML = `✓ Выбранный способ печати оптимален для тиража ${fmt(n)} шт.`;
+    }
   }
 
+  // Скрытые поля
   $('h-printtype').value = type === 'offset' ? 'Офсетная' : 'Цифровая';
   $('h-product').value   = p.name;
   $('h-paper').value     = PAPERS[paperKey].name;
