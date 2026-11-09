@@ -7,80 +7,32 @@
 <title>Наши услуги — Типография Екатеринбургской Епархии</title>
 <meta name="description" content="Полный спектр полиграфических услуг в Екатеринбурге: офсетная и цифровая печать, календари, книги, брендированные пакеты, визитки. Высокое качество и соблюдение сроков.">
 <style>
-  :root{
-    --berry: #8B1C42;
-    --berry-light: #FCF2F5;
-    --angel-blue: #6EA6D8;
-    --bg: #ffffff;
-    --card: var(--berry-light); 
-    --ink: #1a1a1a;
-    --muted: #666666;
-    --line: #e5ccd5;
-    --price: var(--angel-blue); 
-  }
+  :root{ --berry: #8B1C42; --berry-light: #FCF2F5; --angel-blue: #6EA6D8; --bg: #fff; --ink: #1a1a1a; --muted: #666; --line: #e5ccd5; --price: var(--angel-blue); }
   *{box-sizing:border-box}
-  body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    font-weight: 400; -webkit-font-smoothing: antialiased;}
+  body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-weight: 400; -webkit-font-smoothing: antialiased;}
   .calc{max-width:1100px;margin:0 auto}
-
-  /* Шапка и Навигация */
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
   .brand-left a{display:flex;align-items:center;gap:18px;text-decoration:none}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
   .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--berry); font-weight: 500;}
-  
   .nav-menu{display:flex; gap:20px; align-items:center; margin-left: 20px;}
   .nav-menu a{color:var(--berry); text-decoration:none; font-weight:500; font-size:16px; transition:.15s; padding-bottom: 4px; border-bottom: 2px solid transparent;}
   .nav-menu a:hover, .nav-menu a.active{color:var(--angel-blue); border-bottom-color: var(--angel-blue);}
-  
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
   .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500;transition:.15s}
   .header-contacts a:hover{color:var(--angel-blue)}
-  .header-contacts .addr{color:var(--muted);font-size:13px;margin-top:4px; font-weight: 400;}
-
-  @media(max-width:980px){
-    .brand{flex-direction:column;align-items:flex-start}
-    .nav-menu{margin-left:0; margin-top:15px; flex-wrap:wrap;}
-    .header-contacts{text-align:left;margin-top:10px}
-  }
-
-  /* Заголовок страницы */
+  @media(max-width:980px){ .brand{flex-direction:column;align-items:flex-start} .nav-menu{margin-left:0; margin-top:15px; flex-wrap:wrap;} .header-contacts{text-align:left;margin-top:10px} }
   .page-title {margin-bottom: 30px;}
   .page-title h2 {font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;}
   .page-title p {color: var(--muted); font-size: 16px; margin: 0;}
-
-  /* Сетка карточек услуг */
   .services-grid {display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;}
-  
-  .service-card {
-    background: var(--card); 
-    border-radius: 16px; 
-    padding: 24px;
-    border-top: 4px solid var(--angel-blue);
-    box-shadow: 0 6px 24px rgba(139,28,66,.05);
-    display: flex; flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
+  .service-card {background: var(--berry-light); border-radius: 16px; padding: 24px; border-top: 4px solid var(--angel-blue); box-shadow: 0 6px 24px rgba(139,28,66,.05); display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;}
   .service-card:hover {transform: translateY(-4px); box-shadow: 0 10px 30px rgba(139,28,66,.1);}
-  
   .service-card h3 {font-size: 20px; color: var(--berry); margin: 0 0 12px; font-weight: 500;}
   .service-card p {color: var(--muted); font-size: 15px; line-height: 1.5; margin: 0 0 20px; flex-grow: 1;}
-  
-  /* Кликабельные кнопки */
-  .btn-calc {
-    display: inline-block; text-align: center; width: 100%; padding: 12px;
-    background: var(--berry); color: #fff; text-decoration: none;
-    border-radius: 10px; font-weight: 500; transition: background 0.15s;
-    box-sizing: border-box; cursor: pointer;
-  }
+  .btn-calc {display: inline-block; text-align: center; width: 100%; padding: 12px; background: var(--berry); color: #fff; text-decoration: none; border-radius: 10px; font-weight: 500; transition: background 0.15s; box-sizing: border-box; cursor: pointer;}
   .btn-calc:hover {background: #6c1230;}
-
-  /* Подвал */
-  .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:40px;
-    box-shadow:0 6px 24px rgba(139,28,66,.05);display:flex;justify-content:space-between;
-    align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);
-    border: 1px solid rgba(139,28,66,0.05);}
+  .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:40px;box-shadow:0 6px 24px rgba(139,28,66,.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);border: 1px solid rgba(139,28,66,0.05);}
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px;transition:.15s}
@@ -89,96 +41,35 @@
 </style>
 </head>
 <body>
-
 <div class="calc">
   <header class="brand">
     <div class="brand-left">
-      <a href="index.html">
-        <img src="logo_1.jpg" alt="Логотип" onerror="this.style.display='none'">
-        <h1>Типография Екатеринбургской Епархии</h1>
-      </a>
+      <a href="index.html"><img src="logo_1.jpg" alt="Логотип" onerror="this.style.display='none'"><h1>Типография Екатеринбургской Епархии</h1></a>
     </div>
-    
     <nav class="nav-menu">
       <a href="index.html">Главная</a>
       <a href="services.html" class="active">Услуги</a>
+      <a href="portfolio.html">Портфолио</a>
       <a href="about.html">О компании</a>
       <a href="post.html">Требования</a>
       <a href="contacts.html">Контакты</a>
     </nav>
-
-    <div class="header-contacts">
-      <a href="tel:+79960320581">+7 (996) 032-05-81</a><br>
-      <a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a>
-    </div>
+    <div class="header-contacts"><a href="tel:+79960320581">+7 (996) 032-05-81</a><br><a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a></div>
   </header>
-
-  <div class="page-title">
-    <h2>Наши услуги</h2>
-    <p>Мы выполняем полный цикл полиграфических работ — от разработки макета до постпечатной обработки. Выберите нужную услугу, чтобы рассчитать стоимость.</p>
-  </div>
-
+  <div class="page-title"><h2>Наши услуги</h2><p>Мы выполняем полный цикл полиграфических работ — от разработки макета до постпечатной обработки. Выберите нужную услугу, чтобы рассчитать стоимость.</p></div>
   <div class="services-grid">
-    
-    <!-- Услуга 1 (Офсет) -->
-    <div class="service-card">
-      <h3>Офсетная печать</h3>
-      <p>Идеальное решение для больших тиражей. Высокое качество цветопередачи и самая выгодная цена за экземпляр при печати от 500 штук.</p>
-      <a href="offset.html" class="btn-calc">Подробнее</a>
-    </div>
-
-    <!-- Услуга 2 (Цифра) -->
-    <div class="service-card">
-      <h3>Цифровая печать</h3>
-      <p>Оперативная печать малых тиражей от 1 экземпляра. Позволяет быстро вносить правки, печатать переменные данные и не требует приладки.</p>
-      <a href="index.html" class="btn-calc">Рассчитать тираж</a>
-    </div>
-
-    <!-- Услуга 3 (Календари) -->
-    <div class="service-card">
-      <h3>Календари</h3>
-      <p>Настенные, настольные, карманные и квартальные календари. Различные виды скрепления, бумаги и постпечатной отделки.</p>
-      <a href="calendar.html" class="btn-calc">Подробнее</a>
-    </div>
-
-    <!-- Услуга 4 (Книги) -->
-    <div class="service-card">
-      <h3>Книги и брошюры</h3>
-      <p>Печать блоков и обложек, мягкий и твердый переплет, скрепление на пружину или КБС. Работаем с издательствами и частными авторами.</p>
-      <a href="books.html" class="btn-calc">Подробнее</a>
-    </div>
-
-    <!-- Услуга 5 (Упаковка - ОБНОВЛЕНА ССЫЛКА) -->
-    <div class="service-card">
-      <h3>Пакеты и коробки</h3>
-      <p>Изготовление брендированной упаковки из картона и бумаги. Подарочные пакеты, коробки под сувениры и фирменную продукцию.</p>
-      <a href="packaging.html" class="btn-calc">Подробнее</a>
-    </div>
-
-    <!-- Услуга 6 (Визитки) -->
-    <div class="service-card">
-      <h3>Визитки и листовки</h3>
-      <p>Классическая полиграфия на мелованной, офсетной или дизайнерской бумаге. Ламинация, скругление углов и тиснение.</p>
-      <a href="index.html" class="btn-calc">Рассчитать тираж</a>
-    </div>
-
+    <div class="service-card"><h3>Офсетная печать</h3><p>Идеальное решение для больших тиражей. Высокое качество цветопередачи и самая выгодная цена за экземпляр при печати от 500 штук.</p><a href="offset.html" class="btn-calc">Подробнее</a></div>
+    <div class="service-card"><h3>Цифровая печать</h3><p>Оперативная печать малых тиражей от 1 экземпляра. Позволяет быстро вносить правки, печатать переменные данные и не требует приладки.</p><a href="index.html" class="btn-calc">Рассчитать тираж</a></div>
+    <div class="service-card"><h3>Календари</h3><p>Настенные, настольные, карманные и квартальные календари. Различные виды скрепления, бумаги и постпечатной отделки.</p><a href="calendar.html" class="btn-calc">Подробнее</a></div>
+    <div class="service-card"><h3>Книги и брошюры</h3><p>Печать блоков и обложек, мягкий и твердый переплет, скрепление на пружину или КБС. Работаем с издательствами и частными авторами.</p><a href="books.html" class="btn-calc">Подробнее</a></div>
+    <div class="service-card"><h3>Пакеты и коробки</h3><p>Изготовление брендированной упаковки из картона и бумаги. Подарочные пакеты, коробки под сувениры и фирменную продукцию.</p><a href="packaging.html" class="btn-calc">Подробнее</a></div>
+    <div class="service-card"><h3>Визитки и листовки</h3><p>Классическая полиграфия на мелованной, офсетной или дизайнерской бумаге. Ламинация, скругление углов и тиснение.</p><a href="index.html" class="btn-calc">Рассчитать тираж</a></div>
   </div>
-
   <footer class="footer" id="contacts">
-    <div class="footer-col">
-      <strong>Позвонить</strong>
-      <a href="tel:+79960320581">+7 (996) 032-05-81</a>
-    </div>
-    <div class="footer-col">
-      <strong>Написать</strong>
-      <a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a>
-    </div>
-    <div class="footer-col">
-      <strong>Приехать</strong>
-      <span style="font-size:16px; font-weight:500; color:var(--berry);">г. Екатеринбург, ул. Репина, 6а</span>
-    </div>
+    <div class="footer-col"><strong>Позвонить</strong><a href="tel:+79960320581">+7 (996) 032-05-81</a></div>
+    <div class="footer-col"><strong>Написать</strong><a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a></div>
+    <div class="footer-col"><strong>Приехать</strong><span style="font-size:16px; font-weight:500; color:var(--berry);">г. Екатеринбург, ул. Репина, 6а</span></div>
   </footer>
 </div>
-
 </body>
 </html>
