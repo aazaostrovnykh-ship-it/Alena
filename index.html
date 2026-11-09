@@ -7,15 +7,16 @@
 <style>
   :root{
     /* ЦВЕТА ИЗ ЛОГОТИПА */
-    --angel-blue: #81B0D2; /* Одеяние ангела (Pantone 2169 C) */
-    --logo-dark: #1C4E80;  /* Темно-синий цвет букв (Pantone 7684 C) */
+    --angel-blue: #81B0D2; /* Одеяние ангела */
+    --logo-dark: #1C4E80;  /* Темно-синий цвет букв */
     
-    --bg: #eef2f6;         /* Светло-серый фон страницы, чтобы блоки выделялись */
+    /* ИЗМЕНЕНО: Фон страницы теперь чисто белый */
+    --bg: #ffffff;         
     --card: var(--angel-blue); /* Фон блоков */
-    --ink: #16202e;        /* Темный текст внутри блоков */
-    --muted: #3d556e;      /* Второстепенный текст */
-    --line: #b5d4ea;       /* Рамки элементов на голубом фоне */
-    --accent: var(--logo-dark); /* Кнопки и активные элементы */
+    --ink: #16202e;        /* Темный текст */
+    --muted: #5a6e82;      /* Второстепенный текст (серо-синий) */
+    --line: #b5d4ea;       /* Рамки */
+    --accent: var(--logo-dark); /* Кнопки */
     --price: #ff6b35;      /* Оранжевый для цены */
     --ok: #1a7f37;
   }
@@ -31,7 +32,6 @@
   .brand-left{display:flex;align-items:center;gap:18px}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
   
-  /* Название калькулятора цветом из логотипа */
   .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--logo-dark); font-weight: 700;}
   
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
@@ -45,7 +45,7 @@
     .header-contacts{text-align:left;margin-top:10px}
   }
 
-  /* Блоки теперь голубые */
+  /* Блоки */
   .card{background:var(--card);border-radius:16px;padding:22px;
     box-shadow:0 6px 24px rgba(28,78,128,.15);margin-bottom:16px}
 
@@ -54,7 +54,7 @@
 
   label{display:block;font-size:13px;font-weight:600;color:var(--logo-dark);margin-bottom:6px}
   
-  /* Поля ввода делаем белыми для контраста */
+  /* Поля ввода белые для контраста */
   select,input[type=number],input[type=text],input[type=email],input[type=tel],textarea{
     width:100%;padding:11px 12px;border:1.5px solid transparent;border-radius:10px;
     font-size:15px;color:var(--ink);background:#ffffff;outline:none;
@@ -96,18 +96,24 @@
     background:#fff8e6;border:1px solid #ffe0a3;color:#7a5a00;font-weight:500}
   .hint.ok{background:#e7f7ec;border-color:#b7e4c7;color:var(--ok)}
 
-  /* Блок результата в цвете логотипа */
-  .result{background:linear-gradient(135deg, #1C4E80, #102c4d);color:#fff;border:none;
-    box-shadow:0 8px 24px rgba(28,78,128,.3);}
-  .row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:14px;
-    border-bottom:1px solid rgba(255,255,255,.15)}
+  /* ИЗМЕНЕНО: Блок результата теперь белый с голубой рамкой (не темный!) */
+  .result{
+    background: #ffffff; 
+    color: var(--logo-dark); 
+    border: 2px solid var(--angel-blue);
+    box-shadow: 0 8px 24px rgba(28,78,128,.08);
+  }
+  .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;
+    border-bottom:1px solid var(--line)}
   .row:last-of-type{border-bottom:none}
-  .row span:first-child{color:#a8b8d4}
+  .row span:first-child{color:var(--muted); font-weight: 500;}
+  .row span:last-child{font-weight: 600;}
+  
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;
-    padding-top:16px;border-top:1.5px solid rgba(255,255,255,.25)}
-  .total .lbl{font-size:14px;color:#a8b8d4}
-  .total .val{font-size:34px;font-weight:800;color:var(--price);letter-spacing:-.5px}
-  .perunit{text-align:right;font-size:13px;color:#a8b8d4;margin-top:4px}
+    padding-top:20px;border-top:2px solid var(--angel-blue)}
+  .total .lbl{font-size:16px;color:var(--logo-dark); font-weight: 700;}
+  .total .val{font-size:38px;font-weight:800;color:var(--price);letter-spacing:-.5px}
+  .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 500;}
 
   /* Блок со стрелочкой */
   .scroll-down-banner {
@@ -141,7 +147,7 @@
 
   .note{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5}
 
-  /* Подвал в цвете одеяния */
+  /* Подвал */
   .footer{background:var(--angel-blue);border-radius:16px;padding:20px 22px;margin-top:24px;
     box-shadow:0 6px 24px rgba(28,78,128,.15);display:flex;justify-content:space-between;
     align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink)}
@@ -160,7 +166,7 @@
 
 <div class="calc">
 
-  <!-- Шапка (ИЗМЕНЕНО: убрали дубль названия) -->
+  <!-- Шапка -->
   <header class="brand">
     <div class="brand-left">
       <img src="logo.png" alt="Типография Екатеринбургской Епархии" onerror="this.style.display='none'">
@@ -209,6 +215,7 @@
     <div class="hint" id="hint"></div>
   </div>
 
+  <!-- Блок результата (теперь белый и легкий) -->
   <div class="card result" id="result"></div>
 
   <!-- ================= НАВИГАЦИЯ ВНИЗ ================= -->
