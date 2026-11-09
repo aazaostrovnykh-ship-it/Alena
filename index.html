@@ -6,25 +6,24 @@
 <title>Типография Екатеринбургской Епархии</title>
 <style>
   :root{
-    /* ЯГОДНЫЙ И ГОЛУБОЙ ЦВЕТА ИЗ ЛОГОТИПА */
-    --berry: #8B1C42;       /* Насыщенный ягодный */
+    --berry: #8B1C42;       /* Ягодный */
     --berry-light: #FCF2F5; /* Нежный розовый фон */
     --angel-blue: #6EA6D8;  /* Нежно-голубой */
     
-    --bg: #ffffff;          /* Белый фон */
+    --bg: #ffffff;          
     --card: var(--berry-light); 
-    --ink: #1a1a1a;         /* Темный текст */
-    --muted: #666666;       /* Серый текст */
-    --line: #e5ccd5;        /* Рамки */
+    --ink: #1a1a1a;         
+    --muted: #666666;       
+    --line: #e5ccd5;        
     --accent: var(--berry);
-    --price: var(--angel-blue); /* Цвет цены и акцентов */
+    --price: var(--angel-blue); 
     --ok: #1a7f37;
   }
   
   *{box-sizing:border-box}
   body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    font-weight: 400; /* Базовый шрифт тоньше */
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
   }
   .calc{max-width:980px;margin:0 auto}
@@ -34,7 +33,6 @@
   .brand-left{display:flex;align-items:center;gap:18px}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
   
-  /* Тонкий заголовок */
   .brand h1{font-size:26px;margin:0;line-height:1.15;color:var(--berry); font-weight: 500; letter-spacing: 0.5px;}
   
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
@@ -85,7 +83,7 @@
 
   fieldset{border:none;padding:0;margin:18px 0 0}
   fieldset legend{font-size:13px;font-weight:500;color:var(--berry);margin-bottom:10px;padding:0}
-  .chks{display:flex;flex-wrap:wrap;gap:10px}
+  .chks{display:flex;flex-wrap:wrap;gap:10px; align-items: center;}
   
   /* Чекбоксы */
   .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.5);
@@ -94,6 +92,11 @@
   .chk:hover{background:rgba(255,255,255,0.8)}
   .chk input{accent-color:var(--berry);width:16px;height:16px;cursor:pointer}
   .chk.on{background:#fff;border-color:var(--angel-blue);box-shadow:0 2px 6px rgba(0,0,0,0.03)}
+
+  /* Выпадающий список для биговки */
+  .chk-select {display:flex;align-items:center; background: rgba(255,255,255,0.8); padding: 4px 12px; border-radius: 10px; border: 1px solid var(--line);}
+  .chk-select span {font-size:14px; color: var(--berry); margin-right: 8px; font-weight: 500;}
+  .chk-select select {width: auto; padding: 4px 8px; border-radius: 6px; border: 1px solid transparent; background: transparent; box-shadow: none; font-size: 14px; font-weight: 500; color: var(--berry); cursor: pointer;}
 
   .hint{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.45;
     background:#fff8e6;border:1px solid #ffe0a3;color:#7a5a00;font-weight:400}
@@ -116,7 +119,6 @@
     padding-top:20px;border-top:2px solid var(--angel-blue)}
   .total .lbl{font-size:16px;color:var(--berry); font-weight: 500;}
   
-  /* Тонкая, но крупная цифра цены */
   .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px}
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 400;}
 
@@ -128,7 +130,6 @@
     font-family:inherit;transition:.15s;box-shadow:0 4px 12px rgba(139,28,66,.15);}
   .btn-submit:hover{background:#6c1230;}
   
-  /* Кнопка "Обсудить заказ" */
   .btn-submit.custom-btn { background: var(--price); box-shadow: 0 4px 12px rgba(110,166,216,.2); }
   .btn-submit.custom-btn:hover { background: #4a8cc7; }
   .btn-submit:disabled{opacity:.6;cursor:not-allowed}
@@ -196,9 +197,22 @@
       <legend>Дополнительно</legend>
       <div class="grid">
         <div><label>Ламинация</label><select id="lam"></select></div>
-        <div class="chks" style="align-items:flex-end">
-          <label class="chk"><input type="checkbox" id="round"> Скругление углов</label>
-          <label class="chk"><input type="checkbox" id="fold"> Биговка / фальц</label>
+        
+        <!-- Обновленный блок с биговкой и скруглением -->
+        <div class="chks" style="align-items:flex-end;">
+          <label class="chk"><input type="checkbox" id="round"> Скругление</label>
+          
+          <div class="chk-select">
+            <span>Биговка:</span>
+            <select id="fold">
+              <option value="0">Нет</option>
+              <option value="1">1 шт</option>
+              <option value="2">2 шт</option>
+              <option value="3">3 шт</option>
+              <option value="4">4 шт</option>
+            </select>
+          </div>
+
           <label class="chk"><input type="checkbox" id="rush"> Срочно</label>
         </div>
       </div>
@@ -208,8 +222,6 @@
   </div>
 
   <div class="card result" id="result"></div>
-
-  <!-- БЛОК СО СТРЕЛОЧКОЙ УДАЛЕН -->
 
   <div class="forms-grid">
     <div class="card">
@@ -356,18 +368,22 @@ const PRINTS = {
   '1+0': { name:'Ч/б 1+0',     f: 0.42 },
 };
 
+/* ОБНОВЛЕНО: Добавлена двусторонняя ламинация (коэффициент 1.8) */
 const LAM = {
-  none:  { name:'Без ламинации', f: 0 },
-  matte: { name:'Матовая',       f: 1.00 },
-  gloss: { name:'Глянцевая',     f: 1.00 },
-  soft:  { name:'Софт-тач',      f: 1.45 },
+  none:   { name:'Без ламинации', f: 0 },
+  matte1: { name:'Матовая (1 сторона)', f: 1.00 },
+  matte2: { name:'Матовая (2 стороны)', f: 1.80 },
+  gloss1: { name:'Глянцевая (1 сторона)', f: 1.00 },
+  gloss2: { name:'Глянцевая (2 стороны)', f: 1.80 },
+  soft1:  { name:'Софт-тач (1 сторона)', f: 1.45 },
+  soft2:  { name:'Софт-тач (2 стороны)', f: 2.60 },
 };
 
 const TIERS_OFFSET  = [[100,1.00],[250,0.75],[500,0.55],[1000,0.40],[2000,0.32],[5000,0.24],[10000,0.20]];
 
 const LAM_PER_M2     = 250;
 const ROUND_PER_UNIT = 1.5;
-const FOLD_PER_UNIT  = 2.0;
+const FOLD_PER_UNIT  = 2.0; /* Стоимость ОДНОЙ биговки за штуку */
 const RUSH_MARKUP    = 0.30;
 const MIN_ORDER      = 0;
 
@@ -383,7 +399,7 @@ function tirageFactor(n, tiers){
   return Math.max(0.10, f2 + (f2 - f1) / (t2 - t1) * (n - t2));
 }
 
-function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, fold, rush){
+function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, foldCount, rush){
   const p   = PRODUCTS[prodKey];
   const paperF = PAPERS[paperKey].f;
   const printF = PRINTS[printKey].f;
@@ -417,7 +433,7 @@ function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, fold, r
 
   let postSum = 0;
   if (round) postSum += ROUND_PER_UNIT * n;
-  if (fold)  postSum += FOLD_PER_UNIT  * n;
+  if (foldCount > 0) postSum += FOLD_PER_UNIT * foldCount * n;
 
   let total = baseSum + cutSum + lamSum + postSum; 
   const rushSum = rush ? total * RUSH_MARKUP : 0;
@@ -468,7 +484,9 @@ function calc(){
   const paperKey = el.paper.value;
   const printKey = el.print.value;
   const lamKey   = el.lam.value;
-  const r = el.round.checked, f = el.fold.checked, ru = el.rush.checked;
+  
+  /* ОБНОВЛЕНО: Считываем количество биговок */
+  const r = el.round.checked, foldCount = parseInt(el.fold.value) || 0, ru = el.rush.checked;
 
   let rawN = Math.round(+el.tirage.value || 1);
   let n = rawN;
@@ -483,8 +501,8 @@ function calc(){
     el.tirageNote.style.display = 'none';
   }
 
-  const cur = computeFor(type,    prodKey, n, paperKey, printKey, lamKey, r, f, ru);
-  const alt = computeFor(altType, prodKey, n, paperKey, printKey, lamKey, r, f, ru);
+  const cur = computeFor(type,    prodKey, n, paperKey, printKey, lamKey, r, foldCount, ru);
+  const alt = computeFor(altType, prodKey, n, paperKey, printKey, lamKey, r, foldCount, ru);
 
   const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
 
@@ -527,7 +545,8 @@ function calc(){
 
   const ex = [];
   if (r) ex.push('Скругление углов');
-  if (f) ex.push('Биговка / фальц');
+  if (foldCount > 0) ex.push(`Биговка / фальц (${foldCount} шт)`);
+  
   $('h-extras').value = ex.length ? ex.join(', ') : '—';
   $('h-rush').value   = ru ? 'Да (+30%)' : 'Нет';
   $('h-total').value  = fmt(cur.total) + ' ₽';
