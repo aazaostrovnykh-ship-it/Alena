@@ -20,24 +20,19 @@
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
   .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500}
   @media(max-width:980px){.brand{flex-direction:column;align-items:flex-start}.nav-menu{margin-left:0;margin-top:15px;flex-wrap:wrap}.header-contacts{text-align:left;margin-top:10px}}
-
   .page-title {margin-bottom: 30px;}
   .page-title h2 {font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;}
-  
   .grid {display: grid; grid-template-columns: 1fr 1fr; gap: 20px;}
   @media(max-width: 780px) {.grid {grid-template-columns: 1fr;}}
-
   .card{background:var(--berry-light);border-radius:16px;padding:28px;border:1px solid rgba(139,28,66,0.05);box-shadow:0 6px 24px rgba(139,28,66,.05)}
   .card h3{font-size:20px;color:var(--berry);margin:0 0 15px;font-weight:500}
   .card p{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:15px}
   .card a{color:var(--berry);text-decoration:none;font-weight:500;font-size:18px;display:block;margin-bottom:10px}
-  
   label{display:block;font-size:13px;font-weight:500;color:var(--berry);margin-bottom:6px}
   input,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;color:var(--ink);background:#fff;outline:none;font-family:inherit;margin-bottom:15px}
   input:focus,textarea:focus{border-color:var(--angel-blue);box-shadow:0 0 0 3px rgba(110,166,216,.15)}
   .btn-submit{width:100%;padding:14px;background:var(--berry);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;transition:.15s}
   .btn-submit:hover{background:#6c1230}
-
   .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);border:1px solid rgba(139,28,66,0.05)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase}
@@ -46,70 +41,43 @@
 </style>
 </head>
 <body>
-
 <div class="calc">
   <header class="brand">
     <div class="brand-left">
-      <a href="index.html">
-        <img src="logo_1.jpg" alt="Логотип" onerror="this.style.display='none'">
-        <h1>Типография Екатеринбургской Епархии</h1>
-      </a>
+      <a href="index.html"><img src="logo_1.jpg" alt="Логотип" onerror="this.style.display='none'"><h1>Типография Екатеринбургской Епархии</h1></a>
     </div>
     <nav class="nav-menu">
       <a href="index.html">Главная</a>
       <a href="services.html">Услуги</a>
+      <a href="portfolio.html">Портфолио</a>
       <a href="about.html">О компании</a>
       <a href="post.html">Требования</a>
       <a href="contacts.html" class="active">Контакты</a>
     </nav>
   </header>
-
-  <div class="page-title">
-    <h2>Контакты</h2>
-  </div>
-
+  <div class="page-title"><h2>Контакты</h2></div>
   <div class="grid">
-    <!-- Контактная информация -->
     <div class="card">
-      <h3>Адрес производства</h3>
-      <p>620000, Свердловская обл., г. Екатеринбург,<br>ул. Репина, д. 6, кор. А.</p>
-      
-      <h3>Режим работы</h3>
-      <p>Понедельник — Пятница<br>с 09:00 до 18:00</p>
-
-      <h3>Связаться с нами</h3>
-      <a href="tel:+79960320581">+7 (996) 032-05-81</a>
-      <a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a>
+      <h3>Адрес производства</h3><p>620000, Свердловская обл., г. Екатеринбург,<br>ул. Репина, д. 6, кор. А.</p>
+      <h3>Режим работы</h3><p>Понедельник — Пятница<br>с 09:00 до 18:00</p>
+      <h3>Связаться с нами</h3><a href="tel:+79960320581">+7 (996) 032-05-81</a><a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a>
     </div>
-
-    <!-- Форма запроса -->
     <div class="card">
-      <h3>Запрос на расчет</h3>
-      <p style="margin-bottom:20px;">Оставьте свои контакты, и мы свяжемся с вами для уточнения деталей заказа.</p>
-      
+      <h3>Запрос на расчет</h3><p style="margin-bottom:20px;">Оставьте свои контакты, и мы свяжемся с вами для уточнения деталей заказа.</p>
       <form action="https://formspree.io/f/xzeeleoo" method="POST">
         <input type="hidden" name="form_type" value="Запрос с страницы Контакты">
-        
-        <label>Ваше имя</label>
-        <input type="text" name="name" required>
-        
-        <label>Телефон или Email</label>
-        <input type="text" name="contact" required>
-        
-        <label>Комментарий</label>
-        <textarea name="comment" rows="3"></textarea>
-        
+        <label>Ваше имя</label><input type="text" name="name" required>
+        <label>Телефон или Email</label><input type="text" name="contact" required>
+        <label>Комментарий</label><textarea name="comment" rows="3"></textarea>
         <button type="submit" class="btn-submit">Отправить запрос</button>
       </form>
     </div>
   </div>
-
   <footer class="footer">
     <div class="footer-col"><strong>Позвонить</strong><a href="tel:+79960320581">+7 (996) 032-05-81</a></div>
     <div class="footer-col"><strong>Написать</strong><a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a></div>
     <div class="footer-col"><strong>Приехать</strong><span style="font-size:16px;font-weight:500;color:var(--berry)">г. Екатеринбург, ул. Репина, 6а</span></div>
   </footer>
 </div>
-
 </body>
 </html>
