@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Типография Екатеринбургской Епархии — Калькулятор печати</title>
+<title>Типография Екатеринбургской Епархии</title>
 <style>
   :root{
-    /* ЦВЕТА ИЗ ЛОГОТИПА */
-    --angel-blue: #81B0D2; /* Одеяние ангела */
-    --logo-dark: #1C4E80;  /* Темно-синий цвет букв */
+    /* ОБНОВЛЕННЫЕ ЦВЕТА ПОД ЛОГОТИП */
+    --angel-blue: #6EA6D8; /* Яркий голубой (одеяние) */
+    --logo-dark: #004A99;  /* Насыщенный синий (буквы) */
     
     --bg: #ffffff;         /* Фон страницы белый */
     --card: var(--angel-blue); /* Фон блоков */
     --ink: #16202e;        /* Темный текст */
-    --muted: #5a6e82;      /* Второстепенный текст */
-    --line: #b5d4ea;       /* Рамки */
+    --muted: #4a5f74;      /* Второстепенный текст */
+    --line: #9dc1e3;       /* Рамки элементов */
     --accent: var(--logo-dark);
     --price: #ff6b35;      /* Оранжевый для цены */
     --ok: #1a7f37;
@@ -31,12 +31,12 @@
   .brand-left{display:flex;align-items:center;gap:18px}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
   
-  .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--logo-dark); font-weight: 700;}
+  .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--logo-dark); font-weight: 800;}
   
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
-  .header-contacts a{color:var(--logo-dark);text-decoration:none;font-weight:600;transition:.15s}
+  .header-contacts a{color:var(--logo-dark);text-decoration:none;font-weight:700;transition:.15s}
   .header-contacts a:hover{color:var(--price)}
-  .header-contacts .addr{color:var(--muted);font-size:13px;margin-top:4px}
+  .header-contacts .addr{color:var(--muted);font-size:13px;margin-top:4px; font-weight: 500;}
 
   @media(max-width:780px){
     .brand{flex-direction:column;align-items:flex-start}
@@ -44,80 +44,86 @@
     .header-contacts{text-align:left;margin-top:10px}
   }
 
+  /* Блоки */
   .card{background:var(--card);border-radius:16px;padding:22px;
-    box-shadow:0 6px 24px rgba(28,78,128,.15);margin-bottom:16px}
+    box-shadow:0 6px 24px rgba(0,74,153,.15);margin-bottom:16px}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:560px){.grid{grid-template-columns:1fr}}
 
-  label{display:block;font-size:13px;font-weight:600;color:var(--logo-dark);margin-bottom:6px}
+  label{display:block;font-size:13px;font-weight:700;color:var(--logo-dark);margin-bottom:6px}
   
+  /* Поля ввода */
   select,input[type=number],input[type=text],input[type=email],input[type=tel],textarea{
     width:100%;padding:11px 12px;border:1.5px solid transparent;border-radius:10px;
     font-size:15px;color:var(--ink);background:#ffffff;outline:none;
-    font-family:inherit;transition:.15s;box-shadow:0 2px 6px rgba(0,0,0,0.05);
+    font-family:inherit;transition:.15s;box-shadow:0 2px 6px rgba(0,0,0,0.08);
   }
   textarea{resize:vertical}
   select:focus,input:focus,textarea:focus{border-color:var(--logo-dark);
-    box-shadow:0 0 0 3px rgba(28,78,128,.2)}
+    box-shadow:0 0 0 3px rgba(0,74,153,.2)}
   
   .field{margin-bottom:14px}
   [data-fs-error]{display:block;color:#d33;font-size:12px;margin-top:4px;font-weight:600}
   [data-fs-error]:empty{display:none}
 
+  /* Переключатель */
   .segmented{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
   .seg{position:relative;margin:0}
   .seg input{position:absolute;opacity:0;pointer-events:none}
   .seg span{display:block;text-align:center;padding:13px 12px;border:1.5px solid rgba(255,255,255,0.4);
-    border-radius:10px;cursor:pointer;font-weight:600;color:var(--logo-dark);
+    border-radius:10px;cursor:pointer;font-weight:700;color:var(--logo-dark);
     background:rgba(255,255,255,0.6);transition:.15s;font-size:15px}
   .seg input:checked + span{background:var(--logo-dark);color:#fff;border-color:var(--logo-dark);
-    box-shadow:0 4px 12px rgba(28,78,128,.3)}
+    box-shadow:0 4px 12px rgba(0,74,153,.3)}
   .seg input:focus-visible + span{outline:2px solid var(--logo-dark);outline-offset:2px}
   .seg input:disabled + span {opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,0.3); box-shadow: none;}
 
   fieldset{border:none;padding:0;margin:18px 0 0}
-  fieldset legend{font-size:13px;font-weight:600;color:var(--logo-dark);margin-bottom:10px;padding:0}
+  fieldset legend{font-size:13px;font-weight:700;color:var(--logo-dark);margin-bottom:10px;padding:0}
   .chks{display:flex;flex-wrap:wrap;gap:10px}
   
+  /* Чекбоксы */
   .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.6);
     border:1.5px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;
-    font-size:14px;font-weight:600;color:var(--logo-dark);margin:0;transition:.15s}
+    font-size:14px;font-weight:700;color:var(--logo-dark);margin:0;transition:.15s}
   .chk:hover{background:rgba(255,255,255,0.8)}
   .chk input{accent-color:var(--logo-dark);width:16px;height:16px;cursor:pointer}
   .chk.on{background:#fff;border-color:var(--logo-dark);box-shadow:0 2px 6px rgba(0,0,0,0.05)}
 
   .hint{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.45;
-    background:#fff8e6;border:1px solid #ffe0a3;color:#7a5a00;font-weight:500}
+    background:#fff8e6;border:1px solid #ffe0a3;color:#7a5a00;font-weight:600}
   .hint.ok{background:#e7f7ec;border-color:#b7e4c7;color:var(--ok)}
 
+  /* Результат */
   .result{
     background: #ffffff; 
     color: var(--logo-dark); 
     border: 2px solid var(--angel-blue);
-    box-shadow: 0 8px 24px rgba(28,78,128,.08);
+    box-shadow: 0 8px 24px rgba(0,74,153,.08);
   }
   .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;
     border-bottom:1px solid var(--line)}
   .row:last-of-type{border-bottom:none}
   .row span:first-child{color:var(--muted); font-weight: 500;}
-  .row span:last-child{font-weight: 600;}
+  .row span:last-child{font-weight: 700;}
   
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;
     padding-top:20px;border-top:2px solid var(--angel-blue)}
-  .total .lbl{font-size:16px;color:var(--logo-dark); font-weight: 700;}
+  .total .lbl{font-size:16px;color:var(--logo-dark); font-weight: 800;}
   .total .val{font-size:38px;font-weight:800;color:var(--price);letter-spacing:-.5px}
-  .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 500;}
+  .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 600;}
 
+  /* Баннер */
   .scroll-down-banner {
     text-align: center; padding: 16px 20px; background: #fff5e6;
     border: 2px dashed #ffb84d; border-radius: 16px; margin-bottom: 24px; transition: transform 0.3s;
   }
   .scroll-down-banner:hover { transform: scale(1.01); background: #ffedd1; }
-  .scroll-down-banner p { margin: 0 0 12px; font-weight: 600; color: #7a5a00; font-size: 16px; }
+  .scroll-down-banner p { margin: 0 0 12px; font-weight: 700; color: #7a5a00; font-size: 16px; }
   .scroll-btn {
     display: inline-flex; align-items: center; gap: 8px; background: var(--price); color: #fff;
-    text-decoration: none; padding: 10px 24px; border-radius: 30px; font-weight: 700; font-size: 15px;
+    text-decoration: none; padding: 10px 24px; border-radius: 30px; font-weight: 800; font-size: 15px;
     transition: background 0.2s; box-shadow: 0 4px 12px rgba(255,107,53,0.3);
   }
   .scroll-btn:hover { background: #e55b2b; }
@@ -125,27 +131,28 @@
   @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
   #custom-order { scroll-margin-top: 20px; }
 
-  h2{font-size:18px;margin:0 0 4px;color:var(--logo-dark);}
-  .sub-block{margin:0 0 16px;color:var(--logo-dark);font-size:14px;opacity:0.85;}
+  h2{font-size:18px;margin:0 0 4px;color:var(--logo-dark); font-weight: 800;}
+  .sub-block{margin:0 0 16px;color:var(--logo-dark);font-size:14px;opacity:0.9; font-weight: 500;}
   
   .btn-submit{width:100%;margin-top:8px;padding:14px;background:var(--logo-dark);color:#fff;
-    border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;
-    font-family:inherit;transition:.15s;box-shadow:0 4px 12px rgba(28,78,128,.2);}
-  .btn-submit:hover{background:#12365e;}
+    border:none;border-radius:10px;font-size:16px;font-weight:800;cursor:pointer;
+    font-family:inherit;transition:.15s;box-shadow:0 4px 12px rgba(0,74,153,.2);}
+  .btn-submit:hover{background:#003875;}
   .btn-submit:disabled{opacity:.6;cursor:not-allowed}
 
   [data-fs-success]{background:#fff;color:var(--ok);padding:12px 14px;border-radius:10px;
-    margin-top:12px;font-size:14px;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,0.05);}
+    margin-top:12px;font-size:14px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,0.05);}
   [data-fs-success]:empty{display:none}
 
-  .note{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5}
+  .note{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5; font-weight: 500;}
 
+  /* Подвал */
   .footer{background:var(--angel-blue);border-radius:16px;padding:20px 22px;margin-top:24px;
-    box-shadow:0 6px 24px rgba(28,78,128,.15);display:flex;justify-content:space-between;
+    box-shadow:0 6px 24px rgba(0,74,153,.15);display:flex;justify-content:space-between;
     align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
-  .footer-col strong{font-size:13px;color:var(--logo-dark);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-  .footer a{color:var(--logo-dark);text-decoration:none;font-weight:700;font-size:16px;transition:.15s}
+  .footer-col strong{font-size:13px;color:var(--logo-dark);font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+  .footer a{color:var(--logo-dark);text-decoration:none;font-weight:800;font-size:16px;transition:.15s}
   .footer a:hover{color:var(--price)}
   @media(max-width:560px){.footer{flex-direction:column;align-items:flex-start}}
 
@@ -162,7 +169,7 @@
     <div class="brand-left">
       <img src="logo.png" alt="Типография Екатеринбургской Епархии" onerror="this.style.display='none'">
       <div>
-        <h1>Калькулятор стоимости полиграфии</h1>
+        <h1>Расчет стоимости полиграфии</h1>
       </div>
     </div>
     
@@ -224,7 +231,7 @@
       <p class="sub-block">Отправим точную смету на почту и свяжемся с вами</p>
 
       <form id="calc-form" action="https://formspree.io/f/xzeeleoo" method="POST">
-        <input type="hidden" name="form_type" value="Расчет из калькулятора">
+        <input type="hidden" name="form_type" value="Расчет стоимости (сайт)">
 
         <div class="field">
           <label for="f-name">Имя</label>
@@ -287,6 +294,7 @@
         <div class="form-errors" data-fs-error></div>
       </form>
     </div>
+
   </div>
 
   <footer class="footer">
@@ -300,7 +308,7 @@
     </div>
     <div class="footer-col">
       <strong>Приехать</strong>
-      <span style="font-size:15px; font-weight:600; color:var(--logo-dark);">г. Екатеринбург, ул. Репина, 6а</span>
+      <span style="font-size:15px; font-weight:800; color:var(--logo-dark);">г. Екатеринбург, ул. Репина, 6а</span>
     </div>
   </footer>
 
@@ -320,7 +328,6 @@
 
 <script>
 const PRODUCTS = {
-  // itemsPerA3 - сколько штук помещается на лист А3
   vizitka: { name:'Визитки 90×50 мм',        area: 0.0045, itemsPerA3: 28, onlyDigital: true,
              offset:  { setup: 1200, price100: 400 },
              digital: { setup: 0,    price100: 600 } },
@@ -370,7 +377,6 @@ const LAM = {
   soft:  { name:'Софт-тач',      f: 1.45 },
 };
 
-// Кривая скидки для офсета (ждем ваши данные)
 const TIERS_OFFSET  = [[100,1.00],[250,0.75],[500,0.55],[1000,0.40],[2000,0.32],[5000,0.24],[10000,0.20]];
 
 const LAM_PER_M2     = 250;
@@ -402,22 +408,16 @@ function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, fold, r
   let sheets = 0;
 
   if (type === 'digital') {
-    // НОВАЯ ЛОГИКА ДЛЯ ЦИФРЫ
     const items = p.itemsPerA3 || 1;
     sheets = Math.ceil(n / items);
     
-    // Если листов больше 50, то ВСЕ листы стоят 60 руб. Иначе 100.
     const rate = sheets > 50 ? 60 : 100;
-    
-    // Стоимость печати с учетом бумаги и красочности
     printSum = sheets * rate * paperF * printF;
     
-    // Резка (5% от стоимости печати), если это не чистый А3
     if (prodKey !== 'a3') {
       cutSum = printSum * 0.05;
     }
   } else {
-    // ВРЕМЕННАЯ ЛОГИКА ДЛЯ ОФСЕТА (обновим завтра)
     const cfg = p.offset;
     const fT  = tirageFactor(n, TIERS_OFFSET);
     printSum = (cfg.price100 / 100) * fT * paperF * printF * n;
@@ -427,7 +427,6 @@ function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, fold, r
 
   const baseSum = setup + printSum;
   
-  // Ламинация
   const lamSum = LAM[lamKey].f ? p.area * LAM_PER_M2 * n * LAM[lamKey].f : 0;
 
   let postSum = 0;
@@ -488,7 +487,6 @@ function calc(){
   let rawN = Math.round(+el.tirage.value || 1);
   let n = rawN;
 
-  // Округляем до целых листов А3
   const itemsPerA3 = p.itemsPerA3 || 1;
   n = Math.ceil(rawN / itemsPerA3) * itemsPerA3;
   
