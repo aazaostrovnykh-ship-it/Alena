@@ -113,8 +113,8 @@
       
       <!-- Скрытое поле для страниц журнала -->
       <div id="pages-wrapper" style="display:none;">
-        <label>Кол-во страниц в блоке (кратно 4)</label>
-        <input type="number" id="pages" value="16" min="4" step="4">
+        <label>Всего страниц (включая обложку, кратно 4)</label>
+        <input type="number" id="pages" value="24" min="8" step="4">
       </div>
 
       <div><label id="paper-label">Бумага</label><select id="paper"></select></div>
@@ -279,8 +279,9 @@ function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, creaseC
   let blockSum = 0;
 
   if (p.isMagazine) {
-    const pages = Math.max(4, Math.round(+$('pages').value || 4));
-    const blockSheetsPerCopy = Math.ceil(pages / 4);
+    const totalPages = Math.max(8, Math.round(+$('pages').value || 8));
+    const blockPages = totalPages - 4; // 4 страницы на обложку
+    const blockSheetsPerCopy = Math.ceil(blockPages / 4);
     sheets = n * (1 + blockSheetsPerCopy); // 1 лист на обложку + блок
     
     if (type === 'digital') {
@@ -296,12 +297,12 @@ function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, creaseC
       // Офсет для журналов
       const cfg = p.offset;
       const fT = tirageFactor(n, TIERS_OFFSET);
-      // Условно считаем офсет по площади (обложка 1 лист + блок страниц)
+      
       const coverPaperF = PAPERS[$('coverPaper').value].f;
       const coverPrintF = PRINTS[$('coverPrint').value].f;
       
       coverSum = (cfg.price100 / 100) * fT * coverPaperF * coverPrintF * n;
-      blockSum = (cfg.price100 / 100) * fT * paperF * printF * n * (pages / 4);
+      blockSum = (cfg.price100 / 100) * fT * paperF * printF * n * (blockPages / 4);
       printSum = coverSum + blockSum;
       setup = cfg.setup;
     }
@@ -328,7 +329,6 @@ function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, creaseC
 
   const baseSum = setup + printSum; 
   
-  // Ламинация (для журналов ламинируется только обложка, поэтому берем площадь А3 - удвоенную площадь А4)
   let lamSum = 0;
   if (LAM[lamKey].f) {
       const lamArea = p.isMagazine ? (p.area * 2) : p.area;
@@ -367,6 +367,13 @@ function updateUI() {
     
     el.paperLabel.textContent = isMag ? 'Бумага блока' : 'Бумага';
     el.printLabel.textContent = isMag ? 'Красочность блока' : 'Красочность';
+    
+    // Автоматически ставим офсетную 120 гр при выборе журнала
+    if (isMag) {
+        if (el.paper.value !== 'offset80' && el.paper.value !== 'offset120') {
+            el.paper.value = 'offset120';
+        }
+    }
     
     calc();
 }
@@ -414,7 +421,10 @@ function calc() {
   
   let details = '';
   if (p.isMagazine) {
-      details += row('Обложка', '1 лист А3 * ' + n + ' шт') + row('Блок (' + $('pages').value + ' стр.)', (cur.sheets / n - 1) + ' листов А3 * ' + n + ' шт');
+      const totalPages = Math.max(8, Math.round(+$('pages').value || 8));
+      const blockPages = totalPages - 4;
+      const blockSheets = (cur.sheets / n) - 1;
+      details += row('Обложка (4 стр.)', '1 лист А3 * ' + n + ' шт') + row('Блок (' + blockPages + ' стр.)', blockSheets + ' листов А3 * ' + n + ' шт');
   } else {
       details += (type === 'digital' ? row('Печать (листов А3: ' + cur.sheets + ')', fmt(cur.printSum) + ' ₽') : row('Печать и бумага', fmt(cur.printSum) + ' ₽'));
   }
@@ -465,10 +475,10 @@ function calc() {
   
   let summaryMag = '';
   if (p.isMagazine) {
-      summaryMag = `Страниц в блоке: ${$('pages').value}\nБумага обложки: ${PAPERS[$('coverPaper').value].name}\nКрасочность обложки: ${PRINTS[$('coverPrint').value].name}\n`;
+      summaryMag = `Всего страниц: ${$('pages').value}\nБумага обложки: ${PAPERS[$('coverPaper').value].name}\nКрасочность обложки: ${PRINTS[$('coverPrint').value].name}\n`;
   }
 
-  $('h-summary').value = `Способ печати: ${type === 'offset' ? 'офсет' : 'цифра'}\nПродукция: ${p.name}\n${summaryMag}Бумага: ${PAPERS[paperKey].name}\nКрасочность: ${PRINTS[printKey].name}\nТираж: ${fmt(n)} шт\nЛаминация: ${LAM[lamKey].name}\nДоп. обработка: ${ex.length ? ex.join(', ') : '—'}\nСрочность: ${ru ? 'да (+30%)' : 'нет'}\nИтого: ${fmt(cur.total)} ₽ (${(cur.total / n).toFixed(2).replace('.', ',')} ₽/шт)`; 
+  $('h-summary').value = `Способ печати: ${type === 'offset' ? 'офсет' : 'цифра'}\nПродукция: ${p.name}\n${summaryMag}Бумага блока: ${PAPERS[paperKey].name}\nКрасочность блока: ${PRINTS[printKey].name}\nТираж: ${fmt(n)} шт\nЛаминация: ${LAM[lamKey].name}\nДоп. обработка: ${ex.length ? ex.join(', ') : '—'}\nСрочность: ${ru ? 'да (+30%)' : 'нет'}\nИтого: ${fmt(cur.total)} ₽ (${(cur.total / n).toFixed(2).replace('.', ',')} ₽/шт)`; 
 }
 
 // Слушатели событий
