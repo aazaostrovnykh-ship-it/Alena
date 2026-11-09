@@ -78,6 +78,10 @@
   .forms-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
   @media(max-width:780px){.forms-grid{grid-template-columns:1fr}}
   .custom-order-card{border-top:3px solid var(--price)}
+  
+  /* Стили для блока настроек журнала */
+  .magazine-settings { display: none; grid-column: 1 / -1; background: rgba(255,255,255,0.6); padding: 16px; border-radius: 12px; border: 1px dashed var(--berry); margin-top: 10px; margin-bottom: 10px;}
+  .magazine-settings h4 { margin: 0 0 12px 0; color: var(--berry); font-weight: 500; font-size: 15px;}
 </style>
 </head>
 <body>
@@ -106,18 +110,48 @@
     <div class="segmented" role="radiogroup"><label class="seg"><input type="radio" name="printtype" value="offset" checked><span>Офсетная печать</span></label><label class="seg"><input type="radio" name="printtype" value="digital"><span>Цифровая печать</span></label></div>
     <div class="grid">
       <div><label>Продукция</label><select id="product"></select></div>
-      <div><label>Бумага</label><select id="paper"></select></div>
-      <div><label>Красочность</label><select id="print"></select></div>
+      
+      <!-- Скрытое поле для страниц журнала -->
+      <div id="pages-wrapper" style="display:none;">
+        <label>Кол-во страниц в блоке (кратно 4)</label>
+        <input type="number" id="pages" value="16" min="4" step="4">
+      </div>
+
+      <div><label id="paper-label">Бумага</label><select id="paper"></select></div>
+      <div><label id="print-label">Красочность</label><select id="print"></select></div>
+      
+      <!-- Блок настроек обложки для журнала -->
+      <div id="magazine-settings" class="magazine-settings">
+        <h4>Настройки обложки (печатается отдельно)</h4>
+        <div class="grid">
+          <div>
+            <label>Бумага обложки</label>
+            <select id="coverPaper">
+              <option value="matte250">Мелованная мат. 250 г/м²</option>
+              <option value="matte300">Мелованная мат. 300 г/м²</option>
+              <option value="gloss250">Мелованная глянц. 250 г/м²</option>
+              <option value="designer">Дизайнерская</option>
+            </select>
+          </div>
+          <div>
+            <label>Красочность обложки</label>
+            <select id="coverPrint">
+              <option value="4+0">Цветная 4+0 (снаружи)</option>
+              <option value="4+4">Цветная 4+4 (снаружи и внутри)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div><label>Тираж, шт</label><input type="number" id="tirage" value="100" min="1" max="100000" step="1" inputmode="numeric"><div id="tirage-note" style="display:none; font-size:12px; color:var(--berry); background:#fff; padding:6px 10px; border-radius:6px; margin-top:6px; font-weight:400;"></div></div>
     </div>
     <fieldset>
       <legend>Дополнительно</legend>
       <div class="grid">
-        <div><label>Ламинация</label><select id="lam"></select></div>
+        <div><label>Ламинация <span id="lam-note" style="display:none; font-weight:400; font-size:11px; color:var(--berry);">(только обложка)</span></label><select id="lam"></select></div>
         <div class="chks" style="align-items:flex-end;">
           <label class="chk"><input type="checkbox" id="round"> Скругление</label>
           
-          <!-- Разделили Биговку и Фальцовку -->
           <div class="chk-select">
             <span>Биговка:</span>
             <select id="crease">
@@ -202,28 +236,264 @@
 <script>window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); }; formspree('initForm', { formElement: '#calc-form', formId: 'xzeeleoo' }); formspree('initForm', { formElement: '#custom-form', formId: 'xzeeleoo' });</script>
 <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 <script>
-const PRODUCTS = { vizitka: { name:'Визитки 90×50 мм', area: 0.0045, itemsPerA3: 28, onlyDigital: true, offset: { setup: 1200, price100: 400 }, digital: { setup: 0, price100: 600 } }, a6: { name:'Листовки A6 (105×148)', area: 0.0155, itemsPerA3: 8, offset: { setup: 1500, price100: 550 }, digital: { setup: 0, price100: 850 } }, a5: { name:'Листовки A5 (148×210)', area: 0.0311, itemsPerA3: 4, offset: { setup: 1800, price100: 750 }, digital: { setup: 0, price100: 1200 } }, a4: { name:'Листовки A4 (210×297)', area: 0.0624, itemsPerA3: 2, offset: { setup: 2200, price100: 1050 }, digital: { setup: 0, price100: 1800 } }, a3: { name:'Листовки A3 (297×420)', area: 0.1247, itemsPerA3: 1, offset: { setup: 3500, price100: 1900 }, digital: { setup: 0, price100: 3400 } }, evro: { name:'Евробуклет A4 (210×297)', area: 0.0624, itemsPerA3: 2, offset: { setup: 3800, price100: 1700 }, digital: { setup: 0, price100: 2800 } }, buklet: { name:'Буклет A5 (148×210)', area: 0.0311, itemsPerA3: 2, offset: { setup: 3000, price100: 1300 }, digital: { setup: 0, price100: 2100 } } };
+const PRODUCTS = { 
+  vizitka: { name:'Визитки 90×50 мм', area: 0.0045, itemsPerA3: 28, onlyDigital: true, offset: { setup: 1200, price100: 400 }, digital: { setup: 0, price100: 600 } }, 
+  a6: { name:'Листовки A6 (105×148)', area: 0.0155, itemsPerA3: 8, offset: { setup: 1500, price100: 550 }, digital: { setup: 0, price100: 850 } }, 
+  a5: { name:'Листовки A5 (148×210)', area: 0.0311, itemsPerA3: 4, offset: { setup: 1800, price100: 750 }, digital: { setup: 0, price100: 1200 } }, 
+  a4: { name:'Листовки A4 (210×297)', area: 0.0624, itemsPerA3: 2, offset: { setup: 2200, price100: 1050 }, digital: { setup: 0, price100: 1800 } }, 
+  a3: { name:'Листовки A3 (297×420)', area: 0.1247, itemsPerA3: 1, offset: { setup: 3500, price100: 1900 }, digital: { setup: 0, price100: 3400 } }, 
+  evro: { name:'Евробуклет A4 (210×297)', area: 0.0624, itemsPerA3: 2, offset: { setup: 3800, price100: 1700 }, digital: { setup: 0, price100: 2800 } }, 
+  buklet: { name:'Буклет A5 (148×210)', area: 0.0311, itemsPerA3: 2, offset: { setup: 3000, price100: 1300 }, digital: { setup: 0, price100: 2100 } },
+  journal_a4: { name:'Журнал А4 (на скрепке)', area: 0.0624, isMagazine: true, offset: { setup: 3000, price100: 1500 }, digital: { setup: 0, price100: 0 } }
+};
+
 const PAPERS = { offset80: { name:'Офсетная 80 г/м²', f: 0.80 }, offset120: { name:'Офсетная 120 г/м²', f: 0.88 }, matte130: { name:'Мелованная мат. 130 г/м²', f: 1.00 }, matte170: { name:'Мелованная мат. 170 г/м²', f: 1.12 }, matte250: { name:'Мелованная мат. 250 г/м²', f: 1.30 }, matte300: { name:'Мелованная мат. 300 г/м²', f: 1.42 }, gloss130: { name:'Мелованная глянц. 130 г/м²', f: 1.04 }, gloss250: { name:'Мелованная глянц. 250 г/м²', f: 1.34 }, designer: { name:'Дизайнерская', f: 1.90 } };
+
 const PRINTS = { '4+0': { name:'Цветная 4+0 (односторонняя)', f: 1.00 }, '4+4': { name:'Цветная 4+4 (двусторонняя)', f: 1.20 }, '1+0': { name:'Ч/б 1+0 (односторонняя)', f: 0.50 }, '1+1': { name:'Ч/б 1+1 (двусторонняя)', f: 0.60 } };
+
 const LAM = { none: { name:'Без ламинации', f: 0 }, matte1: { name:'Матовая (1 сторона)', f: 1.00 }, matte2: { name:'Матовая (2 стороны)', f: 1.80 }, gloss1: { name:'Глянцевая (1 сторона)', f: 1.00 }, gloss2: { name:'Глянцевая (2 стороны)', f: 1.80 }, soft1: { name:'Софт-тач (1 сторона)', f: 1.45 }, soft2: { name:'Софт-тач (2 стороны)', f: 2.60 } };
+
 const TIERS_OFFSET = [[100,1.00],[250,0.75],[500,0.55],[1000,0.40],[2000,0.32],[5000,0.24],[10000,0.20]]; 
 const LAM_PER_M2 = 250; 
 const ROUND_PER_UNIT = 1.5; 
-const CREASE_PER_UNIT = 2.0; // Стоимость одной биговки
-const FOLD_PER_UNIT = 2.0;   // Стоимость одной фальцовки
+const CREASE_PER_UNIT = 2.0;
+const FOLD_PER_UNIT = 2.0; 
 const RUSH_MARKUP = 0.30; 
 const MIN_ORDER = 0;
+const BINDING_PRICE = 15; // Стоимость скрепки за 1 журнал
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
+
 function tirageFactor(n, tiers) { if (n <= tiers[0][0]) return tiers[0][1]; for (let i = 1; i < tiers.length; i++) { const [t1,f1] = tiers[i-1], [t2,f2] = tiers[i]; if (n <= t2) return f1 + (f2 - f1) * (n - t1) / (t2 - t1); } const [t1,f1] = tiers[tiers.length-2], [t2,f2] = tiers[tiers.length-1]; return Math.max(0.10, f2 + (f2 - f1) / (t2 - t1) * (n - t2)); }
-function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, creaseCount, foldCount, rush) { const p = PRODUCTS[prodKey]; const paperF = PAPERS[paperKey].f; const printF = PRINTS[printKey].f; let printSum = 0; let setup = 0; let cutSum = 0; let sheets = 0; if (type === 'digital') { const items = p.itemsPerA3 || 1; sheets = Math.ceil(n / items); const rate = sheets > 50 ? 60 : 100; printSum = sheets * rate * paperF * printF; if (prodKey !== 'a3') cutSum = printSum * 0.05; } else { const cfg = p.offset; const fT = tirageFactor(n, TIERS_OFFSET); printSum = (cfg.price100 / 100) * fT * paperF * printF * n; setup = cfg.setup; sheets = Math.ceil(n / (p.itemsPerA3 || 1)); } const baseSum = setup + printSum; const lamSum = LAM[lamKey].f ? p.area * LAM_PER_M2 * n * LAM[lamKey].f : 0; let postSum = 0; if (round) postSum += ROUND_PER_UNIT * n; if (creaseCount > 0) postSum += CREASE_PER_UNIT * creaseCount * n; if (foldCount > 0) postSum += FOLD_PER_UNIT * foldCount * n; let total = baseSum + cutSum + lamSum + postSum; const rushSum = rush ? total * RUSH_MARKUP : 0; total += rushSum; total = Math.round(total / 10) * 10; return { total, printSum, baseSum, lamSum, postSum, rushSum, setup, cutSum, sheets }; }
-const $ = id => document.getElementById(id); const el = { product: $('product'), paper: $('paper'), print: $('print'), tirage: $('tirage'), lam: $('lam'), round: $('round'), crease: $('crease'), fold: $('fold'), rush: $('rush'), result: $('result'), hint: $('hint'), tirageNote: $('tirage-note') };
+
+function computeFor(type, prodKey, n, paperKey, printKey, lamKey, round, creaseCount, foldCount, rush) { 
+  const p = PRODUCTS[prodKey]; 
+  const paperF = PAPERS[paperKey].f; 
+  const printF = PRINTS[printKey].f; 
+  let printSum = 0; 
+  let setup = 0; 
+  let cutSum = 0; 
+  let sheets = 0;
+  let bindingSum = 0;
+  let coverSum = 0;
+  let blockSum = 0;
+
+  if (p.isMagazine) {
+    const pages = Math.max(4, Math.round(+$('pages').value || 4));
+    const blockSheetsPerCopy = Math.ceil(pages / 4);
+    sheets = n * (1 + blockSheetsPerCopy); // 1 лист на обложку + блок
+    
+    if (type === 'digital') {
+      const rate = sheets > 50 ? 60 : 100;
+      const coverPaperF = PAPERS[$('coverPaper').value].f;
+      const coverPrintF = PRINTS[$('coverPrint').value].f;
+      
+      coverSum = n * 1 * rate * coverPaperF * coverPrintF;
+      blockSum = n * blockSheetsPerCopy * rate * paperF * printF;
+      printSum = coverSum + blockSum;
+      cutSum = printSum * 0.05; // Резка для журнала
+    } else {
+      // Офсет для журналов
+      const cfg = p.offset;
+      const fT = tirageFactor(n, TIERS_OFFSET);
+      // Условно считаем офсет по площади (обложка 1 лист + блок страниц)
+      const coverPaperF = PAPERS[$('coverPaper').value].f;
+      const coverPrintF = PRINTS[$('coverPrint').value].f;
+      
+      coverSum = (cfg.price100 / 100) * fT * coverPaperF * coverPrintF * n;
+      blockSum = (cfg.price100 / 100) * fT * paperF * printF * n * (pages / 4);
+      printSum = coverSum + blockSum;
+      setup = cfg.setup;
+    }
+    
+    // Скрепка (Крепление)
+    bindingSum = n * BINDING_PRICE;
+    
+  } else {
+    // Стандартная логика для листовых продуктов
+    if (type === 'digital') { 
+      const items = p.itemsPerA3 || 1; 
+      sheets = Math.ceil(n / items); 
+      const rate = sheets > 50 ? 60 : 100; 
+      printSum = sheets * rate * paperF * printF; 
+      if (prodKey !== 'a3') cutSum = printSum * 0.05; 
+    } else { 
+      const cfg = p.offset; 
+      const fT = tirageFactor(n, TIERS_OFFSET); 
+      printSum = (cfg.price100 / 100) * fT * paperF * printF * n; 
+      setup = cfg.setup; 
+      sheets = Math.ceil(n / (p.itemsPerA3 || 1)); 
+    }
+  }
+
+  const baseSum = setup + printSum; 
+  
+  // Ламинация (для журналов ламинируется только обложка, поэтому берем площадь А3 - удвоенную площадь А4)
+  let lamSum = 0;
+  if (LAM[lamKey].f) {
+      const lamArea = p.isMagazine ? (p.area * 2) : p.area;
+      lamSum = lamArea * LAM_PER_M2 * n * LAM[lamKey].f;
+  }
+
+  let postSum = 0; 
+  if (round) postSum += ROUND_PER_UNIT * n; 
+  if (creaseCount > 0) postSum += CREASE_PER_UNIT * creaseCount * n; 
+  if (foldCount > 0) postSum += FOLD_PER_UNIT * foldCount * n; 
+
+  let total = baseSum + cutSum + lamSum + postSum + bindingSum; 
+  const rushSum = rush ? total * RUSH_MARKUP : 0; 
+  total += rushSum; 
+  total = Math.round(total / 10) * 10; 
+  
+  return { total, printSum, baseSum, lamSum, postSum, rushSum, setup, cutSum, sheets, bindingSum, coverSum, blockSum }; 
+}
+
+const $ = id => document.getElementById(id); 
+const el = { 
+  product: $('product'), paper: $('paper'), print: $('print'), tirage: $('tirage'), lam: $('lam'), round: $('round'), crease: $('crease'), fold: $('fold'), rush: $('rush'), result: $('result'), hint: $('hint'), tirageNote: $('tirage-note'),
+  pagesWrapper: $('pages-wrapper'), magazineSettings: $('magazine-settings'), paperLabel: $('paper-label'), printLabel: $('print-label'), lamNote: $('lam-note')
+};
+
 function fillSelect(sel, obj, val) { sel.innerHTML = Object.entries(obj).map(([k,v]) => `<option value="${k}"${k===val?' selected':''}>${v.name}</option>`).join(''); }
 fillSelect(el.product, PRODUCTS, 'a6'); fillSelect(el.paper, PAPERS, 'matte130'); fillSelect(el.print, PRINTS, '4+0'); fillSelect(el.lam, LAM, 'none');
+
 const getPrintType = () => document.querySelector('input[name="printtype"]:checked').value;
-function calc() { const prodKey = el.product.value; const p = PRODUCTS[prodKey]; const offsetRadio = document.querySelector('input[name="printtype"][value="offset"]'); const digitalRadio = document.querySelector('input[name="printtype"][value="digital"]'); if (p.onlyDigital) { digitalRadio.checked = true; offsetRadio.disabled = true; } else { offsetRadio.disabled = false; } const type = getPrintType(); const altType = type === 'offset' ? 'digital' : 'offset'; const paperKey = el.paper.value; const printKey = el.print.value; const lamKey = el.lam.value; const r = el.round.checked, creaseCount = parseInt(el.crease.value) || 0, foldCount = parseInt(el.fold.value) || 0, ru = el.rush.checked; let rawN = Math.round(+el.tirage.value || 1); let n = rawN; const itemsPerA3 = p.itemsPerA3 || 1; n = Math.ceil(rawN / itemsPerA3) * itemsPerA3; if (n !== rawN) { el.tirageNote.style.display = 'block'; el.tirageNote.textContent = `Тираж округлен до ${n} шт (по ${itemsPerA3} шт на листе А3)`; } else { el.tirageNote.style.display = 'none'; } const cur = computeFor(type, prodKey, n, paperKey, printKey, lamKey, r, creaseCount, foldCount, ru); const alt = computeFor(altType, prodKey, n, paperKey, printKey, lamKey, r, creaseCount, foldCount, ru); const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`; el.result.innerHTML = row('Способ печати', type === 'offset' ? 'Офсетная' : 'Цифровая') + row('Продукция', p.name) + row('Тираж', fmt(n) + ' шт') + (cur.setup ? row('Приладка / формы', fmt(cur.setup) + ' ₽') : '') + (type === 'digital' ? row('Печать (листов А3: ' + cur.sheets + ')', fmt(cur.printSum) + ' ₽') : row('Печать и бумага', fmt(cur.printSum) + ' ₽')) + (cur.cutSum ? row('Резка (5%)', fmt(cur.cutSum) + ' ₽') : '') + (cur.lamSum ? row('Ламинация', fmt(cur.lamSum) + ' ₽') : '') + (cur.postSum ? row('Постобработка', fmt(cur.postSum) + ' ₽') : '') + (cur.rushSum ? row('Срочность (+30%)',fmt(cur.rushSum) + ' ₽') : '') + `<div class="total"><span class="lbl">Итого</span><span class="val">${fmt(cur.total)} ₽</span></div><div class="perunit">${(cur.total / n).toFixed(2).replace('.', ',')} ₽ / шт</div>`; if (p.onlyDigital) { el.hint.className = 'hint ok'; el.hint.innerHTML = `✓ Для визиток используется только цифровая печать.`; } else { if (alt.total < cur.total) { const diff = cur.total - alt.total; el.hint.className = 'hint'; el.hint.innerHTML = `💡 При тираже ${fmt(n)} шт выгоднее <b>${altType === 'offset' ? 'офсетная' : 'цифровая'}</b> печать — экономия <b>${fmt(diff)} ₽</b>.`; } else { el.hint.className = 'hint ok'; el.hint.innerHTML = `✓ Выбранный способ печати оптимален для тиража ${fmt(n)} шт.`; } } $('h-printtype').value = type === 'offset' ? 'Офсетная' : 'Цифровая'; $('h-product').value = p.name; $('h-paper').value = PAPERS[paperKey].name; $('h-color').value = PRINTS[printKey].name; $('h-tirage').value = fmt(n) + ' шт'; $('h-lam').value = LAM[lamKey].name; const ex = []; if (r) ex.push('Скругление углов'); if (creaseCount > 0) ex.push(`Биговка (${creaseCount} шт)`); if (foldCount > 0) ex.push(`Фальцовка (${foldCount} шт)`); $('h-extras').value = ex.length ? ex.join(', ') : '—'; $('h-rush').value = ru ? 'Да (+30%)' : 'Нет'; $('h-total').value = fmt(cur.total) + ' ₽'; $('h-summary').value = `Способ печати: ${type === 'offset' ? 'офсет' : 'цифра'}\nПродукция: ${p.name}\nБумага: ${PAPERS[paperKey].name}\nКрасочность: ${PRINTS[printKey].name}\nТираж: ${fmt(n)} шт\nЛаминация: ${LAM[lamKey].name}\nДоп. обработка: ${ex.length ? ex.join(', ') : '—'}\nСрочность: ${ru ? 'да (+30%)' : 'нет'}\nИтого: ${fmt(cur.total)} ₽ (${(cur.total / n).toFixed(2).replace('.', ',')} ₽/шт)`; }
-['change','input'].forEach(ev => { el.product.addEventListener(ev, calc); el.paper.addEventListener(ev, calc); el.print.addEventListener(ev, calc); el.lam.addEventListener(ev, calc); el.tirage.addEventListener(ev, calc); el.crease.addEventListener(ev, calc); el.fold.addEventListener(ev, calc); }); [el.round, el.rush].forEach(c => c.addEventListener('change', calc)); document.querySelectorAll('input[name="printtype"]').forEach(r => r.addEventListener('change', calc)); document.querySelectorAll('.chk input').forEach(i => { const sync = () => i.closest('.chk').classList.toggle('on', i.checked); i.addEventListener('change', sync); sync(); });
-calc();
+
+function updateUI() {
+    const isMag = PRODUCTS[el.product.value].isMagazine;
+    el.pagesWrapper.style.display = isMag ? 'block' : 'none';
+    el.magazineSettings.style.display = isMag ? 'block' : 'none';
+    el.lamNote.style.display = isMag ? 'inline' : 'none';
+    
+    el.paperLabel.textContent = isMag ? 'Бумага блока' : 'Бумага';
+    el.printLabel.textContent = isMag ? 'Красочность блока' : 'Красочность';
+    
+    calc();
+}
+
+function calc() { 
+  const prodKey = el.product.value; 
+  const p = PRODUCTS[prodKey]; 
+  const offsetRadio = document.querySelector('input[name="printtype"][value="offset"]'); 
+  const digitalRadio = document.querySelector('input[name="printtype"][value="digital"]'); 
+  
+  if (p.onlyDigital) { 
+    digitalRadio.checked = true; 
+    offsetRadio.disabled = true; 
+  } else { 
+    offsetRadio.disabled = false; 
+  } 
+  
+  const type = getPrintType(); 
+  const altType = type === 'offset' ? 'digital' : 'offset'; 
+  const paperKey = el.paper.value; 
+  const printKey = el.print.value; 
+  const lamKey = el.lam.value; 
+  const r = el.round.checked, creaseCount = parseInt(el.crease.value) || 0, foldCount = parseInt(el.fold.value) || 0, ru = el.rush.checked; 
+  
+  let rawN = Math.round(+el.tirage.value || 1); 
+  let n = rawN; 
+  
+  if (!p.isMagazine) {
+      const itemsPerA3 = p.itemsPerA3 || 1; 
+      n = Math.ceil(rawN / itemsPerA3) * itemsPerA3; 
+      if (n !== rawN) { 
+        el.tirageNote.style.display = 'block'; 
+        el.tirageNote.textContent = `Тираж округлен до ${n} шт (по ${itemsPerA3} шт на листе А3)`; 
+      } else { 
+        el.tirageNote.style.display = 'none'; 
+      } 
+  } else {
+      el.tirageNote.style.display = 'none'; // Для журналов тираж не округляем
+  }
+
+  const cur = computeFor(type, prodKey, n, paperKey, printKey, lamKey, r, creaseCount, foldCount, ru); 
+  const alt = computeFor(altType, prodKey, n, paperKey, printKey, lamKey, r, creaseCount, foldCount, ru); 
+  
+  const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`; 
+  
+  let details = '';
+  if (p.isMagazine) {
+      details += row('Обложка', '1 лист А3 * ' + n + ' шт') + row('Блок (' + $('pages').value + ' стр.)', (cur.sheets / n - 1) + ' листов А3 * ' + n + ' шт');
+  } else {
+      details += (type === 'digital' ? row('Печать (листов А3: ' + cur.sheets + ')', fmt(cur.printSum) + ' ₽') : row('Печать и бумага', fmt(cur.printSum) + ' ₽'));
+  }
+
+  el.result.innerHTML = 
+    row('Способ печати', type === 'offset' ? 'Офсетная' : 'Цифровая') + 
+    row('Продукция', p.name) + 
+    row('Тираж', fmt(n) + ' шт') + 
+    (cur.setup ? row('Приладка / формы', fmt(cur.setup) + ' ₽') : '') + 
+    details +
+    (cur.cutSum ? row('Резка (5%)', fmt(cur.cutSum) + ' ₽') : '') + 
+    (cur.lamSum ? row('Ламинация', fmt(cur.lamSum) + ' ₽') : '') + 
+    (cur.postSum ? row('Постобработка', fmt(cur.postSum) + ' ₽') : '') +
+    (cur.bindingSum ? row('Крепление (скрепка)', fmt(cur.bindingSum) + ' ₽') : '') + 
+    (cur.rushSum ? row('Срочность (+30%)',fmt(cur.rushSum) + ' ₽') : '') + 
+    `<div class="total"><span class="lbl">Итого</span><span class="val">${fmt(cur.total)} ₽</span></div><div class="perunit">${(cur.total / n).toFixed(2).replace('.', ',')} ₽ / шт</div>`; 
+    
+  if (p.onlyDigital) { 
+    el.hint.className = 'hint ok'; 
+    el.hint.innerHTML = `✓ Для визиток используется только цифровая печать.`; 
+  } else { 
+    if (alt.total < cur.total) { 
+      const diff = cur.total - alt.total; 
+      el.hint.className = 'hint'; 
+      el.hint.innerHTML = `💡 При тираже ${fmt(n)} шт выгоднее <b>${altType === 'offset' ? 'офсетная' : 'цифровая'}</b> печать — экономия <b>${fmt(diff)} ₽</b>.`; 
+    } else { 
+      el.hint.className = 'hint ok'; 
+      el.hint.innerHTML = `✓ Выбранный способ печати оптимален для тиража ${fmt(n)} шт.`; 
+    } 
+  } 
+  
+  $('h-printtype').value = type === 'offset' ? 'Офсетная' : 'Цифровая'; 
+  $('h-product').value = p.name; 
+  $('h-paper').value = (p.isMagazine ? 'Блок: ' : '') + PAPERS[paperKey].name; 
+  $('h-color').value = (p.isMagazine ? 'Блок: ' : '') + PRINTS[printKey].name; 
+  $('h-tirage').value = fmt(n) + ' шт'; 
+  $('h-lam').value = LAM[lamKey].name; 
+  
+  const ex = []; 
+  if (r) ex.push('Скругление углов'); 
+  if (creaseCount > 0) ex.push(`Биговка (${creaseCount} шт)`); 
+  if (foldCount > 0) ex.push(`Фальцовка (${foldCount} шт)`); 
+  if (p.isMagazine) ex.push('Крепление: скрепка');
+  
+  $('h-extras').value = ex.length ? ex.join(', ') : '—'; 
+  $('h-rush').value = ru ? 'Да (+30%)' : 'Нет'; 
+  $('h-total').value = fmt(cur.total) + ' ₽'; 
+  
+  let summaryMag = '';
+  if (p.isMagazine) {
+      summaryMag = `Страниц в блоке: ${$('pages').value}\nБумага обложки: ${PAPERS[$('coverPaper').value].name}\nКрасочность обложки: ${PRINTS[$('coverPrint').value].name}\n`;
+  }
+
+  $('h-summary').value = `Способ печати: ${type === 'offset' ? 'офсет' : 'цифра'}\nПродукция: ${p.name}\n${summaryMag}Бумага: ${PAPERS[paperKey].name}\nКрасочность: ${PRINTS[printKey].name}\nТираж: ${fmt(n)} шт\nЛаминация: ${LAM[lamKey].name}\nДоп. обработка: ${ex.length ? ex.join(', ') : '—'}\nСрочность: ${ru ? 'да (+30%)' : 'нет'}\nИтого: ${fmt(cur.total)} ₽ (${(cur.total / n).toFixed(2).replace('.', ',')} ₽/шт)`; 
+}
+
+// Слушатели событий
+['change','input'].forEach(ev => { 
+    el.product.addEventListener(ev, updateUI); 
+    el.paper.addEventListener(ev, calc); 
+    el.print.addEventListener(ev, calc); 
+    el.lam.addEventListener(ev, calc); 
+    el.tirage.addEventListener(ev, calc); 
+    el.crease.addEventListener(ev, calc); 
+    el.fold.addEventListener(ev, calc); 
+    $('pages').addEventListener(ev, calc);
+    $('coverPaper').addEventListener(ev, calc);
+    $('coverPrint').addEventListener(ev, calc);
+}); 
+
+[el.round, el.rush].forEach(c => c.addEventListener('change', calc)); 
+document.querySelectorAll('input[name="printtype"]').forEach(r => r.addEventListener('change', calc)); 
+document.querySelectorAll('.chk input').forEach(i => { 
+    const sync = () => i.closest('.chk').classList.toggle('on', i.checked); 
+    i.addEventListener('change', sync); sync(); 
+});
+
+// Запуск
+updateUI(); // Инициализируем интерфейс при загрузке
 </script>
 </body>
 </html>
