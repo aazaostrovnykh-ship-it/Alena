@@ -12,75 +12,56 @@
   *{box-sizing:border-box}
   body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
   .calc{max-width:980px;margin:0 auto}
-  
-  /* Шапка */
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
   .brand-left a{display:flex;align-items:center;gap:18px;text-decoration:none}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
-  .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--berry);font-weight:500}
   .nav-menu{display:flex;gap:20px;align-items:center;margin-left:20px}
   .nav-menu a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px;transition:.15s;padding-bottom:4px;border-bottom:2px solid transparent}
   .nav-menu a:hover,.nav-menu a.active{color:var(--angel-blue);border-bottom-color:var(--angel-blue)}
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
   .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500}
-  
   .page-title {margin-bottom: 30px;}
   .page-title h2 {font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;}
   .page-title p {color: var(--muted); font-size: 16px; margin: 0; line-height: 1.5;}
-
-  /* Блоки */
   .card{background:var(--berry-light);border-radius:16px;padding:22px;margin-bottom:16px;border:1px solid rgba(139,28,66,0.05);box-shadow:0 6px 24px rgba(139,28,66,.05)}
   .card h3{font-size:20px;color:var(--berry);margin:0 0 15px;font-weight:500}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  
   label{display:block;font-size:13px;font-weight:500;color:var(--berry);margin-bottom:6px}
   select,input[type=number]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;color:var(--ink);background:#ffffff;outline:none;font-family:inherit;font-weight:400;transition:.15s;box-shadow:0 2px 4px rgba(0,0,0,0.02);}
   select:focus,input:focus{border-color:var(--angel-blue);box-shadow:0 0 0 3px rgba(110,166,216,.15)}
-  
   .chks{display:flex;flex-wrap:wrap;gap:10px; align-items: center;}
   .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.5);border:1px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--berry);margin:0;transition:.15s}
   .chk:hover{background:rgba(255,255,255,0.8)}
   .chk input{accent-color:var(--berry);width:16px;height:16px;cursor:pointer}
   .chk.on{background:#fff;border-color:var(--angel-blue);box-shadow:0 2px 6px rgba(0,0,0,0.03)}
-
   .result{background: #ffffff; color: var(--berry); border: 2px solid var(--angel-blue); box-shadow: 0 8px 24px rgba(139,28,66,.05);}
   .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line); flex-wrap: wrap; align-items: baseline;}
   .row:last-of-type{border-bottom:none}
   .row span:first-child{color:var(--muted); font-weight: 400;}
   .row span:last-child{font-weight: 500;}
   .row .unit-price {font-size: 12px; color: #999; margin-left: 6px; font-weight: 400;}
-  
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-top:20px;border-top:2px solid var(--angel-blue)}
   .total .lbl{font-size:16px;color:var(--berry); font-weight: 500;}
   .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px}
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 400;}
-
-  /* Кнопки действий */
   .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
   .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 500; text-align: center; cursor: pointer; transition: 0.15s; border: none; font-family: inherit; }
   .btn-print { background: var(--berry); color: #fff; box-shadow: 0 4px 12px rgba(139,28,66,.15); }
   .btn-print:hover { background: #6c1230; }
   .btn-copy { background: #fff; color: var(--berry); border: 2px solid var(--berry); }
   .btn-copy:hover { background: var(--berry-light); }
-
-  /* Заголовок для печати */
   .print-header { display: none; text-align: center; margin-bottom: 20px; }
   .print-header h2 { font-size: 24px; margin: 0 0 5px; }
   .print-header p { margin: 0; font-size: 14px; color: #555; }
-
   .hint-box {background: #fff8e6; border: 1px solid #ffe0a3; color: #7a5a00; padding: 15px; border-radius: 10px; font-size: 14px; margin-top: 15px; line-height: 1.5;}
-
   .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);border:1px solid rgba(139,28,66,0.05)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px}
-
-  /* Мобильная адаптация */
   @media(max-width: 768px){
     body { padding: 16px 10px; }
     .brand { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
     .brand-left a { flex-direction: column; gap: 10px; }
-    .brand h1 { font-size: 20px; text-align: center; }
     .nav-menu { margin-left: 0; justify-content: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
     .nav-menu a { font-size: 14px; }
     .header-contacts { text-align: center; margin-top: 10px; }
@@ -91,8 +72,6 @@
     select, input, textarea { font-size: 16px !important; }
     .actions { flex-direction: column; }
   }
-
-  /* Стили для печати (PDF) */
   @media print {
     body { background: #fff; padding: 0; color: #000; }
     .brand, .nav-menu, .header-contacts, .page-title, .card:not(.result), .hint-box, .footer, .actions { display: none !important; }
@@ -108,8 +87,7 @@
 <div class="calc">
   <header class="brand">
     <div class="brand-left">
-      <!-- ИСПРАВЛЕНО: logo.jpg заменен на logo_1.jpg -->
-      <a href="index.html"><img src="logo_1.jpg" alt="Логотип" onerror="this.style.display='none'"><h1>Типография Екатеринбургской Епархии</h1></a>
+      <a href="index.html"><img src="logo_1.jpg" alt="Типография Екатеринбургской Епархии" onerror="this.style.display='none'"></a>
     </div>
     <nav class="nav-menu">
       <a href="index.html">Цифра</a>
@@ -127,12 +105,10 @@
       <a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a>
     </div>
   </header>
-
   <div class="page-title">
     <h2>Офсетная печать</h2>
     <p>Идеальное решение для больших тиражей. Печать на листах формата А2.</p>
   </div>
-
   <div class="card">
     <h3>Параметры заказа</h3>
     <div class="grid">
@@ -144,13 +120,8 @@
           <option value="book" selected>Книги / Каталоги</option>
         </select>
       </div>
-      <div>
-        <label>Тираж, шт</label>
-        <input type="number" id="qty" value="300" min="100" max="100000">
-      </div>
+      <div><label>Тираж, шт</label><input type="number" id="qty" value="300" min="100" max="100000"></div>
     </div>
-
-    <!-- БЛОК ДЛЯ ЛИСТОВОК -->
     <div id="leaflet-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры листовок</h4>
       <div class="grid">
@@ -182,8 +153,6 @@
         </div>
       </div>
     </div>
-
-    <!-- БЛОК ДЛЯ БРОШЮР -->
     <div id="brochure-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры брошюры</h4>
       <div class="grid">
@@ -194,12 +163,8 @@
             <option value="A4">А4 (205×290)</option>
           </select>
         </div>
-        <div>
-          <label>Кол-во страниц в блоке</label>
-          <input type="number" id="brochure-pages" value="16" min="4" step="4">
-        </div>
+        <div><label>Кол-во страниц в блоке</label><input type="number" id="brochure-pages" value="16" min="4" step="4"></div>
       </div>
-
       <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Внутренний блок</h4>
       <div class="grid">
         <div>
@@ -219,7 +184,6 @@
           </select>
         </div>
       </div>
-
       <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Обложка и переплет</h4>
       <div class="grid">
         <div>
@@ -246,11 +210,8 @@
         </div>
       </div>
     </div>
-
-    <!-- БЛОК ДЛЯ КНИГ -->
     <div id="book-options" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
-      
       <div class="grid">
         <div>
           <label>Формат книги</label>
@@ -259,12 +220,8 @@
             <option value="A4">А4 (205×290)</option>
           </select>
         </div>
-        <div>
-          <label>Кол-во страниц в блоке</label>
-          <input type="number" id="book-pages" value="300" min="8" step="4">
-        </div>
+        <div><label>Кол-во страниц в блоке</label><input type="number" id="book-pages" value="300" min="8" step="4"></div>
       </div>
-
       <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Внутренний блок</h4>
       <div class="grid">
         <div>
@@ -284,7 +241,6 @@
           </select>
         </div>
       </div>
-
       <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Обложка</h4>
       <div class="grid">
         <div>
@@ -318,7 +274,6 @@
         </div>
       </div>
     </div>
-
     <div style="margin-top: 15px;">
       <div class="chks">
         <label class="chk"><input type="checkbox" id="selfTurn"> Схема «Само на себя» (скидка на формы)</label>
@@ -327,271 +282,84 @@
       </div>
     </div>
   </div>
-
-  <!-- Заголовок для печатной версии -->
-  <div class="print-header">
-    <h2>Типография Екатеринбургской Епархии</h2>
-    <p>Предварительная смета офсетной печати</p>
-  </div>
-
+  <div class="print-header"><h2>Типография Екатеринбургской Епархии</h2><p>Предварительная смета офсетной печати</p></div>
   <div class="card result" id="result"></div>
-  
   <div class="actions">
     <button class="btn-action btn-print" onclick="window.print()">Распечатать / Сохранить в PDF</button>
     <button class="btn-action btn-copy" onclick="copySummary()">Скопировать смету</button>
   </div>
-
-  <div class="hint-box">
-    <strong>Важно:</strong> Офсетный расчет является предварительным. Точная стоимость зависит от спуска полос, раскладки страниц на листе А2, процента расхода бумаги на приладку и фактического расхода материалов. Менеджер уточнит все детали после получения заявки.
-  </div>
-
+  <div class="hint-box"><strong>Важно:</strong> Офсетный расчет является предварительным. Точная стоимость зависит от спуска полос, раскладки страниц на листе А2, процента расхода бумаги на приладку и фактического расхода материалов. Менеджер уточнит все детали после получения заявки.</div>
   <footer class="footer">
-    <div class="footer-col">
-      <strong>Позвонить</strong>
-      <span style="font-size:13px; color:var(--berry); margin-bottom:4px;">Менеджер Алена Заостровных</span>
-      <a href="tel:+73432789642">+7 (343) 278-96-42</a>
-      <a href="tel:+79960320581">+7 (996) 032-05-81</a>
-    </div>
+    <div class="footer-col"><strong>Позвонить</strong><span style="font-size:13px; color:var(--berry); margin-bottom:4px;">Менеджер Алена Заостровных</span><a href="tel:+73432789642">+7 (343) 278-96-42</a><a href="tel:+79960320581">+7 (996) 032-05-81</a></div>
     <div class="footer-col"><strong>Написать</strong><a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a></div>
     <div class="footer-col"><strong>Приехать</strong><span style="font-size:16px;font-weight:500;color:var(--berry)">г. Екатеринбург, ул. Репина, 6а</span></div>
   </footer>
 </div>
-
 <script>
-/* ============================================================
-   НАСТРОЙКИ ОФСЕТА (ЗАФИКСИРОВАНЫ СРЕДНИЕ ЗНАЧЕНИЯ ИЗ EXCEL)
-   ============================================================ */
-const PLATE_PRICE = 500;        
-const WASTE_PER_FORM = 50;      
-
-// Печать за 1 лист А2
-const PRINT_PRICES = { 
-  '1+0': 2, 
-  '1+1': 4, 
-  '4+0': 5, 
-  '4+4': 8 
-};
-
-// Бумага за 1 лист А2
-const PAPER_PRICE_PER_SHEET = { 
-  '80': 4.5, 
-  '115': 5.0, 
-  '130': 6.5, 
-  '200': 12.0,
-  '250': 18.0, 
-  '300': 20.0 
-};
-
-const PRICE_CUT = 1.0;
-const PRICE_CREASE = 2.5;
-
-const ITEMS_PER_A2 = { 'A5': 8, 'A4': 4, 'A3': 2 };
-const PAGES_PER_A2 = { 'A5': 16, 'A4': 8 }; 
-const COVERS_PER_A2 = { 'A5': 8, 'A4': 4 };
+const MACHINE_SPEED = 6250; const SETUP_TIME_PER_FORM = 0.6; const SHIFT_HOURS = 12;
+const SALARY_PER_SHIFT = 3866; const AMORTIZATION_PER_SHIFT = 4189; const MATERIALS_PER_SHIFT = 313;
+const PLATE_PRICE = 350; const INK_COST_PER_TRIAD = 1200; const MARKUP = 2.0;
+const PAPER_PRICE_PER_SHEET = { '80': 4.5, '115': 5.0, '130': 6.5, '200': 12.0, '250': 18.0, '300': 20.0 };
+const PRICE_CUT = 1.0; const PRICE_CREASE = 2.5;
+const ITEMS_PER_A2 = { 'A5': 8, 'A4': 4, 'A3': 2 }; const PAGES_PER_A2 = { 'A5': 16, 'A4': 8 }; const COVERS_PER_A2 = { 'A5': 8, 'A4': 4 };
 const BINDING_PRICES = { 'saddle': 8, 'perfect': 30, 'soft': 30, 'hard': 120 };
-
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
-
 function updateUI() {
   const product = document.getElementById('product').value;
-  
   document.getElementById('leaflet-options').style.display = (product === 'leaflet') ? 'block' : 'none';
   document.getElementById('brochure-options').style.display = (product === 'brochure') ? 'block' : 'none';
   document.getElementById('book-options').style.display = (product === 'book') ? 'block' : 'none';
-  
   calc();
 }
-
 function calc() {
-  const product = document.getElementById('product').value;
-  const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
-  
-  const isSelfTurn = document.getElementById('selfTurn').checked;
-  const isCut = document.getElementById('cut').checked;
-  const isCrease = document.getElementById('crease').checked;
-
-  let html = '';
-  let total = 0;
-  let plainText = "Смета офсетной печати (Типография Екатеринбургской Епархии)\n";
-  plainText += "--------------------------------------------------\n";
-
-  const row = (l, v, detail = '') => {
-    plainText += `${l}: ${v} ${detail ? '(' + detail + ')' : ''}\n`;
-    return `<div class="row">
-              <span>${l}</span>
-              <span>${v} <span class="unit-price">${detail}</span></span>
-            </div>`;
-  };
-
-  function getPlatesPerSheet(color, selfTurn) {
-    let front = 0;
-    let back = 0;
-    if (color === '1+0' || color === '1+1') front = 1;
-    if (color === '4+0' || color === '4+4') front = 4;
-    
-    if (color === '1+1' || color === '4+4') back = front;
-    
+  const product = document.getElementById('product').value; const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
+  const isSelfTurn = document.getElementById('selfTurn').checked; const isCut = document.getElementById('cut').checked; const isCrease = document.getElementById('crease').checked;
+  let html = ''; let total = 0; let plainText = "Смета офсетной печати\n---\n";
+  const row = (l, v, detail = '') => { plainText += `${l}: ${v} ${detail ? '('+detail+')' : ''}\n`; return `<div class="row"><span>${l}</span><span>${v} <span class="unit-price">${detail}</span></span></div>`; };
+  function calcPrintCost(quantity, formsCount, colorsCount) {
+    const hours = (SETUP_TIME_PER_FORM * formsCount) + (quantity / MACHINE_SPEED); const shifts = hours / SHIFT_HOURS;
+    const costPrice = (shifts * SALARY_PER_SHIFT) + (shifts * AMORTIZATION_PER_SHIFT) + (shifts * MATERIALS_PER_SHIFT) + ((colorsCount / 4) * INK_COST_PER_TRIAD) + (formsCount * PLATE_PRICE);
+    return { clientPrice: costPrice * MARKUP, costPrice: costPrice, shifts: shifts };
+  }
+  function getPlatesCount(color, selfTurn) {
+    let front = (color === '1+0' || color === '1+1') ? 1 : 4; let back = (color === '1+1' || color === '4+4') ? front : 0;
     return front + (selfTurn ? 0 : back);
   }
-
   if (product === 'book' || product === 'brochure') {
     const isBook = product === 'book';
-    
     const format = document.getElementById(isBook ? 'book-format' : 'brochure-format').value;
     const pages = Math.max(4, Math.round(+document.getElementById(isBook ? 'book-pages' : 'brochure-pages').value || 4));
-    const pBlock = document.getElementById(isBook ? 'book-paper' : 'brochure-paper').value;
-    const cBlock = document.getElementById(isBook ? 'book-color' : 'brochure-color').value;
-    const pCover = document.getElementById(isBook ? 'book-cover-paper' : 'brochure-cover-paper').value;
-    const cCover = document.getElementById(isBook ? 'book-cover-color' : 'brochure-cover-color').value;
-    const binding = document.getElementById(isBook ? 'book-binding' : 'brochure-binding').value;
-    const lamCover = isBook ? parseInt(document.getElementById('book-cover-lam').value) : 0;
-
-    // Блок
-    const pagesPerSheet = PAGES_PER_A2[format];
-    let sheetsPerCopy = Math.ceil(pages / pagesPerSheet);
-    let cleanBlockSheets = sheetsPerCopy * qty;
-    
-    let platesPerSheet = getPlatesPerSheet(cBlock, isSelfTurn);
-    let platesBlock = sheetsPerCopy * platesPerSheet;
-
-    const wasteBlockSheets = platesBlock * WASTE_PER_FORM;
-    const totalBlockSheets = cleanBlockSheets + wasteBlockSheets;
-
-    const printCostBlock = cleanBlockSheets * PRINT_PRICES[cBlock];
+    const pBlock = document.getElementById(isBook ? 'book-paper' : 'brochure-paper').value; const cBlock = document.getElementById(isBook ? 'book-color' : 'brochure-color').value;
+    const pCover = document.getElementById(isBook ? 'book-cover-paper' : 'brochure-cover-paper').value; const cCover = document.getElementById(isBook ? 'book-cover-color' : 'brochure-cover-color').value;
+    const binding = document.getElementById(isBook ? 'book-binding' : 'brochure-binding').value; const lamCover = isBook ? parseInt(document.getElementById('book-cover-lam').value) : 0;
+    const pagesPerSheet = PAGES_PER_A2[format]; let sheetsPerCopy = Math.ceil(pages / pagesPerSheet); let cleanBlockSheets = sheetsPerCopy * qty;
+    let platesPerSheet = getPlatesCount(cBlock, isSelfTurn); let platesBlock = sheetsPerCopy * platesPerSheet;
+    const blockPrint = calcPrintCost(cleanBlockSheets, platesBlock, platesPerSheet); const totalBlockSheets = cleanBlockSheets + (platesBlock * 50);
     const paperCostBlock = totalBlockSheets * PAPER_PRICE_PER_SHEET[pBlock];
-    const platesCostBlock = platesBlock * PLATE_PRICE;
-
-    // Обложка
-    const coversPerSheet = COVERS_PER_A2[format];
-    let cleanCoverSheets = Math.ceil(qty / coversPerSheet);
-    
-    let platesCover = getPlatesPerSheet(cCover, isSelfTurn); 
-    const wasteCoverSheets = platesCover * WASTE_PER_FORM;
-    const totalCoverSheets = cleanCoverSheets + wasteCoverSheets;
-
-    const printCostCover = cleanCoverSheets * PRINT_PRICES[cCover];
-    const paperCostCover = totalCoverSheets * PAPER_PRICE_PER_SHEET[pCover];
-    const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
-    const platesCostCover = platesCover * PLATE_PRICE;
-
-    // Постпечать
-    let bindPrice = BINDING_PRICES[binding];
-    const bindCost = qty * bindPrice;
-    const cutCost = isCut ? (totalBlockSheets + totalCoverSheets) * PRICE_CUT : 0;
-    const creaseCost = isCrease ? totalBlockSheets * PRICE_CREASE : 0;
-
-    total = printCostBlock + paperCostBlock + platesCostBlock +
-            printCostCover + paperCostCover + lamCostCover + platesCostCover +
-            bindCost + cutCost + creaseCost;
-
-    plainText += `Тираж: ${fmt(qty)} шт\n`;
-    plainText += `Формат: ${format}, ${pages} стр. (${sheetsPerCopy} листов А2 на 1 экз.)\n`;
-
-    html = row('Тираж', fmt(qty) + ' шт') +
-           row('Листов А2 на блок (чистых)', fmt(cleanBlockSheets) + ' шт', `${sheetsPerCopy} л. × ${qty} экз.`) +
-           row('Бумага на приладку (блок)', fmt(wasteBlockSheets) + ' шт') +
-           row('Печать блока', fmt(printCostBlock) + ' ₽', `${cleanBlockSheets} отт. × ${PRINT_PRICES[cBlock]} ₽`) +
-           row('Бумага блока', fmt(paperCostBlock) + ' ₽', `${totalBlockSheets} лист. × ${PAPER_PRICE_PER_SHEET[pBlock]} ₽`) +
-           row('Формы блока', fmt(platesCostBlock) + ' ₽', `${platesBlock} шт × ${PLATE_PRICE} ₽`) +
-           
-           row('Листов А2 на обложку (чистых)', fmt(cleanCoverSheets) + ' шт') +
-           row('Бумага на приладку (обложка)', fmt(wasteCoverSheets) + ' шт') +
-           row('Печать обложки', fmt(printCostCover) + ' ₽', `${cleanCoverSheets} отт. × ${PRINT_PRICES[cCover]} ₽`) +
-           row('Бумага обложки', fmt(paperCostCover) + ' ₽', `${totalCoverSheets} лист. × ${PAPER_PRICE_PER_SHEET[pCover]} ₽`) +
-           row('Формы обложки', fmt(platesCostCover) + ' ₽', `${platesCover} шт × ${PLATE_PRICE} ₽`) +
-           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽', `${totalCoverSheets} лист. × ${lamCover} ₽`) : '') +
-           row('Переплет', fmt(bindCost) + ' ₽', `${qty} шт × ${bindPrice} ₽`) +
-           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalBlockSheets + totalCoverSheets} лист. × ${PRICE_CUT} ₽`) : '') +
-           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽', `${totalBlockSheets} лист. × ${PRICE_CREASE} ₽`) : '');
-
+    const coversPerSheet = COVERS_PER_A2[format]; let cleanCoverSheets = Math.ceil(qty / coversPerSheet); let platesCover = getPlatesCount(cCover, isSelfTurn);
+    const coverPrint = calcPrintCost(cleanCoverSheets, platesCover, platesCover); const totalCoverSheets = cleanCoverSheets + (platesCover * 50);
+    const paperCostCover = totalCoverSheets * PAPER_PRICE_PER_SHEET[pCover]; const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
+    let bindPrice = BINDING_PRICES[binding]; const bindCost = qty * bindPrice; const cutCost = isCut ? (totalBlockSheets + totalCoverSheets) * PRICE_CUT : 0; const creaseCost = isCrease ? totalBlockSheets * PRICE_CREASE : 0;
+    const totalCostPrice = blockPrint.costPrice + coverPrint.costPrice + paperCostBlock + paperCostCover + lamCostCover + bindCost + cutCost + creaseCost;
+    total = blockPrint.clientPrice + coverPrint.clientPrice + paperCostBlock + paperCostCover + lamCostCover + bindCost + cutCost + creaseCost;
+    html = row('Тираж', fmt(qty)+' шт') + row('Листов А2 на блок', fmt(totalBlockSheets)+' шт', `${cleanBlockSheets} л. + приладка`) + row('Печать блока (работа)', fmt(blockPrint.clientPrice)+' ₽', `${blockPrint.shifts.toFixed(2)} смен`) + row('Бумага блока', fmt(paperCostBlock)+' ₽', `${totalBlockSheets} л. × ${PAPER_PRICE_PER_SHEET[pBlock]} ₽`) + row('Листов А2 на обложку', fmt(totalCoverSheets)+' шт') + row('Печать обложки (работа)', fmt(coverPrint.clientPrice)+' ₽', `${coverPrint.shifts.toFixed(2)} смен`) + row('Бумага обложки', fmt(paperCostCover)+' ₽', `${totalCoverSheets} л. × ${PAPER_PRICE_PER_SHEET[pCover]} ₽`) + (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover)+' ₽', `${totalCoverSheets} л. × ${lamCover} ₽`) : '') + row('Переплет', fmt(bindCost)+' ₽', `${qty} шт × ${bindPrice} ₽`) + (cutCost ? row('Резка', fmt(cutCost)+' ₽', `${totalBlockSheets + totalCoverSheets} л. × ${PRICE_CUT} ₽`) : '') + (creaseCost ? row('Биговка', fmt(creaseCost)+' ₽', `${totalBlockSheets} л. × ${PRICE_CREASE} ₽`) : '') + row('--- Себестоимость (внутр.) ---', fmt(totalCostPrice)+' ₽');
   } else {
-    const format = document.getElementById('leaflet-format').value;
-    const paper = document.getElementById('leaflet-paper').value;
-    const color = document.getElementById('leaflet-color').value;
-
-    const itemsPerA2 = ITEMS_PER_A2[format];
-    let cleanSheets = Math.ceil(qty / itemsPerA2);
-    
-    let plates = getPlatesPerSheet(color, isSelfTurn);
-
-    const wasteSheets = plates * WASTE_PER_FORM;
-    const totalSheets = cleanSheets + wasteSheets;
-
-    const printCost = cleanSheets * PRINT_PRICES[color];
-    const paperCost = totalSheets * PAPER_PRICE_PER_SHEET[paper];
-    const platesCost = plates * PLATE_PRICE;
-    const cutCost = isCut ? totalSheets * PRICE_CUT : 0;
-    const creaseCost = isCrease ? totalSheets * PRICE_CREASE : 0;
-
-    total = printCost + paperCost + platesCost + cutCost + creaseCost;
-
-    plainText += `Тираж: ${fmt(qty)} шт\n`;
-    plainText += `Формат: ${format}, Красочность: ${color}\n`;
-
-    html = row('Тираж', fmt(qty) + ' шт') +
-           row('Листов А2 чистых', fmt(cleanSheets) + ' шт') +
-           row('Бумага на приладку', fmt(wasteSheets) + ' шт') +
-           row('Печать (работа)', fmt(printCost) + ' ₽', `${cleanSheets} отт. × ${PRINT_PRICES[color]} ₽`) +
-           row('Бумага', fmt(paperCost) + ' ₽', `${totalSheets} лист. × ${PAPER_PRICE_PER_SHEET[paper]} ₽`) +
-           row('Печатные формы', fmt(platesCost) + ' ₽', `${plates} шт × ${PLATE_PRICE} ₽`) +
-           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalSheets} лист. × ${PRICE_CUT} ₽`) : '') +
-           (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost) + ' ₽', `${totalSheets} лист. × ${PRICE_CREASE} ₽`) : '');
+    const format = document.getElementById('leaflet-format').value; const paper = document.getElementById('leaflet-paper').value; const color = document.getElementById('leaflet-color').value;
+    const itemsPerA2 = ITEMS_PER_A2[format]; let cleanSheets = Math.ceil(qty / itemsPerA2); let plates = getPlatesCount(color, isSelfTurn);
+    const printResult = calcPrintCost(cleanSheets, plates, plates); const wasteSheets = plates * 50; const totalSheets = cleanSheets + wasteSheets;
+    const paperCost = totalSheets * PAPER_PRICE_PER_SHEET[paper]; const cutCost = isCut ? totalSheets * PRICE_CUT : 0; const creaseCost = isCrease ? totalSheets * PRICE_CREASE : 0;
+    const totalCostPrice = printResult.costPrice + paperCost + cutCost + creaseCost; total = printResult.clientPrice + paperCost + cutCost + creaseCost;
+    html = row('Тираж', fmt(qty)+' шт') + row('Листов А2 (чистых)', fmt(cleanSheets)+' шт') + row('Бумага (с приладкой)', fmt(totalSheets)+' шт') + row('Печать (работа)', fmt(printResult.clientPrice)+' ₽', `${printResult.shifts.toFixed(2)} смен`) + row('Бумага', fmt(paperCost)+' ₽', `${totalSheets} л. × ${PAPER_PRICE_PER_SHEET[paper]} ₽`) + (cutCost ? row('Резка', fmt(cutCost)+' ₽', `${totalSheets} л. × ${PRICE_CUT} ₽`) : '') + (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost)+' ₽', `${totalSheets} л. × ${PRICE_CREASE} ₽`) : '') + row('--- Себестоимость (внутр.) ---', fmt(totalCostPrice)+' ₽');
   }
-
-  total = Math.round(total / 10) * 10;
-  plainText += "--------------------------------------------------\n";
-  plainText += `ИТОГО: ${fmt(total)} ₽ (${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт)\n`;
-  
-  document.getElementById('result').innerHTML = html +
-    `<div class="total">
-       <span class="lbl">Итого</span>
-       <span class="val">${fmt(total)} ₽</span>
-     </div>
-     <div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
-
+  total = Math.round(total / 10) * 10; plainText += `---\nИТОГО: ${fmt(total)} ₽ (${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт)\n`;
+  document.getElementById('result').innerHTML = html + `<div class="total"><span class="lbl">Итого</span><span class="val">${fmt(total)} ₽</span></div><div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
   window.lastCalculationText = plainText;
 }
-
-function copySummary() {
-  navigator.clipboard.writeText(window.lastCalculationText).then(() => {
-    const btn = document.querySelector('.btn-copy');
-    const originalText = btn.innerText;
-    btn.innerText = "Скопировано!";
-    btn.style.background = "#e7f7ec";
-    btn.style.color = "#1a7f37";
-    btn.style.borderColor = "#b7e4c7";
-    setTimeout(() => {
-      btn.innerText = originalText;
-      btn.style.background = "#fff";
-      btn.style.color = "var(--berry)";
-      btn.style.borderColor = "var(--berry)";
-    }, 2000);
-  }).catch(err => {
-    alert("Ошибка при копировании: " + err);
-  });
-}
-
-// Слушатели
+function copySummary() { navigator.clipboard.writeText(window.lastCalculationText).then(() => { const btn = document.querySelector('.btn-copy'); const originalText = btn.innerText; btn.innerText = "Скопировано!"; btn.style.background = "#e7f7ec"; btn.style.color = "#1a7f37"; btn.style.borderColor = "#b7e4c7"; setTimeout(() => { btn.innerText = originalText; btn.style.background = "#fff"; btn.style.color = "var(--berry)"; btn.style.borderColor = "var(--berry)"; }, 2000); }).catch(err => alert("Ошибка: " + err)); }
 document.getElementById('product').addEventListener('change', updateUI);
-['qty', 
- 'leaflet-format', 'leaflet-paper', 'leaflet-color',
- 'brochure-format', 'brochure-pages', 'brochure-paper', 'brochure-color', 'brochure-cover-paper', 'brochure-cover-color', 'brochure-binding',
- 'book-format', 'book-pages', 'book-paper', 'book-color', 'book-cover-paper', 'book-cover-color', 'book-cover-lam', 'book-binding'
-].forEach(id => {
-  document.getElementById(id).addEventListener('change', calc);
-  document.getElementById(id).addEventListener('input', calc);
-});
-['selfTurn', 'cut', 'crease'].forEach(id => {
-  document.getElementById(id).addEventListener('change', calc);
-});
-
-// Подсветка чекбоксов
-document.querySelectorAll('.chk input').forEach(i => {
-  const sync = () => i.closest('.chk').classList.toggle('on', i.checked);
-  i.addEventListener('change', sync); sync();
-});
-
-// Запуск
+['qty', 'leaflet-format', 'leaflet-paper', 'leaflet-color', 'brochure-format', 'brochure-pages', 'brochure-paper', 'brochure-color', 'brochure-cover-paper', 'brochure-cover-color', 'brochure-binding', 'book-format', 'book-pages', 'book-paper', 'book-color', 'book-cover-paper', 'book-cover-color', 'book-cover-lam', 'book-binding'].forEach(id => { document.getElementById(id).addEventListener('change', calc); document.getElementById(id).addEventListener('input', calc); });
+['selfTurn', 'cut', 'crease'].forEach(id => { document.getElementById(id).addEventListener('change', calc); });
+document.querySelectorAll('.chk input').forEach(i => { const sync = () => i.closest('.chk').classList.toggle('on', i.checked); i.addEventListener('change', sync); sync(); });
 updateUI();
 </script>
 </body>
