@@ -44,10 +44,12 @@
   .chk.on{background:#fff;border-color:var(--angel-blue);box-shadow:0 2px 6px rgba(0,0,0,0.03)}
 
   .result{background: #ffffff; color: var(--berry); border: 2px solid var(--angel-blue); box-shadow: 0 8px 24px rgba(139,28,66,.05);}
-  .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line); flex-wrap: wrap;}
+  .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line); flex-wrap: wrap; align-items: baseline;}
   .row:last-of-type{border-bottom:none}
   .row span:first-child{color:var(--muted); font-weight: 400;}
   .row span:last-child{font-weight: 500;}
+  .row .unit-price {font-size: 12px; color: #999; margin-left: 6px; font-weight: 400;}
+  
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-top:20px;border-top:2px solid var(--angel-blue)}
   .total .lbl{font-size:16px;color:var(--berry); font-weight: 500;}
   .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px}
@@ -146,7 +148,7 @@
       </div>
       <div>
         <label>Тираж, шт</label>
-        <input type="number" id="qty" value="100" min="1" max="100000">
+        <input type="number" id="qty" value="300" min="1" max="100000">
       </div>
     </div>
 
@@ -200,7 +202,7 @@
         </div>
         <div>
           <label>Кол-во страниц в блоке</label>
-          <input type="number" id="book-pages" value="120" min="4" step="4">
+          <input type="number" id="book-pages" value="300" min="4" step="4">
         </div>
       </div>
 
@@ -288,10 +290,23 @@
 </div>
 
 <script>
-// Цены для листовок
-const PRINT_PRICES = { '1+0': { base: 10, over50: 10 }, '1+1': { base: 20, over50: 20 }, '4+0': { base: 25, over50: 20 }, '4+4': { base: 50, over50: 40 } };
-const PAPER_PRICES = { '80': { base: 9, over50: 5 }, '120': { base: 17, over50: 13 }, '160': { base: 23, over50: 20 }, '200': { base: 25, over50: 22 }, '250': { base: 27, over50: 23 }, '300': { base: 30, over50: 25 } };
-const WASTE_FACTOR = 1.15;
+// Цены для листовок (СТРОГО ПО ПРАЙС-ЛИСТУ ИЗ EXCEL)
+const PRINT_PRICES = { 
+  '1+0': { base: 10, over50: 10 }, 
+  '1+1': { base: 20, over50: 20 }, 
+  '4+0': { base: 25, over50: 20 }, 
+  '4+4': { base: 50, over50: 40 } 
+};
+const PAPER_PRICES = { 
+  '80':  { base: 9,  over50: 5 }, 
+  '120': { base: 17, over50: 13 }, 
+  '160': { base: 23, over50: 20 }, 
+  '200': { base: 25, over50: 22 }, 
+  '250': { base: 27, over50: 23 }, 
+  '300': { base: 30, over50: 25 } 
+};
+
+const WASTE_FACTOR = 1.05; // Всего 5% на приладку для цифры (а не 15%)
 const PRICE_CUT = 0.72;
 const PRICE_LAM1 = 10;
 const PRICE_LAM2 = 20;
@@ -299,11 +314,11 @@ const PRICE_CREASE = 10;
 const PRICE_ROUND = 1.2;
 
 // Цены для книг
-const BOOK_HARD_PRICE = 200;
+const BOOK_HARD_PRICE = 200; // Уточнено по Excel
 const BOOK_COLLATION = 20;
 const BINDING_PRICES = { 
   'saddle': 8, 
-  'perfect': 500, 
+  'perfect': 500, // 500 рублей по вашему требованию
   'wire': 55, 
   'hard': BOOK_HARD_PRICE 
 };
@@ -330,10 +345,12 @@ function calc() {
   let plainText = "Смета цифровой печати (Типография Екатеринбургской Епархии)\n";
   plainText += "--------------------------------------------------\n";
 
-  // Функция для добавления строки в HTML и текст
-  const row = (l, v) => {
-    plainText += `${l}: ${v}\n`;
-    return `<div class="row"><span>${l}</span><span>${v}</span></div>`;
+  const row = (l, v, detail = '') => {
+    plainText += `${l}: ${v} ${detail ? '(' + detail + ')' : ''}\n`;
+    return `<div class="row">
+              <span>${l}</span>
+              <span>${v} <span class="unit-price">${detail}</span></span>
+            </div>`;
   };
 
   // 1. ЖУРНАЛЫ (ФИКС)
@@ -347,7 +364,7 @@ function calc() {
     
     html = row('Тираж', fmt(qty) + ' шт') +
            row('Объем', volText) +
-           row('Фиксированная цена за шт.', fmt(fixedPrice) + ' ₽');
+           row('Фиксированная цена', fmt(total) + ' ₽', `${qty} шт × ${fixedPrice} ₽`);
   
   // 2. КНИГИ
   } else if (type === 'book') {
@@ -360,22 +377,23 @@ function calc() {
     const lamCover = parseInt(document.getElementById('book-cover-lam').value);
     const binding = document.getElementById('book-binding').value;
 
-    // Блок
+    // Блок (А5 - 8 страниц на А3, А4 - 4 страницы на А3)
     const pagesPerSheet = (format === 'A5') ? 8 : 4;
     let blockSheetsPerCopy = Math.ceil(pages / pagesPerSheet);
-    blockSheetsPerCopy = Math.ceil(blockSheetsPerCopy * WASTE_FACTOR);
-    const totalBlockSheets = blockSheetsPerCopy * qty;
+    let cleanBlockSheets = blockSheetsPerCopy * qty;
+    const totalBlockSheets = Math.ceil(cleanBlockSheets * WASTE_FACTOR);
 
     const isOver50Block = totalBlockSheets >= 50;
-    const printCostBlock = totalBlockSheets * (isOver50Block ? PRINT_PRICES[cBlock].over50 : PRINT_PRICES[cBlock].base);
+    const printCostBlock = cleanBlockSheets * (isOver50Block ? PRINT_PRICES[cBlock].over50 : PRINT_PRICES[cBlock].base);
     const paperCostBlock = totalBlockSheets * (isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base);
 
-    // Обложка
+    // Обложка (1 лист А3 на 2 книги А5)
     const coversPerSheet = (format === 'A5') ? 2 : 1;
-    const totalCoverSheets = Math.ceil(qty / coversPerSheet);
-    const isOver50Cover = totalCoverSheets >= 50;
+    let cleanCoverSheets = Math.ceil(qty / coversPerSheet);
+    const totalCoverSheets = Math.ceil(cleanCoverSheets * WASTE_FACTOR);
 
-    const printCostCover = totalCoverSheets * (isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base);
+    const isOver50Cover = totalCoverSheets >= 50;
+    const printCostCover = cleanCoverSheets * (isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base);
     const paperCostCover = totalCoverSheets * (isOver50Cover ? PAPER_PRICES[pCover].over50 : PAPER_PRICES[pCover].base);
     const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
 
@@ -391,15 +409,15 @@ function calc() {
     plainText += `Формат: ${format}, ${pages} стр.\n`;
 
     html = row('Тираж', fmt(qty) + ' шт') +
-           row('Формат', format + ' (' + pages + ' стр.)') +
-           row('Листов А3 на блок (с отходами)', blockSheetsPerCopy + ' шт') +
-           row('Печать блока', fmt(printCostBlock) + ' ₽') +
-           row('Бумага блока', fmt(paperCostBlock) + ' ₽') +
-           row('Печать обложки', fmt(printCostCover) + ' ₽') +
-           row('Бумага обложки', fmt(paperCostCover) + ' ₽') +
-           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽') : '') +
-           row('Переплет', fmt(totalBindingCost) + ' ₽') +
-           (totalCollationCost ? row('Подборка', fmt(totalCollationCost) + ' ₽') : '');
+           row('Листов А3 на блок', fmt(totalBlockSheets) + ' шт', `${blockSheetsPerCopy} л. × ${qty} экз. + 5%`) +
+           row('Печать блока', fmt(printCostBlock) + ' ₽', `${cleanBlockSheets} отт. × ${isOver50Block ? PRINT_PRICES[cBlock].over50 : PRINT_PRICES[cBlock].base} ₽`) +
+           row('Бумага блока', fmt(paperCostBlock) + ' ₽', `${totalBlockSheets} л. × ${isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base} ₽`) +
+           row('Листов А3 на обложку', fmt(totalCoverSheets) + ' шт') +
+           row('Печать обложки', fmt(printCostCover) + ' ₽', `${cleanCoverSheets} отт. × ${isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base} ₽`) +
+           row('Бумага обложки', fmt(paperCostCover) + ' ₽', `${totalCoverSheets} л. × ${isOver50Cover ? PAPER_PRICES[pCover].over50 : PAPER_PRICES[pCover].base} ₽`) +
+           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽', `${totalCoverSheets} л. × ${lamCover} ₽`) : '') +
+           row('Переплет', fmt(totalBindingCost) + ' ₽', `${qty} шт × ${bindingCostPerUnit} ₽`) +
+           (totalCollationCost ? row('Подборка', fmt(totalCollationCost) + ' ₽', `${qty} шт × ${BOOK_COLLATION} ₽`) : '');
 
   // 3. ЛИСТОВКИ
   } else {
@@ -412,11 +430,11 @@ function calc() {
     const isCrease = document.getElementById('crease').checked;
     const isRound = document.getElementById('round').checked;
 
-    let sheets = Math.ceil(qty / itemsPerA3);
-    sheets = Math.ceil(sheets * WASTE_FACTOR);
+    let cleanSheets = Math.ceil(qty / itemsPerA3);
+    let sheets = Math.ceil(cleanSheets * WASTE_FACTOR);
     const isOver50 = sheets >= 50;
 
-    const printCost = sheets * (isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base);
+    const printCost = cleanSheets * (isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base);
     const paperCost = sheets * (isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base);
     const cutCost = isCut ? sheets * PRICE_CUT : 0;
     const lamCost = isLam2 ? sheets * PRICE_LAM2 : (isLam1 ? sheets * PRICE_LAM1 : 0);
@@ -429,13 +447,14 @@ function calc() {
     plainText += `Тираж: ${fmt(qty)} шт\n`;
     plainText += `Красочность: ${color}\n`;
 
-    html = row('Потребуется листов А3', sheets + ' шт') +
-           row('Печать (' + color + ')', fmt(printCost) + ' ₽') +
-           row('Бумага', fmt(paperCost) + ' ₽') +
-           (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
-           (lamCost ? row('Ламинация', fmt(lamCost) + ' ₽') : '') +
-           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽') : '') +
-           (roundCost ? row('Скругление', fmt(roundCost) + ' ₽') : '');
+    html = row('Тираж', fmt(qty) + ' шт') +
+           row('Потребуется листов А3', sheets + ' шт', `${cleanSheets} л. + 5%`) +
+           row('Печать (' + color + ')', fmt(printCost) + ' ₽', `${cleanSheets} отт. × ${isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base} ₽`) +
+           row('Бумага', fmt(paperCost) + ' ₽', `${sheets} л. × ${isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base} ₽`) +
+           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${sheets} л. × ${PRICE_CUT} ₽`) : '') +
+           (lamCost ? row('Ламинация', fmt(lamCost) + ' ₽', `${sheets} л. × ${isLam2 ? PRICE_LAM2 : PRICE_LAM1} ₽`) : '') +
+           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽', `${sheets} л. × ${PRICE_CREASE} ₽`) : '') +
+           (roundCost ? row('Скругление', fmt(roundCost) + ' ₽', `${qty} шт × ${PRICE_ROUND} ₽`) : '');
   }
 
   // Общее округление и вывод
@@ -450,7 +469,6 @@ function calc() {
      </div>
      <div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
 
-  // Сохраняем текст для копирования
   window.lastCalculationText = plainText;
 }
 
@@ -478,11 +496,9 @@ function copySummary() {
   document.getElementById('product').addEventListener(ev, updateUI);
   document.getElementById('qty').addEventListener(ev, calc);
   
-  // Для листовок
   document.getElementById('paper').addEventListener(ev, calc);
   document.getElementById('color').addEventListener(ev, calc);
   
-  // Для книг
   document.getElementById('book-format').addEventListener(ev, calc);
   document.getElementById('book-pages').addEventListener(ev, calc);
   document.getElementById('book-paper').addEventListener(ev, calc);
