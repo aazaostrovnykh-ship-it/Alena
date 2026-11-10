@@ -358,11 +358,12 @@
 
 <script>
 /* ============================================================
-   НАСТРОЙКИ ОФСЕТА (СКОРРЕКТИРОВАНО ПОД РАСЧЕТ ДИРЕКТОРА)
+   НАСТРОЙКИ ОФСЕТА (ЗАФИКСИРОВАНЫ СРЕДНИЕ ЗНАЧЕНИЯ ИЗ EXCEL)
    ============================================================ */
 const PLATE_PRICE = 500;        
 const WASTE_PER_FORM = 50;      
 
+// Печать за 1 лист А2
 const PRINT_PRICES = { 
   '1+0': 2, 
   '1+1': 4, 
@@ -370,13 +371,14 @@ const PRINT_PRICES = {
   '4+4': 8 
 };
 
+// Бумага за 1 лист А2
 const PAPER_PRICE_PER_SHEET = { 
-  '80': 2.5, 
-  '115': 3.0, 
-  '130': 3.0, 
+  '80': 4.5, 
+  '115': 5.0, 
+  '130': 6.5, 
   '200': 12.0,
-  '250': 15.0, 
-  '300': 18.0 
+  '250': 18.0, 
+  '300': 20.0 
 };
 
 const PRICE_CUT = 1.0;
@@ -431,11 +433,9 @@ function calc() {
     return front + (selfTurn ? 0 : back);
   }
 
-  // --- ЛОГИКА ДЛЯ КНИГ И БРОШЮР (ОНИ ОЧЕНЬ ПОХОЖИ) ---
   if (product === 'book' || product === 'brochure') {
     const isBook = product === 'book';
     
-    // Выбираем ID полей в зависимости от типа
     const format = document.getElementById(isBook ? 'book-format' : 'brochure-format').value;
     const pages = Math.max(4, Math.round(+document.getElementById(isBook ? 'book-pages' : 'brochure-pages').value || 4));
     const pBlock = document.getElementById(isBook ? 'book-paper' : 'brochure-paper').value;
@@ -475,7 +475,6 @@ function calc() {
 
     // Постпечать
     let bindPrice = BINDING_PRICES[binding];
-    // Если это брошюра на скрепке, а тираж маленький, может быть другой тариф, но пока берем базовый
     const bindCost = qty * bindPrice;
     const cutCost = isCut ? (totalBlockSheets + totalCoverSheets) * PRICE_CUT : 0;
     const creaseCost = isCrease ? totalBlockSheets * PRICE_CREASE : 0;
@@ -504,7 +503,6 @@ function calc() {
            (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalBlockSheets + totalCoverSheets} лист. × ${PRICE_CUT} ₽`) : '') +
            (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽', `${totalBlockSheets} лист. × ${PRICE_CREASE} ₽`) : '');
 
-  // --- ЛОГИКА ДЛЯ ЛИСТОВОК ---
   } else {
     const format = document.getElementById('leaflet-format').value;
     const paper = document.getElementById('leaflet-paper').value;
