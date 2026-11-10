@@ -110,54 +110,124 @@
     <div class="grid">
       <div>
         <label>Тип продукции</label>
-        <select id="product">
-          <option value="leaflet" selected>Листовки / Буклеты</option>
-          <option value="book">Книги / Каталоги</option>
-        </select>
-      </div>
-      <div>
-        <label>Формат изделия</label>
-        <select id="format">
-          <option value="A4">А4 (210×297)</option>
-          <option value="A5" selected>А5 (148×210)</option>
-          <option value="A3">А3 (297×420)</option>
-        </select>
-      </div>
-      
-      <div>
-        <label>Бумага</label>
-        <select id="paper">
-          <option value="80">Офсетная 80 г/м²</option>
-          <option value="130" selected>Мелованная 130 г/м²</option>
-          <option value="250">Мелованная 250 г/м²</option>
-          <option value="300">Картон 300 г/м²</option>
-        </select>
-      </div>
-      <div>
-        <label>Красочность</label>
-        <select id="color">
-          <option value="1+0">1+0 (ч/б)</option>
-          <option value="1+1">1+1 (ч/б двусторонняя)</option>
-          <option value="4+0">4+0 (цветная)</option>
-          <option value="4+4" selected>4+4 (цветная двусторонняя)</option>
+        <select id="product" onchange="updateUI()">
+          <option value="leaflet">Листовки / Буклеты</option>
+          <option value="book" selected>Книги / Каталоги</option>
         </select>
       </div>
       <div>
         <label>Тираж, шт</label>
-        <input type="number" id="qty" value="10000" min="100" max="100000">
+        <input type="number" id="qty" value="5000" min="100" max="100000">
+      </div>
+    </div>
+
+    <!-- БЛОК ДЛЯ ЛИСТОВОК -->
+    <div id="leaflet-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+      <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры листовок</h4>
+      <div class="grid">
+        <div>
+          <label>Формат изделия</label>
+          <select id="leaflet-format">
+            <option value="A4">А4 (210×297)</option>
+            <option value="A5" selected>А5 (148×210)</option>
+            <option value="A3">А3 (297×420)</option>
+          </select>
+        </div>
+        <div>
+          <label>Бумага</label>
+          <select id="leaflet-paper">
+            <option value="80">Офсетная 80 г/м²</option>
+            <option value="130" selected>Мелованная 130 г/м²</option>
+            <option value="250">Мелованная 250 г/м²</option>
+          </select>
+        </div>
+        <div>
+          <label>Красочность</label>
+          <select id="leaflet-color">
+            <option value="1+0">1+0 (ч/б)</option>
+            <option value="1+1">1+1 (ч/б двусторонняя)</option>
+            <option value="4+0">4+0 (цветная)</option>
+            <option value="4+4" selected>4+4 (цветная двусторонняя)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- БЛОК ДЛЯ КНИГ -->
+    <div id="book-options" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+      <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
+      
+      <div class="grid">
+        <div>
+          <label>Формат книги</label>
+          <select id="book-format">
+            <option value="A5" selected>А5 (145×205)</option>
+            <option value="A4">А4 (205×290)</option>
+          </select>
+        </div>
+        <div>
+          <label>Кол-во страниц в блоке</label>
+          <input type="number" id="book-pages" value="120" min="8" step="4">
+        </div>
+      </div>
+
+      <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Внутренний блок</h4>
+      <div class="grid">
+        <div>
+          <label>Бумага блока</label>
+          <select id="book-paper">
+            <option value="80" selected>Офсетная 80 г/м²</option>
+            <option value="130">Мелованная 130 г/м²</option>
+          </select>
+        </div>
+        <div>
+          <label>Красочность блока</label>
+          <select id="book-color">
+            <option value="1+0">1+0 (ч/б)</option>
+            <option value="1+1" selected>1+1 (ч/б двусторонняя)</option>
+            <option value="4+4">4+4 (цветная)</option>
+          </select>
+        </div>
+      </div>
+
+      <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Обложка</h4>
+      <div class="grid">
+        <div>
+          <label>Бумага обложки</label>
+          <select id="book-cover-paper">
+            <option value="250" selected>Мелованная 250 г/м²</option>
+            <option value="300">Картон 300 г/м²</option>
+          </select>
+        </div>
+        <div>
+          <label>Красочность обложки</label>
+          <select id="book-cover-color">
+            <option value="4+0" selected>4+0 (цветная 1 сторона)</option>
+            <option value="4+4">4+4 (цветная 2 стороны)</option>
+          </select>
+        </div>
+        <div>
+          <label>Ламинация обложки</label>
+          <select id="book-cover-lam">
+            <option value="0">Без ламинации</option>
+            <option value="10" selected>1 сторона</option>
+            <option value="20">2 стороны</option>
+          </select>
+        </div>
+        <div>
+          <label>Переплет</label>
+          <select id="book-binding">
+            <option value="soft">Мягкий (КБС / Скоба)</option>
+            <option value="hard" selected>Твердый переплет</option>
+          </select>
+        </div>
       </div>
     </div>
 
     <div style="margin-top: 15px;">
       <div class="chks">
-        <!-- НОВАЯ ГАЛОЧКА "САМО НА СЕБЯ" -->
-        <label class="chk on" title="Позволяет использовать один комплект форм для лица и оборота, если макет позволяет">
-          <input type="checkbox" id="selfTurn" checked> Схема «Само на себя» (скидка на формы)
-        </label>
-        
+        <label class="chk on"><input type="checkbox" id="selfTurn" checked> Схема «Само на себя» (скидка на формы)</label>
         <label class="chk on"><input type="checkbox" id="cut" checked> Резка</label>
-        <label class="chk"><input type="checkbox" id="lam1"> Ламинация 1 сторона</label>
-        <label class="chk"><input type="checkbox" id="lam2"> Ламинация 2 стороны</label>
         <label class="chk"><input type="checkbox" id="crease"> Биговка / Фальцовка</label>
       </div>
     </div>
@@ -190,103 +260,158 @@ const SETUP_PRICE = 500;        // Стоимость приладки (на 1 �
 const PRINT_PRICE_PER_SHEET = 2.0; // Стоимость печати 1 листа А2
 const WASTE_FACTOR = 1.15;      // 15% на техотходы
 
-// Стоимость бумаги за 1 лист А2
-const PAPER_PRICE_PER_SHEET = { 
-  '80': 2.5, 
-  '130': 3.5, 
-  '250': 7.5, 
-  '300': 10 
-};
-
-// Стоимость постобработки за 1 лист А2
+const PAPER_PRICE_PER_SHEET = { '80': 2.5, '130': 3.5, '250': 7.5, '300': 10 };
 const PRICE_CUT = 1.0;
-const PRICE_LAM1 = 5.0;
-const PRICE_LAM2 = 10.0;
 const PRICE_CREASE = 2.5;
 
 // Сколько изделий помещается на один лист А2
-const ITEMS_PER_A2 = { 
-  'A5': 8,  // На А2 помещается 8 изделий А5
-  'A4': 4,  // На А2 помещается 4 изделия А4
-  'A3': 2   // На А2 помещается 2 изделия А3
-};
+const ITEMS_PER_A2 = { 'A5': 8, 'A4': 4, 'A3': 2 };
+// Для книг (сколько страниц помещается на 1 лист А2)
+const PAGES_PER_A2 = { 'A5': 16, 'A4': 8 }; 
+// Сколько обложек помещается на 1 лист А2
+const COVERS_PER_A2 = { 'A5': 8, 'A4': 4 };
+
+const BINDING_PRICES = { 'soft': 25, 'hard': 120 };
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
 
-function calc() {
-  const format = document.getElementById('format').value;
-  const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
-  const paper = document.getElementById('paper').value;
-  const color = document.getElementById('color').value;
+function updateUI() {
+  const isBook = document.getElementById('product').value === 'book';
+  document.getElementById('book-options').style.display = isBook ? 'block' : 'none';
+  document.getElementById('leaflet-options').style.display = isBook ? 'none' : 'block';
+  calc();
+}
 
+function calc() {
+  const product = document.getElementById('product').value;
+  const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
+  
   const isSelfTurn = document.getElementById('selfTurn').checked;
   const isCut = document.getElementById('cut').checked;
-  const isLam1 = document.getElementById('lam1').checked;
-  const isLam2 = document.getElementById('lam2').checked;
   const isCrease = document.getElementById('crease').checked;
 
-  // 1. Считаем количество листов А2
-  const itemsPerA2 = ITEMS_PER_A2[format];
-  let sheets = Math.ceil((qty / itemsPerA2) * WASTE_FACTOR);
+  let html = '';
+  let total = 0;
+  const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
 
-  // 2. Считаем количество форм
-  let plates = 0;
-  if (color === '1+0') plates = 1;
-  if (color === '1+1') plates = 2;
-  if (color === '4+0') plates = 4;
-  if (color === '4+4') plates = 8;
+  // --- ЛОГИКА ДЛЯ КНИГ ---
+  if (product === 'book') {
+    const format = document.getElementById('book-format').value;
+    const pages = Math.max(8, Math.round(+document.getElementById('book-pages').value || 8));
+    const pBlock = document.getElementById('book-paper').value;
+    const cBlock = document.getElementById('book-color').value;
+    const pCover = document.getElementById('book-cover-paper').value;
+    const cCover = document.getElementById('book-cover-color').value;
+    const lamCover = parseInt(document.getElementById('book-cover-lam').value);
+    const binding = document.getElementById('book-binding').value;
 
-  // ПРИМЕНЯЕМ СХЕМУ «САМО НА СЕБЯ» (делим формы пополам)
-  let selfTurnActive = false;
-  if (isSelfTurn && plates > 1) {
-    plates = plates / 2;
-    selfTurnActive = true;
+    // 1. Блок
+    const pagesPerSheet = PAGES_PER_A2[format];
+    let blockSheetsPerCopy = Math.ceil(pages / pagesPerSheet);
+    blockSheetsPerCopy = Math.ceil(blockSheetsPerCopy * WASTE_FACTOR);
+    const totalBlockSheets = blockSheetsPerCopy * qty;
+
+    let platesBlock = 0;
+    if (cBlock === '1+0') platesBlock = 1;
+    if (cBlock === '1+1') platesBlock = 2;
+    if (cBlock === '4+0') platesBlock = 4;
+    if (cBlock === '4+4') platesBlock = 8;
+    if (isSelfTurn && platesBlock > 1) platesBlock = platesBlock / 2;
+
+    const printCostBlock = totalBlockSheets * PRINT_PRICE_PER_SHEET;
+    const paperCostBlock = totalBlockSheets * PAPER_PRICE_PER_SHEET[pBlock];
+    const platesCostBlock = platesBlock * PLATE_PRICE;
+    const setupCostBlock = platesBlock * SETUP_PRICE;
+
+    // 2. Обложка (печатается отдельно)
+    const coversPerSheet = COVERS_PER_A2[format];
+    const totalCoverSheets = Math.ceil((qty / coversPerSheet) * WASTE_FACTOR);
+
+    let platesCover = 0;
+    if (cCover === '4+0') platesCover = 4;
+    if (cCover === '4+4') platesCover = 8;
+    if (isSelfTurn && platesCover > 1) platesCover = platesCover / 2;
+
+    const printCostCover = totalCoverSheets * PRINT_PRICE_PER_SHEET;
+    const paperCostCover = totalCoverSheets * PAPER_PRICE_PER_SHEET[pCover];
+    const platesCostCover = platesCover * PLATE_PRICE;
+    const setupCostCover = platesCover * SETUP_PRICE;
+    const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
+
+    // 3. Переплет и резка
+    const bindCost = qty * BINDING_PRICES[binding];
+    const cutCost = isCut ? totalBlockSheets * PRICE_CUT + totalCoverSheets * PRICE_CUT : 0;
+    const creaseCost = isCrease ? totalBlockSheets * PRICE_CREASE : 0;
+
+    total = platesCostBlock + setupCostBlock + printCostBlock + paperCostBlock +
+            platesCostCover + setupCostCover + printCostCover + paperCostCover + lamCostCover +
+            bindCost + cutCost + creaseCost;
+
+    html = row('Тираж', fmt(qty) + ' шт') +
+           row('Листов А2 на блок (с отходами)', fmt(totalBlockSheets) + ' шт') +
+           row('Формы и печать блока', fmt(platesCostBlock + setupCostBlock + printCostBlock) + ' ₽') +
+           row('Бумага блока', fmt(paperCostBlock) + ' ₽') +
+           row('Листов А2 на обложку', fmt(totalCoverSheets) + ' шт') +
+           row('Формы и печать обложки', fmt(platesCostCover + setupCostCover + printCostCover) + ' ₽') +
+           row('Бумага обложки', fmt(paperCostCover) + ' ₽') +
+           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽') : '') +
+           row('Переплет', fmt(bindCost) + ' ₽') +
+           (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
+           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽') : '');
+
+  // --- ЛОГИКА ДЛЯ ЛИСТОВОК ---
+  } else {
+    const format = document.getElementById('leaflet-format').value;
+    const paper = document.getElementById('leaflet-paper').value;
+    const color = document.getElementById('leaflet-color').value;
+
+    const itemsPerA2 = ITEMS_PER_A2[format];
+    let sheets = Math.ceil((qty / itemsPerA2) * WASTE_FACTOR);
+
+    let plates = 0;
+    if (color === '1+0') plates = 1;
+    if (color === '1+1') plates = 2;
+    if (color === '4+0') plates = 4;
+    if (color === '4+4') plates = 8;
+    if (isSelfTurn && plates > 1) plates = plates / 2;
+
+    const platesCost = plates * PLATE_PRICE;
+    const setupCost = plates * SETUP_PRICE;
+    const printCost = sheets * PRINT_PRICE_PER_SHEET;
+    const paperCost = sheets * PAPER_PRICE_PER_SHEET[paper];
+    const cutCost = isCut ? sheets * PRICE_CUT : 0;
+    const creaseCost = isCrease ? sheets * PRICE_CREASE : 0;
+
+    total = platesCost + setupCost + printCost + paperCost + cutCost + creaseCost;
+
+    html = row('Тираж', fmt(qty) + ' шт') +
+           row('Изделий на листе А2', itemsPerA2 + ' шт') +
+           row('Печатных листов А2 (с отходами)', fmt(sheets) + ' шт') +
+           row('Количество печатных форм', fmt(plates) + ' шт' + (isSelfTurn ? ' (Само на себя)' : '')) +
+           row('Формы и приладка', fmt(platesCost + setupCost) + ' ₽') +
+           row('Печать тиража', fmt(printCost) + ' ₽') +
+           row('Бумага', fmt(paperCost) + ' ₽') +
+           (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
+           (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost) + ' ₽') : '');
   }
 
-  // 3. Стоимость
-  const platesCost = plates * PLATE_PRICE;
-  const setupCost = plates * SETUP_PRICE; 
-  const printCost = sheets * PRINT_PRICE_PER_SHEET;
-  const paperCost = sheets * PAPER_PRICE_PER_SHEET[paper];
-  
-  const cutCost = isCut ? sheets * PRICE_CUT : 0;
-  const lamCost = isLam2 ? sheets * PRICE_LAM2 : (isLam1 ? sheets * PRICE_LAM1 : 0);
-  const creaseCost = isCrease ? sheets * PRICE_CREASE : 0;
-
-  let total = platesCost + setupCost + printCost + paperCost + cutCost + lamCost + creaseCost;
   total = Math.round(total / 10) * 10;
-  
-  const perUnit = total / qty;
-
-  // Вывод
-  const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
-  
-  document.getElementById('result').innerHTML =
-    row('Тираж', fmt(qty) + ' шт') +
-    row('Изделий на листе А2', itemsPerA2 + ' шт') +
-    row('Печатных листов А2 (с отходами)', fmt(sheets) + ' шт') +
-    row('Количество печатных форм', fmt(plates) + ' шт' + (selfTurnActive ? ' (Само на себя)' : '')) +
-    row('Формы и приладка', fmt(platesCost + setupCost) + ' ₽') +
-    row('Печать тиража', fmt(printCost) + ' ₽') +
-    row('Бумага', fmt(paperCost) + ' ₽') +
-    (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
-    (lamCost ? row('Ламинация', fmt(lamCost) + ' ₽') : '') +
-    (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost) + ' ₽') : '') +
+  document.getElementById('result').innerHTML = html +
     `<div class="total">
        <span class="lbl">Итого</span>
        <span class="val">${fmt(total)} ₽</span>
      </div>
-     <div class="perunit">${perUnit.toFixed(2).replace('.', ',')} ₽ / шт</div>`;
+     <div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
 }
 
 // Слушатели
-['change', 'input'].forEach(ev => {
-  document.getElementById('format').addEventListener(ev, calc);
-  document.getElementById('paper').addEventListener(ev, calc);
-  document.getElementById('color').addEventListener(ev, calc);
-  document.getElementById('qty').addEventListener(ev, calc);
+document.getElementById('product').addEventListener('change', updateUI);
+['qty', 'book-format', 'book-pages', 'book-paper', 'book-color', 'book-cover-paper', 'book-cover-color', 'book-cover-lam', 'book-binding',
+ 'leaflet-format', 'leaflet-paper', 'leaflet-color'].forEach(id => {
+  document.getElementById(id).addEventListener('change', calc);
+  document.getElementById(id).addEventListener('input', calc);
 });
-['selfTurn', 'cut', 'lam1', 'lam2', 'crease'].forEach(id => {
+['selfTurn', 'cut', 'crease'].forEach(id => {
   document.getElementById(id).addEventListener('change', calc);
 });
 
@@ -297,7 +422,7 @@ document.querySelectorAll('.chk input').forEach(i => {
 });
 
 // Запуск
-calc();
+updateUI();
 </script>
 </body>
 </html>
