@@ -14,12 +14,12 @@
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
   .brand-left a{display:flex;align-items:center;gap:18px;text-decoration:none}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
-  .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--berry);font-weight:500}
   .nav-menu{display:flex;gap:20px;align-items:center;margin-left:20px}
   .nav-menu a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px;transition:.15s;padding-bottom:4px;border-bottom:2px solid transparent}
   .nav-menu a:hover,.nav-menu a.active{color:var(--angel-blue);border-bottom-color:var(--angel-blue)}
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
   .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500}
+  @media(max-width:980px){.brand{flex-direction:column;align-items:flex-start}.nav-menu{margin-left:0;margin-top:15px;flex-wrap:wrap}.header-contacts{text-align:left;margin-top:10px}}
   .page-title {margin-bottom: 30px;}
   .page-title h2 {font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;}
   .card{background:var(--berry-light);border-radius:16px;padding:28px;margin-bottom:20px;border:1px solid rgba(139,28,66,0.05);box-shadow:0 6px 24px rgba(139,28,66,.05)}
@@ -30,31 +30,18 @@
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px}
-  
-  /* МОБИЛЬНАЯ АДАПТАЦИЯ */
-  @media(max-width: 768px){
-    body { padding: 16px 10px; }
-    .brand { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
-    .brand-left a { flex-direction: column; gap: 10px; }
-    .brand h1 { font-size: 20px; text-align: center; }
-    .nav-menu { margin-left: 0; justify-content: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
-    .nav-menu a { font-size: 14px; }
-    .header-contacts { text-align: center; margin-top: 10px; }
-    .header-contacts div, .header-contacts a { font-size: 14px; }
-    .card { padding: 20px; }
-    .footer { flex-direction: column; align-items: center; text-align: center; }
-    .footer-col { align-items: center; }
-  }
+  @media(max-width:560px){.footer{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
 <div class="calc">
   <header class="brand">
     <div class="brand-left">
-      <a href="index.html"><img src="logo_1.jpg" alt="Логотип" onerror="this.style.display='none'"><h1>Типография Екатеринбургской Епархии</h1></a>
+      <a href="index.html"><img src="logo_1.jpg" alt="Типография Екатеринбургской Епархии" onerror="this.style.display='none'"></a>
     </div>
     <nav class="nav-menu">
-      <a href="index.html">Главная</a>
+      <a href="index.html">Цифра</a>
+      <a href="offset.html">Офсет</a>
       <a href="services.html">Услуги</a>
       <a href="portfolio.html">Портфолио</a>
       <a href="about.html">О компании</a>
@@ -89,12 +76,7 @@
     <p>Если у вас нет готового макета, наши дизайнеры помогут его разработать с нуля.</p>
   </div>
   <footer class="footer">
-    <div class="footer-col">
-      <strong>Позвонить</strong>
-      <span style="font-size:13px; color:var(--berry); margin-bottom:4px;">Менеджер Алена Заостровных</span>
-      <a href="tel:+73432789642">+7 (343) 278-96-42</a>
-      <a href="tel:+79960320581">+7 (996) 032-05-81</a>
-    </div>
+    <div class="footer-col"><strong>Позвонить</strong><span style="font-size:13px; color:var(--berry); margin-bottom:4px;">Менеджер Алена Заостровных</span><a href="tel:+73432789642">+7 (343) 278-96-42</a><a href="tel:+79960320581">+7 (996) 032-05-81</a></div>
     <div class="footer-col"><strong>Написать</strong><a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a></div>
     <div class="footer-col"><strong>Приехать</strong><span style="font-size:16px;font-weight:500;color:var(--berry)">г. Екатеринбург, ул. Репина, 6а</span></div>
   </footer>
