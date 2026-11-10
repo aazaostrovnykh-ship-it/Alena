@@ -268,7 +268,13 @@ const PRICE_ROUND = 1.2;
 // Цены для книг
 const BOOK_HARD_PRICE = 200;
 const BOOK_COLLATION = 20;
-const BINDING_PRICES = { 'saddle': 8, 'perfect': 15, 'wire': 55, 'hard': BOOK_HARD_PRICE };
+// ОБНОВЛЕНО: КБС (Термопереплет) теперь стоит 500 рублей
+const BINDING_PRICES = { 
+  'saddle': 8, 
+  'perfect': 500, 
+  'wire': 55, 
+  'hard': BOOK_HARD_PRICE 
+};
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
 
