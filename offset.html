@@ -150,6 +150,11 @@
 
     <div style="margin-top: 15px;">
       <div class="chks">
+        <!-- НОВАЯ ГАЛОЧКА "САМО НА СЕБЯ" -->
+        <label class="chk on" title="Позволяет использовать один комплект форм для лица и оборота, если макет позволяет">
+          <input type="checkbox" id="selfTurn" checked> Схема «Само на себя» (скидка на формы)
+        </label>
+        
         <label class="chk on"><input type="checkbox" id="cut" checked> Резка</label>
         <label class="chk"><input type="checkbox" id="lam1"> Ламинация 1 сторона</label>
         <label class="chk"><input type="checkbox" id="lam2"> Ламинация 2 стороны</label>
@@ -185,7 +190,7 @@ const SETUP_PRICE = 500;        // Стоимость приладки (на 1 �
 const PRINT_PRICE_PER_SHEET = 2.0; // Стоимость печати 1 листа А2
 const WASTE_FACTOR = 1.15;      // 15% на техотходы
 
-// Стоимость бумаги за 1 лист А2 (примерно вдвое меньше, чем А1)
+// Стоимость бумаги за 1 лист А2
 const PAPER_PRICE_PER_SHEET = { 
   '80': 2.5, 
   '130': 3.5, 
@@ -214,6 +219,7 @@ function calc() {
   const paper = document.getElementById('paper').value;
   const color = document.getElementById('color').value;
 
+  const isSelfTurn = document.getElementById('selfTurn').checked;
   const isCut = document.getElementById('cut').checked;
   const isLam1 = document.getElementById('lam1').checked;
   const isLam2 = document.getElementById('lam2').checked;
@@ -223,12 +229,19 @@ function calc() {
   const itemsPerA2 = ITEMS_PER_A2[format];
   let sheets = Math.ceil((qty / itemsPerA2) * WASTE_FACTOR);
 
-  // 2. Считаем количество форм (стандартная схема, без «само на себя»)
+  // 2. Считаем количество форм
   let plates = 0;
   if (color === '1+0') plates = 1;
   if (color === '1+1') plates = 2;
   if (color === '4+0') plates = 4;
   if (color === '4+4') plates = 8;
+
+  // ПРИМЕНЯЕМ СХЕМУ «САМО НА СЕБЯ» (делим формы пополам)
+  let selfTurnActive = false;
+  if (isSelfTurn && plates > 1) {
+    plates = plates / 2;
+    selfTurnActive = true;
+  }
 
   // 3. Стоимость
   const platesCost = plates * PLATE_PRICE;
@@ -252,7 +265,7 @@ function calc() {
     row('Тираж', fmt(qty) + ' шт') +
     row('Изделий на листе А2', itemsPerA2 + ' шт') +
     row('Печатных листов А2 (с отходами)', fmt(sheets) + ' шт') +
-    row('Количество печатных форм', fmt(plates) + ' шт') +
+    row('Количество печатных форм', fmt(plates) + ' шт' + (selfTurnActive ? ' (Само на себя)' : '')) +
     row('Формы и приладка', fmt(platesCost + setupCost) + ' ₽') +
     row('Печать тиража', fmt(printCost) + ' ₽') +
     row('Бумага', fmt(paperCost) + ' ₽') +
@@ -273,7 +286,7 @@ function calc() {
   document.getElementById('color').addEventListener(ev, calc);
   document.getElementById('qty').addEventListener(ev, calc);
 });
-['cut', 'lam1', 'lam2', 'crease'].forEach(id => {
+['selfTurn', 'cut', 'lam1', 'lam2', 'crease'].forEach(id => {
   document.getElementById(id).addEventListener('change', calc);
 });
 
