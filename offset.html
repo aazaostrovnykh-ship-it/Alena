@@ -14,42 +14,62 @@
   .calc{max-width:980px;margin:0 auto}
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
   .brand-left a{display:flex;align-items:center;gap:18px;text-decoration:none}
-  .brand img{height:66px;width:auto;display:block;flex-shrink:0}
+  .brand img{height:66px;width:auto;display:block;flex-shrink:0; transition: transform 0.3s ease;}
+  .brand a:hover img{ transform: scale(1.02); }
   .nav-menu{display:flex;gap:20px;align-items:center;margin-left:20px}
   .nav-menu a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px;transition:.15s;padding-bottom:4px;border-bottom:2px solid transparent}
   .nav-menu a:hover,.nav-menu a.active{color:var(--angel-blue);border-bottom-color:var(--angel-blue)}
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
-  .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500}
+  .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500; transition: color 0.2s;}
+  .header-contacts a:hover{ color: var(--angel-blue); }
   .page-title {margin-bottom: 30px;}
   .page-title h2 {font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;}
   .page-title p {color: var(--muted); font-size: 16px; margin: 0; line-height: 1.5;}
-  .card{background:var(--berry-light);border-radius:16px;padding:22px;margin-bottom:16px;border:1px solid rgba(139,28,66,0.05);box-shadow:0 6px 24px rgba(139,28,66,.05)}
+  
+  .card{background:var(--berry-light);border-radius:16px;padding:22px;margin-bottom:16px;border:1px solid rgba(139,28,66,0.05);box-shadow:0 6px 24px rgba(139,28,66,.05); transition: box-shadow 0.3s ease;}
+  .card:hover{ box-shadow:0 8px 30px rgba(139,28,66,.1); }
   .card h3{font-size:20px;color:var(--berry);margin:0 0 15px;font-weight:500}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   label{display:block;font-size:13px;font-weight:500;color:var(--berry);margin-bottom:6px}
-  select,input[type=number]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;color:var(--ink);background:#ffffff;outline:none;font-family:inherit;font-weight:400;transition:.15s;box-shadow:0 2px 4px rgba(0,0,0,0.02);}
-  select:focus,input:focus{border-color:var(--angel-blue);box-shadow:0 0 0 3px rgba(110,166,216,.15)}
+  
+  select,input[type=number]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;color:var(--ink);background:#ffffff;outline:none;font-family:inherit;font-weight:400;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,0.02);}
+  select:focus,input:focus{border-color:var(--angel-blue);box-shadow:0 0 0 3px rgba(110,166,216,.15); transform: translateY(-1px);}
+  
   .chks{display:flex;flex-wrap:wrap;gap:10px; align-items: center;}
-  .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.5);border:1px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--berry);margin:0;transition:.15s}
-  .chk:hover{background:rgba(255,255,255,0.8)}
+  .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.5);border:1px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--berry);margin:0;transition:.2s;}
+  .chk:hover{background:rgba(255,255,255,0.8); transform: translateY(-1px);}
   .chk input{accent-color:var(--berry);width:16px;height:16px;cursor:pointer}
   .chk.on{background:#fff;border-color:var(--angel-blue);box-shadow:0 2px 6px rgba(0,0,0,0.03)}
+
+  .options-block {
+    max-height: 0; opacity: 0; overflow: hidden; 
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  }
+  .options-block.show {
+    max-height: 900px; opacity: 1; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);
+  }
+
   .result{background: #ffffff; color: var(--berry); border: 2px solid var(--angel-blue); box-shadow: 0 8px 24px rgba(139,28,66,.05);}
   .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line); flex-wrap: wrap; align-items: baseline;}
   .row:last-of-type{border-bottom:none}
   .row span:first-child{color:var(--muted); font-weight: 400;}
   .row span:last-child{font-weight: 500;}
   .row .unit-price {font-size: 12px; color: #999; margin-left: 6px; font-weight: 400;}
+  
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-top:20px;border-top:2px solid var(--angel-blue)}
   .total .lbl{font-size:16px;color:var(--berry); font-weight: 500;}
-  .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px}
+  .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px; transition: color 0.3s;}
+  .total .val.updated { color: var(--berry); }
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 400;}
+
   .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-  .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 500; text-align: center; cursor: pointer; transition: 0.15s; border: none; font-family: inherit; }
+  .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 500; text-align: center; cursor: pointer; transition: 0.2s; border: none; font-family: inherit; }
+  .btn-action:active { transform: scale(0.98); }
   .btn-print { background: var(--berry); color: #fff; box-shadow: 0 4px 12px rgba(139,28,66,.15); }
-  .btn-print:hover { background: #6c1230; }
+  .btn-print:hover { background: #6c1230; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139,28,66,.25); }
   .btn-copy { background: #fff; color: var(--berry); border: 2px solid var(--berry); }
-  .btn-copy:hover { background: var(--berry-light); }
+  .btn-copy:hover { background: var(--berry-light); transform: translateY(-2px); }
+
   .print-header { display: none; text-align: center; margin-bottom: 20px; }
   .print-header h2 { font-size: 24px; margin: 0 0 5px; }
   .print-header p { margin: 0; font-size: 14px; color: #555; }
@@ -58,14 +78,13 @@
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px}
+
   @media(max-width: 768px){
     body { padding: 16px 10px; }
     .brand { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
     .brand-left a { flex-direction: column; gap: 10px; }
     .nav-menu { margin-left: 0; justify-content: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
-    .nav-menu a { font-size: 14px; }
     .header-contacts { text-align: center; margin-top: 10px; }
-    .header-contacts div, .header-contacts a { font-size: 14px; }
     .grid { grid-template-columns: 1fr; }
     .footer { flex-direction: column; align-items: center; text-align: center; }
     .footer-col { align-items: center; }
@@ -122,7 +141,8 @@
       </div>
       <div><label>Тираж, шт</label><input type="number" id="qty" value="300" min="100" max="100000"></div>
     </div>
-    <div id="leaflet-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+    
+    <div id="leaflet-options" class="options-block">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры листовок</h4>
       <div class="grid">
         <div>
@@ -153,7 +173,8 @@
         </div>
       </div>
     </div>
-    <div id="brochure-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+
+    <div id="brochure-options" class="options-block">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры брошюры</h4>
       <div class="grid">
         <div>
@@ -210,7 +231,8 @@
         </div>
       </div>
     </div>
-    <div id="book-options" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+
+    <div id="book-options" class="options-block show">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
       <div class="grid">
         <div>
@@ -274,6 +296,7 @@
         </div>
       </div>
     </div>
+
     <div style="margin-top: 15px;">
       <div class="chks">
         <label class="chk"><input type="checkbox" id="selfTurn"> Схема «Само на себя» (скидка на формы)</label>
@@ -304,18 +327,61 @@ const PRICE_CUT = 1.0; const PRICE_CREASE = 2.5;
 const ITEMS_PER_A2 = { 'A5': 8, 'A4': 4, 'A3': 2 }; const PAGES_PER_A2 = { 'A5': 16, 'A4': 8 }; const COVERS_PER_A2 = { 'A5': 8, 'A4': 4 };
 const BINDING_PRICES = { 'saddle': 8, 'perfect': 30, 'soft': 30, 'hard': 120 };
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
+
+// --- АНИМАЦИЯ ПОДСЧЕТА ЦИФР ---
+let currentDisplayedTotal = 0;
+function animatePrice(targetValue) {
+  const priceEl = document.querySelector('.total .val');
+  if (!priceEl) return;
+  
+  const duration = 400; // ms
+  const startValue = currentDisplayedTotal;
+  const startTime = performance.now();
+  
+  priceEl.classList.add('updated');
+  setTimeout(() => priceEl.classList.remove('updated'), 300);
+
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 4);
+    
+    const currentVal = startValue + (targetValue - startValue) * ease;
+    priceEl.textContent = fmt(currentVal) + ' ₽';
+    
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      currentDisplayedTotal = targetValue;
+    }
+  }
+  requestAnimationFrame(update);
+}
+
 function updateUI() {
   const product = document.getElementById('product').value;
-  document.getElementById('leaflet-options').style.display = (product === 'leaflet') ? 'block' : 'none';
-  document.getElementById('brochure-options').style.display = (product === 'brochure') ? 'block' : 'none';
-  document.getElementById('book-options').style.display = (product === 'book') ? 'block' : 'none';
-  calc();
+  
+  const leafletBlock = document.getElementById('leaflet-options');
+  const brochureBlock = document.getElementById('brochure-options');
+  const bookBlock = document.getElementById('book-options');
+
+  leafletBlock.classList.remove('show');
+  brochureBlock.classList.remove('show');
+  bookBlock.classList.remove('show');
+
+  if (product === 'leaflet') leafletBlock.classList.add('show');
+  else if (product === 'brochure') brochureBlock.classList.add('show');
+  else if (product === 'book') bookBlock.classList.add('show');
+
+  setTimeout(calc, 100); // Даем анимации раскрытия шанс начаться
 }
+
 function calc() {
   const product = document.getElementById('product').value; const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
   const isSelfTurn = document.getElementById('selfTurn').checked; const isCut = document.getElementById('cut').checked; const isCrease = document.getElementById('crease').checked;
   let html = ''; let total = 0; let plainText = "Смета офсетной печати\n---\n";
   const row = (l, v, detail = '') => { plainText += `${l}: ${v} ${detail ? '('+detail+')' : ''}\n`; return `<div class="row"><span>${l}</span><span>${v} <span class="unit-price">${detail}</span></span></div>`; };
+  
   function calcPrintCost(quantity, formsCount, colorsCount) {
     const hours = (SETUP_TIME_PER_FORM * formsCount) + (quantity / MACHINE_SPEED); const shifts = hours / SHIFT_HOURS;
     const costPrice = (shifts * SALARY_PER_SHIFT) + (shifts * AMORTIZATION_PER_SHIFT) + (shifts * MATERIALS_PER_SHIFT) + ((colorsCount / 4) * INK_COST_PER_TRIAD) + (formsCount * PLATE_PRICE);
@@ -325,6 +391,7 @@ function calc() {
     let front = (color === '1+0' || color === '1+1') ? 1 : 4; let back = (color === '1+1' || color === '4+4') ? front : 0;
     return front + (selfTurn ? 0 : back);
   }
+  
   if (product === 'book' || product === 'brochure') {
     const isBook = product === 'book';
     const format = document.getElementById(isBook ? 'book-format' : 'brochure-format').value;
@@ -340,26 +407,36 @@ function calc() {
     const coverPrint = calcPrintCost(cleanCoverSheets, platesCover, platesCover); const totalCoverSheets = cleanCoverSheets + (platesCover * 50);
     const paperCostCover = totalCoverSheets * PAPER_PRICE_PER_SHEET[pCover]; const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
     let bindPrice = BINDING_PRICES[binding]; const bindCost = qty * bindPrice; const cutCost = isCut ? (totalBlockSheets + totalCoverSheets) * PRICE_CUT : 0; const creaseCost = isCrease ? totalBlockSheets * PRICE_CREASE : 0;
-    const totalCostPrice = blockPrint.costPrice + coverPrint.costPrice + paperCostBlock + paperCostCover + lamCostCover + bindCost + cutCost + creaseCost;
     total = blockPrint.clientPrice + coverPrint.clientPrice + paperCostBlock + paperCostCover + lamCostCover + bindCost + cutCost + creaseCost;
-    html = row('Тираж', fmt(qty)+' шт') + row('Листов А2 на блок', fmt(totalBlockSheets)+' шт', `${cleanBlockSheets} л. + приладка`) + row('Печать блока (работа)', fmt(blockPrint.clientPrice)+' ₽', `${blockPrint.shifts.toFixed(2)} смен`) + row('Бумага блока', fmt(paperCostBlock)+' ₽', `${totalBlockSheets} л. × ${PAPER_PRICE_PER_SHEET[pBlock]} ₽`) + row('Листов А2 на обложку', fmt(totalCoverSheets)+' шт') + row('Печать обложки (работа)', fmt(coverPrint.clientPrice)+' ₽', `${coverPrint.shifts.toFixed(2)} смен`) + row('Бумага обложки', fmt(paperCostCover)+' ₽', `${totalCoverSheets} л. × ${PAPER_PRICE_PER_SHEET[pCover]} ₽`) + (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover)+' ₽', `${totalCoverSheets} л. × ${lamCover} ₽`) : '') + row('Переплет', fmt(bindCost)+' ₽', `${qty} шт × ${bindPrice} ₽`) + (cutCost ? row('Резка', fmt(cutCost)+' ₽', `${totalBlockSheets + totalCoverSheets} л. × ${PRICE_CUT} ₽`) : '') + (creaseCost ? row('Биговка', fmt(creaseCost)+' ₽', `${totalBlockSheets} л. × ${PRICE_CREASE} ₽`) : '') + row('--- Себестоимость (внутр.) ---', fmt(totalCostPrice)+' ₽');
+    html = row('Тираж', fmt(qty)+' шт') + row('Листов А2 на блок', fmt(totalBlockSheets)+' шт', `${cleanBlockSheets} л. + приладка`) + row('Печать блока (работа)', fmt(blockPrint.clientPrice)+' ₽', `${blockPrint.shifts.toFixed(2)} смен`) + row('Бумага блока', fmt(paperCostBlock)+' ₽', `${totalBlockSheets} л. × ${PAPER_PRICE_PER_SHEET[pBlock]} ₽`) + row('Листов А2 на обложку', fmt(totalCoverSheets)+' шт') + row('Печать обложки (работа)', fmt(coverPrint.clientPrice)+' ₽', `${coverPrint.shifts.toFixed(2)} смен`) + row('Бумага обложки', fmt(paperCostCover)+' ₽', `${totalCoverSheets} л. × ${PAPER_PRICE_PER_SHEET[pCover]} ₽`) + (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover)+' ₽', `${totalCoverSheets} л. × ${lamCover} ₽`) : '') + row('Переплет', fmt(bindCost)+' ₽', `${qty} шт × ${bindPrice} ₽`) + (cutCost ? row('Резка', fmt(cutCost)+' ₽', `${totalBlockSheets + totalCoverSheets} л. × ${PRICE_CUT} ₽`) : '') + (creaseCost ? row('Биговка', fmt(creaseCost)+' ₽', `${totalBlockSheets} л. × ${PRICE_CREASE} ₽`) : '');
   } else {
     const format = document.getElementById('leaflet-format').value; const paper = document.getElementById('leaflet-paper').value; const color = document.getElementById('leaflet-color').value;
     const itemsPerA2 = ITEMS_PER_A2[format]; let cleanSheets = Math.ceil(qty / itemsPerA2); let plates = getPlatesCount(color, isSelfTurn);
     const printResult = calcPrintCost(cleanSheets, plates, plates); const wasteSheets = plates * 50; const totalSheets = cleanSheets + wasteSheets;
     const paperCost = totalSheets * PAPER_PRICE_PER_SHEET[paper]; const cutCost = isCut ? totalSheets * PRICE_CUT : 0; const creaseCost = isCrease ? totalSheets * PRICE_CREASE : 0;
-    const totalCostPrice = printResult.costPrice + paperCost + cutCost + creaseCost; total = printResult.clientPrice + paperCost + cutCost + creaseCost;
-    html = row('Тираж', fmt(qty)+' шт') + row('Листов А2 (чистых)', fmt(cleanSheets)+' шт') + row('Бумага (с приладкой)', fmt(totalSheets)+' шт') + row('Печать (работа)', fmt(printResult.clientPrice)+' ₽', `${printResult.shifts.toFixed(2)} смен`) + row('Бумага', fmt(paperCost)+' ₽', `${totalSheets} л. × ${PAPER_PRICE_PER_SHEET[paper]} ₽`) + (cutCost ? row('Резка', fmt(cutCost)+' ₽', `${totalSheets} л. × ${PRICE_CUT} ₽`) : '') + (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost)+' ₽', `${totalSheets} л. × ${PRICE_CREASE} ₽`) : '') + row('--- Себестоимость (внутр.) ---', fmt(totalCostPrice)+' ₽');
+    total = printResult.clientPrice + paperCost + cutCost + creaseCost;
+    html = row('Тираж', fmt(qty)+' шт') + row('Листов А2 (чистых)', fmt(cleanSheets)+' шт') + row('Бумага (с приладкой)', fmt(totalSheets)+' шт') + row('Печать (работа)', fmt(printResult.clientPrice)+' ₽', `${printResult.shifts.toFixed(2)} смен`) + row('Бумага', fmt(paperCost)+' ₽', `${totalSheets} л. × ${PAPER_PRICE_PER_SHEET[paper]} ₽`) + (cutCost ? row('Резка', fmt(cutCost)+' ₽', `${totalSheets} л. × ${PRICE_CUT} ₽`) : '') + (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost)+' ₽', `${totalSheets} л. × ${PRICE_CREASE} ₽`) : '');
   }
+  
   total = Math.round(total / 10) * 10; plainText += `---\nИТОГО: ${fmt(total)} ₽ (${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт)\n`;
-  document.getElementById('result').innerHTML = html + `<div class="total"><span class="lbl">Итого</span><span class="val">${fmt(total)} ₽</span></div><div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
+  
+  const resultContainer = document.getElementById('result');
+  resultContainer.innerHTML = html + `<div class="total"><span class="lbl">Итого</span><span class="val"></span></div><div class="perunit"></div>`;
+  
+  document.querySelector('.perunit').textContent = `${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт`;
+  animatePrice(total);
+  
   window.lastCalculationText = plainText;
 }
+
 function copySummary() { navigator.clipboard.writeText(window.lastCalculationText).then(() => { const btn = document.querySelector('.btn-copy'); const originalText = btn.innerText; btn.innerText = "Скопировано!"; btn.style.background = "#e7f7ec"; btn.style.color = "#1a7f37"; btn.style.borderColor = "#b7e4c7"; setTimeout(() => { btn.innerText = originalText; btn.style.background = "#fff"; btn.style.color = "var(--berry)"; btn.style.borderColor = "var(--berry)"; }, 2000); }).catch(err => alert("Ошибка: " + err)); }
+
 document.getElementById('product').addEventListener('change', updateUI);
 ['qty', 'leaflet-format', 'leaflet-paper', 'leaflet-color', 'brochure-format', 'brochure-pages', 'brochure-paper', 'brochure-color', 'brochure-cover-paper', 'brochure-cover-color', 'brochure-binding', 'book-format', 'book-pages', 'book-paper', 'book-color', 'book-cover-paper', 'book-cover-color', 'book-cover-lam', 'book-binding'].forEach(id => { document.getElementById(id).addEventListener('change', calc); document.getElementById(id).addEventListener('input', calc); });
 ['selfTurn', 'cut', 'crease'].forEach(id => { document.getElementById(id).addEventListener('change', calc); });
 document.querySelectorAll('.chk input').forEach(i => { const sync = () => i.closest('.chk').classList.toggle('on', i.checked); i.addEventListener('change', sync); sync(); });
+
+// Инициализация при загрузке
 updateUI();
 </script>
 </body>
