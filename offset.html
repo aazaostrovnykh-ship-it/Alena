@@ -274,7 +274,7 @@
   </div>
 
   <div class="hint-box">
-    <strong>Важно:</strong> Офсетный расчет является предварительным. Точная стоимость зависит от спуска полос, раскладки страниц на листе А2, процента техотходов и фактического расхода бумаги. Менеджер уточнит все детали после получения заявки.
+    <strong>Важно:</strong> Офсетный расчет является предварительным. Точная стоимость зависит от спуска полос, раскладки страниц на листе А2, процента расхода бумаги на приладку и фактического расхода материалов. Менеджер уточнит все детали после получения заявки.
   </div>
 
   <footer class="footer">
@@ -312,9 +312,7 @@ const PAGES_PER_A2 = { 'A5': 16, 'A4': 8 };
 const COVERS_PER_A2 = { 'A5': 8, 'A4': 4 };
 const BINDING_PRICES = { 'soft': 30, 'hard': 120 };
 
-// Наценка типографии (для клиента)
-const PROFIT_MARKUP = 2.0; // 200% от себестоимости
-
+const PROFIT_MARKUP = 2.0; 
 const WASTE_PER_FORM = 125; // Листов на приладку одной формы
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
@@ -344,7 +342,6 @@ function calc() {
     return `<div class="row"><span>${l}</span><span>${v}</span></div>`;
   };
 
-  // Функция расчета себестоимости по часам и материалам
   function calcCost(sheets, plates) {
     const setupHours = plates * SETUP_TIME_PER_FORM;
     const printHours = sheets / PRINT_SPEED;
@@ -359,7 +356,6 @@ function calc() {
 
     const totalCost = salary + amortization + otherMaterials + ink + platesCost;
     
-    // Возвращаем себестоимость с наценкой
     return {
       clientPrintCost: totalCost * PROFIT_MARKUP,
       rawCost: totalCost,
@@ -394,7 +390,6 @@ function calc() {
     const wasteBlockSheets = platesBlock * WASTE_PER_FORM;
     const totalBlockSheets = finishBlockSheets + wasteBlockSheets;
     
-    // Считаем себестоимость печати блока
     const blockCost = calcCost(totalBlockSheets, platesBlock);
     const paperCostBlock = totalBlockSheets * PAPER_PRICE_PER_SHEET[pBlock];
 
@@ -410,7 +405,6 @@ function calc() {
     const wasteCoverSheets = platesCover * WASTE_PER_FORM;
     const totalCoverSheets = finishCoverSheets + wasteCoverSheets;
     
-    // Считаем себестоимость печати обложки
     const coverCost = calcCost(totalCoverSheets, platesCover);
     const paperCostCover = totalCoverSheets * PAPER_PRICE_PER_SHEET[pCover];
     const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
@@ -427,11 +421,11 @@ function calc() {
 
     html = row('Тираж', fmt(qty) + ' шт') +
            row('Листов А2 на блок (чистых)', fmt(finishBlockSheets) + ' шт') +
-           row('Техотходы бумаги (блок)', fmt(wasteBlockSheets) + ' шт') +
+           row('Бумага на приладку (блок)', fmt(wasteBlockSheets) + ' шт') +
            row('Печать блока (работа + материалы)', fmt(blockCost.clientPrintCost) + ' ₽') +
            row('Бумага блока', fmt(paperCostBlock) + ' ₽') +
            row('Листов А2 на обложку (чистых)', fmt(finishCoverSheets) + ' шт') +
-           row('Техотходы бумаги (обложка)', fmt(wasteCoverSheets) + ' шт') +
+           row('Бумага на приладку (обложка)', fmt(wasteCoverSheets) + ' шт') +
            row('Печать обложки (работа + материалы)', fmt(coverCost.clientPrintCost) + ' ₽') +
            row('Бумага обложки', fmt(paperCostCover) + ' ₽') +
            (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽') : '') +
@@ -469,7 +463,7 @@ function calc() {
 
     html = row('Тираж', fmt(qty) + ' шт') +
            row('Листов А2 чистых', fmt(finishSheets) + ' шт') +
-           row('Техотходы бумаги', fmt(wasteSheets) + ' шт') +
+           row('Бумага на приладку', fmt(wasteSheets) + ' шт') +
            row('Печать (работа + материалы)', fmt(printCost) + ' ₽') +
            row('Бумага', fmt(paperCost) + ' ₽') +
            (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
