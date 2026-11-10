@@ -44,10 +44,12 @@
   .chk.on{background:#fff;border-color:var(--angel-blue);box-shadow:0 2px 6px rgba(0,0,0,0.03)}
 
   .result{background: #ffffff; color: var(--berry); border: 2px solid var(--angel-blue); box-shadow: 0 8px 24px rgba(139,28,66,.05);}
-  .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line); flex-wrap: wrap;}
+  .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line); flex-wrap: wrap; align-items: baseline;}
   .row:last-of-type{border-bottom:none}
   .row span:first-child{color:var(--muted); font-weight: 400;}
   .row span:last-child{font-weight: 500;}
+  .row .unit-price {font-size: 12px; color: #999; margin-left: 6px; font-weight: 400;}
+  
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-top:20px;border-top:2px solid var(--angel-blue)}
   .total .lbl{font-size:16px;color:var(--berry); font-weight: 500;}
   .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px}
@@ -142,7 +144,7 @@
       </div>
       <div>
         <label>Тираж, шт</label>
-        <input type="number" id="qty" value="10000" min="100" max="100000">
+        <input type="number" id="qty" value="300" min="100" max="100000">
       </div>
     </div>
 
@@ -162,8 +164,8 @@
           <label>Бумага</label>
           <select id="leaflet-paper">
             <option value="80">Офсетная 80 г/м²</option>
-            <option value="115" selected>Мелованная 115 г/м²</option>
-            <option value="130">Мелованная 130 г/м²</option>
+            <option value="115">Мелованная 115 г/м²</option>
+            <option value="130" selected>Мелованная 130 г/м²</option>
             <option value="250">Мелованная 250 г/м²</option>
           </select>
         </div>
@@ -253,8 +255,8 @@
 
     <div style="margin-top: 15px;">
       <div class="chks">
-        <label class="chk on"><input type="checkbox" id="selfTurn" checked> Схема «Само на себя» (скидка на формы)</label>
-        <label class="chk"><input type="checkbox" id="cut"> Резка</label>
+        <label class="chk"><input type="checkbox" id="selfTurn"> Схема «Само на себя» (скидка на формы)</label>
+        <label class="chk"><input type="checkbox" id="cut" checked> Резка</label>
         <label class="chk"><input type="checkbox" id="crease"> Биговка / Фальцовка</label>
       </div>
     </div>
@@ -291,12 +293,11 @@
 
 <script>
 /* ============================================================
-   НАСТРОЙКИ ОФСЕТА (ВЗЯТЫ ИЗ ВНУТРЕННЕГО EXCEL)
+   НАСТРОЙКИ ОФСЕТА (СКОРРЕКТИРОВАНО ПОД РАСЧЕТ ДИРЕКТОРА)
    ============================================================ */
-const PLATE_PRICE = 500;        // Стоимость формы
-const WASTE_PER_FORM = 95;      // Листов на приладку одной формы
+const PLATE_PRICE = 500;        
+const WASTE_PER_FORM = 50;      
 
-// Цены за печать 1 листа А2 (ТОЛЬКО ЧИСТЫХ ЛИСТОВ)
 const PRINT_PRICES = { 
   '1+0': 2, 
   '1+1': 4, 
@@ -304,13 +305,12 @@ const PRINT_PRICES = {
   '4+4': 8 
 };
 
-// Цены за бумагу 1 листа А2
 const PAPER_PRICE_PER_SHEET = { 
-  '80': 4.0, 
-  '115': 4.5, 
-  '130': 6.0, 
-  '250': 18.0, 
-  '300': 20.0 
+  '80': 2.5, 
+  '115': 3.0, 
+  '130': 3.0, 
+  '250': 15.0, 
+  '300': 18.0 
 };
 
 const PRICE_CUT = 1.0;
@@ -343,10 +343,26 @@ function calc() {
   let plainText = "Смета офсетной печати (Типография Екатеринбургской Епархии)\n";
   plainText += "--------------------------------------------------\n";
 
-  const row = (l, v) => {
-    plainText += `${l}: ${v}\n`;
-    return `<div class="row"><span>${l}</span><span>${v}</span></div>`;
+  const row = (l, v, detail = '') => {
+    plainText += `${l}: ${v} ${detail ? '(' + detail + ')' : ''}\n`;
+    return `<div class="row">
+              <span>${l}</span>
+              <span>${v} <span class="unit-price">${detail}</span></span>
+            </div>`;
   };
+
+  // Считаем количество форм на 1 экземпляр (лист) с учетом красочности
+  function getPlatesPerSheet(color, selfTurn) {
+    let front = 0;
+    let back = 0;
+    if (color === '1+0' || color === '1+1') front = 1;
+    if (color === '4+0' || color === '4+4') front = 4;
+    
+    if (color === '1+1' || color === '4+4') back = front;
+    
+    // Если включена схема «Само на себя», формы на оборот не нужны
+    return front + (selfTurn ? 0 : back);
+  }
 
   if (product === 'book') {
     const format = document.getElementById('book-format').value;
@@ -358,45 +374,36 @@ function calc() {
     const lamCover = parseInt(document.getElementById('book-cover-lam').value);
     const binding = document.getElementById('book-binding').value;
 
-    // Блок
+    // --- 1. Блок ---
     const pagesPerSheet = PAGES_PER_A2[format];
-    let sheetsPerCopy = Math.ceil(pages / pagesPerSheet);
-    let cleanBlockSheets = sheetsPerCopy * qty;
+    let sheetsPerCopy = Math.ceil(pages / pagesPerSheet); // Например, 19 листов на 1 экз.
+    let cleanBlockSheets = sheetsPerCopy * qty; // 19 * 300 = 5700 листов всего
     
-    let platesBlock = 0;
-    if (cBlock === '1+0') platesBlock = 1;
-    if (cBlock === '1+1') platesBlock = 2;
-    if (cBlock === '4+0') platesBlock = 4;
-    if (cBlock === '4+4') platesBlock = 8;
-    if (isSelfTurn && (cBlock === '4+4' || cBlock === '1+1')) platesBlock = platesBlock / 2;
+    // Форм нужно: (кол-во листов на 1 экз) * (кол-во красок на лист)
+    let platesPerSheet = getPlatesPerSheet(cBlock, isSelfTurn);
+    let platesBlock = sheetsPerCopy * platesPerSheet; // 19 * 2 = 38 форм
 
     const wasteBlockSheets = platesBlock * WASTE_PER_FORM;
     const totalBlockSheets = cleanBlockSheets + wasteBlockSheets;
 
-    // Печать блока (только за чистые листы)
     const printCostBlock = cleanBlockSheets * PRINT_PRICES[cBlock];
     const paperCostBlock = totalBlockSheets * PAPER_PRICE_PER_SHEET[pBlock];
     const platesCostBlock = platesBlock * PLATE_PRICE;
 
-    // Обложка
+    // --- 2. Обложка ---
     const coversPerSheet = COVERS_PER_A2[format];
-    let cleanCoverSheets = Math.ceil(qty / coversPerSheet);
+    let cleanCoverSheets = Math.ceil(qty / coversPerSheet); // 300 / 8 = 38 листов
     
-    let platesCover = 0;
-    if (cCover === '4+0') platesCover = 4;
-    if (cCover === '4+4') platesCover = 8;
-    if (isSelfTurn && (cCover === '4+4')) platesCover = platesCover / 2;
-
+    let platesCover = getPlatesPerSheet(cCover, isSelfTurn); // 4 или 8 форм
     const wasteCoverSheets = platesCover * WASTE_PER_FORM;
     const totalCoverSheets = cleanCoverSheets + wasteCoverSheets;
 
-    // Печать обложки (только за чистые листы)
     const printCostCover = cleanCoverSheets * PRINT_PRICES[cCover];
     const paperCostCover = totalCoverSheets * PAPER_PRICE_PER_SHEET[pCover];
     const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
     const platesCostCover = platesCover * PLATE_PRICE;
 
-    // Постпечать
+    // --- 3. Постпечать ---
     const bindCost = qty * BINDING_PRICES[binding];
     const cutCost = isCut ? (totalBlockSheets + totalCoverSheets) * PRICE_CUT : 0;
     const creaseCost = isCrease ? totalBlockSheets * PRICE_CREASE : 0;
@@ -406,24 +413,24 @@ function calc() {
             bindCost + cutCost + creaseCost;
 
     plainText += `Тираж: ${fmt(qty)} шт\n`;
-    plainText += `Формат: ${format}, ${pages} стр.\n`;
+    plainText += `Формат: ${format}, ${pages} стр. (${sheetsPerCopy} листов А2 на 1 экз.)\n`;
 
     html = row('Тираж', fmt(qty) + ' шт') +
-           row('Листов А2 на блок (чистых)', fmt(cleanBlockSheets) + ' шт') +
+           row('Листов А2 на блок (чистых)', fmt(cleanBlockSheets) + ' шт', `${sheetsPerCopy} л. × ${qty} экз.`) +
            row('Бумага на приладку (блок)', fmt(wasteBlockSheets) + ' шт') +
-           row('Печать блока', fmt(printCostBlock) + ' ₽') +
-           row('Бумага блока', fmt(paperCostBlock) + ' ₽') +
-           row('Формы блока (шт)', fmt(platesBlock) + ' шт / ' + fmt(platesCostBlock) + ' ₽') +
+           row('Печать блока', fmt(printCostBlock) + ' ₽', `${cleanBlockSheets} отт. × ${PRINT_PRICES[cBlock]} ₽`) +
+           row('Бумага блока', fmt(paperCostBlock) + ' ₽', `${totalBlockSheets} лист. × ${PAPER_PRICE_PER_SHEET[pBlock]} ₽`) +
+           row('Формы блока', fmt(platesCostBlock) + ' ₽', `${platesBlock} шт × ${PLATE_PRICE} ₽`) +
            
            row('Листов А2 на обложку (чистых)', fmt(cleanCoverSheets) + ' шт') +
            row('Бумага на приладку (обложка)', fmt(wasteCoverSheets) + ' шт') +
-           row('Печать обложки', fmt(printCostCover) + ' ₽') +
-           row('Бумага обложки', fmt(paperCostCover) + ' ₽') +
-           row('Формы обложки (шт)', fmt(platesCover) + ' шт / ' + fmt(platesCostCover) + ' ₽') +
-           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽') : '') +
-           row('Переплет', fmt(bindCost) + ' ₽') +
-           (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
-           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽') : '');
+           row('Печать обложки', fmt(printCostCover) + ' ₽', `${cleanCoverSheets} отт. × ${PRINT_PRICES[cCover]} ₽`) +
+           row('Бумага обложки', fmt(paperCostCover) + ' ₽', `${totalCoverSheets} лист. × ${PAPER_PRICE_PER_SHEET[pCover]} ₽`) +
+           row('Формы обложки', fmt(platesCostCover) + ' ₽', `${platesCover} шт × ${PLATE_PRICE} ₽`) +
+           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽', `${totalCoverSheets} лист. × ${lamCover} ₽`) : '') +
+           row('Переплет', fmt(bindCost) + ' ₽', `${qty} шт × ${BINDING_PRICES[binding]} ₽`) +
+           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalBlockSheets + totalCoverSheets} лист. × ${PRICE_CUT} ₽`) : '') +
+           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽', `${totalBlockSheets} лист. × ${PRICE_CREASE} ₽`) : '');
 
   } else {
     const format = document.getElementById('leaflet-format').value;
@@ -433,12 +440,7 @@ function calc() {
     const itemsPerA2 = ITEMS_PER_A2[format];
     let cleanSheets = Math.ceil(qty / itemsPerA2);
     
-    let plates = 0;
-    if (color === '1+0') plates = 1;
-    if (color === '1+1') plates = 2;
-    if (color === '4+0') plates = 4;
-    if (color === '4+4') plates = 8;
-    if (isSelfTurn && (color === '4+4' || color === '1+1')) plates = plates / 2;
+    let plates = getPlatesPerSheet(color, isSelfTurn);
 
     const wasteSheets = plates * WASTE_PER_FORM;
     const totalSheets = cleanSheets + wasteSheets;
@@ -457,11 +459,11 @@ function calc() {
     html = row('Тираж', fmt(qty) + ' шт') +
            row('Листов А2 чистых', fmt(cleanSheets) + ' шт') +
            row('Бумага на приладку', fmt(wasteSheets) + ' шт') +
-           row('Печать (работа)', fmt(printCost) + ' ₽') +
-           row('Бумага', fmt(paperCost) + ' ₽') +
-           row('Печатные формы', fmt(plates) + ' шт / ' + fmt(platesCost) + ' ₽') +
-           (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
-           (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost) + ' ₽') : '');
+           row('Печать (работа)', fmt(printCost) + ' ₽', `${cleanSheets} отт. × ${PRINT_PRICES[color]} ₽`) +
+           row('Бумага', fmt(paperCost) + ' ₽', `${totalSheets} лист. × ${PAPER_PRICE_PER_SHEET[paper]} ₽`) +
+           row('Печатные формы', fmt(platesCost) + ' ₽', `${plates} шт × ${PLATE_PRICE} ₽`) +
+           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalSheets} лист. × ${PRICE_CUT} ₽`) : '') +
+           (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost) + ' ₽', `${totalSheets} лист. × ${PRICE_CREASE} ₽`) : '');
   }
 
   total = Math.round(total / 10) * 10;
