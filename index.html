@@ -12,73 +12,55 @@
   *{box-sizing:border-box}
   body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
   .calc{max-width:980px;margin:0 auto}
-  
-  /* Шапка */
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
   .brand-left a{display:flex;align-items:center;gap:18px;text-decoration:none}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
-  .brand h1{font-size:24px;margin:0;line-height:1.15;color:var(--berry);font-weight:500}
   .nav-menu{display:flex;gap:20px;align-items:center;margin-left:20px}
   .nav-menu a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px;transition:.15s;padding-bottom:4px;border-bottom:2px solid transparent}
   .nav-menu a:hover,.nav-menu a.active{color:var(--angel-blue);border-bottom-color:var(--angel-blue)}
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
   .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500}
-  
   .page-title {margin-bottom: 30px;}
   .page-title h2 {font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;}
   .page-title p {color: var(--muted); font-size: 16px; margin: 0; line-height: 1.5;}
-
-  /* Блоки */
   .card{background:var(--berry-light);border-radius:16px;padding:22px;margin-bottom:16px;border:1px solid rgba(139,28,66,0.05);box-shadow:0 6px 24px rgba(139,28,66,.05)}
   .card h3{font-size:20px;color:var(--berry);margin:0 0 15px;font-weight:500}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  
   label{display:block;font-size:13px;font-weight:500;color:var(--berry);margin-bottom:6px}
   select,input[type=number]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;color:var(--ink);background:#ffffff;outline:none;font-family:inherit;font-weight:400;transition:.15s;box-shadow:0 2px 4px rgba(0,0,0,0.02);}
   select:focus,input:focus{border-color:var(--angel-blue);box-shadow:0 0 0 3px rgba(110,166,216,.15)}
-  
   .chks{display:flex;flex-wrap:wrap;gap:10px; align-items: center;}
   .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.5);border:1px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--berry);margin:0;transition:.15s}
   .chk:hover{background:rgba(255,255,255,0.8)}
   .chk input{accent-color:var(--berry);width:16px;height:16px;cursor:pointer}
   .chk.on{background:#fff;border-color:var(--angel-blue);box-shadow:0 2px 6px rgba(0,0,0,0.03)}
-
   .result{background: #ffffff; color: var(--berry); border: 2px solid var(--angel-blue); box-shadow: 0 8px 24px rgba(139,28,66,.05);}
   .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line); flex-wrap: wrap; align-items: baseline;}
   .row:last-of-type{border-bottom:none}
   .row span:first-child{color:var(--muted); font-weight: 400;}
   .row span:last-child{font-weight: 500;}
   .row .unit-price {font-size: 12px; color: #999; margin-left: 6px; font-weight: 400;}
-  
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-top:20px;border-top:2px solid var(--angel-blue)}
   .total .lbl{font-size:16px;color:var(--berry); font-weight: 500;}
   .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px}
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 400;}
-
-  /* Кнопки действий */
   .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
   .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 500; text-align: center; cursor: pointer; transition: 0.15s; border: none; font-family: inherit; }
   .btn-print { background: var(--berry); color: #fff; box-shadow: 0 4px 12px rgba(139,28,66,.15); }
   .btn-print:hover { background: #6c1230; }
   .btn-copy { background: #fff; color: var(--berry); border: 2px solid var(--berry); }
   .btn-copy:hover { background: var(--berry-light); }
-
-  /* Заголовок для печати */
   .print-header { display: none; text-align: center; margin-bottom: 20px; }
   .print-header h2 { font-size: 24px; margin: 0 0 5px; }
   .print-header p { margin: 0; font-size: 14px; color: #555; }
-
   .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);border:1px solid rgba(139,28,66,0.05)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px}
-
-  /* Мобильная адаптация */
   @media(max-width: 768px){
     body { padding: 16px 10px; }
     .brand { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
     .brand-left a { flex-direction: column; gap: 10px; }
-    .brand h1 { font-size: 20px; text-align: center; }
     .nav-menu { margin-left: 0; justify-content: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
     .nav-menu a { font-size: 14px; }
     .header-contacts { text-align: center; margin-top: 10px; }
@@ -89,11 +71,9 @@
     select, input, textarea { font-size: 16px !important; }
     .actions { flex-direction: column; }
   }
-
-  /* Стили для печати (PDF) */
   @media print {
     body { background: #fff; padding: 0; color: #000; }
-    .brand, .nav-menu, .header-contacts, .page-title, .card:not(.result), .hint-box, .footer, .actions { display: none !important; }
+    .brand, .nav-menu, .header-contacts, .page-title, .card:not(.result), .footer, .actions { display: none !important; }
     .result { border: 2px solid #000; box-shadow: none; margin: 0; padding: 20px; }
     .print-header { display: block !important; color: #000; }
     .total .val { color: #000; }
@@ -106,7 +86,7 @@
 <div class="calc">
   <header class="brand">
     <div class="brand-left">
-      <a href="index.html"><img src="logo_1.jpg" alt="Логотип" onerror="this.style.display='none'"><h1>Типография Екатеринбургской Епархии</h1></a>
+      <a href="index.html"><img src="logo_1.jpg" alt="Типография Екатеринбургской Епархии" onerror="this.style.display='none'"></a>
     </div>
     <nav class="nav-menu">
       <a href="index.html" class="active">Цифра</a>
@@ -124,12 +104,10 @@
       <a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a>
     </div>
   </header>
-
   <div class="page-title">
     <h2>Расчет цифровой печати</h2>
     <p>Точный расчет стоимости листовой продукции, журналов и книг.</p>
   </div>
-
   <div class="card">
     <div class="grid">
       <div>
@@ -140,19 +118,13 @@
           <option value="a4" data-type="leaflet" data-items="2" selected>Листовки А4 (2 шт на А3)</option>
           <option value="a3" data-type="leaflet" data-items="1">Листовки А3 (1 шт на А3)</option>
           <option value="vizitka" data-type="leaflet" data-items="24">Визитки (24 шт на А3)</option>
-          
           <option value="mag_30" data-type="magazine">Журнал А4 (до 30 страниц)</option>
           <option value="mag_40" data-type="magazine">Журнал А4 (до 40 страниц)</option>
           <option value="book" data-type="book">Книга (индивидуальный расчет)</option>
         </select>
       </div>
-      <div>
-        <label>Тираж, шт</label>
-        <input type="number" id="qty" value="300" min="1" max="100000">
-      </div>
+      <div><label>Тираж, шт</label><input type="number" id="qty" value="300" min="1" max="100000"></div>
     </div>
-
-    <!-- БЛОК ДЛЯ ЛИСТОВОК -->
     <div id="leaflet-options" style="margin-top: 15px;">
       <div class="grid">
         <div>
@@ -187,11 +159,8 @@
         </div>
       </div>
     </div>
-
-    <!-- БЛОК ДЛЯ КНИГ -->
     <div id="book-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
-      
       <div class="grid">
         <div>
           <label>Формат</label>
@@ -200,12 +169,8 @@
             <option value="A4">А4 (205×290)</option>
           </select>
         </div>
-        <div>
-          <label>Кол-во страниц в блоке</label>
-          <input type="number" id="book-pages" value="300" min="4" step="4">
-        </div>
+        <div><label>Кол-во страниц в блоке</label><input type="number" id="book-pages" value="300" min="4" step="4"></div>
       </div>
-
       <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Внутренний блок</h4>
       <div class="grid">
         <div>
@@ -225,7 +190,6 @@
           </select>
         </div>
       </div>
-
       <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Обложка</h4>
       <div class="grid">
         <div>
@@ -263,262 +227,78 @@
       </div>
     </div>
   </div>
-
-  <!-- Заголовок для печатной версии -->
-  <div class="print-header">
-    <h2>Типография Екатеринбургской Епархии</h2>
-    <p>Предварительная смета цифровой печати</p>
-  </div>
-
+  <div class="print-header"><h2>Типография Екатеринбургской Епархии</h2><p>Предварительная смета цифровой печати</p></div>
   <div class="card result" id="result"></div>
-
   <div class="actions">
     <button class="btn-action btn-print" onclick="window.print()">Распечатать / Сохранить в PDF</button>
     <button class="btn-action btn-copy" onclick="copySummary()">Скопировать смету</button>
   </div>
-
   <footer class="footer">
-    <div class="footer-col">
-      <strong>Позвонить</strong>
-      <span style="font-size:13px; color:var(--berry); margin-bottom:4px;">Менеджер Алена Заостровных</span>
-      <a href="tel:+73432789642">+7 (343) 278-96-42</a>
-      <a href="tel:+79960320581">+7 (996) 032-05-81</a>
-    </div>
+    <div class="footer-col"><strong>Позвонить</strong><span style="font-size:13px; color:var(--berry); margin-bottom:4px;">Менеджер Алена Заостровных</span><a href="tel:+73432789642">+7 (343) 278-96-42</a><a href="tel:+79960320581">+7 (996) 032-05-81</a></div>
     <div class="footer-col"><strong>Написать</strong><a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a></div>
     <div class="footer-col"><strong>Приехать</strong><span style="font-size:16px;font-weight:500;color:var(--berry)">г. Екатеринбург, ул. Репина, 6а</span></div>
   </footer>
 </div>
-
 <script>
-// Цены для листовок (СТРОГО ПО ПРАЙС-ЛИСТУ ИЗ EXCEL)
-const PRINT_PRICES = { 
-  '1+0': { base: 10, over50: 10 }, 
-  '1+1': { base: 20, over50: 20 }, 
-  '4+0': { base: 25, over50: 20 }, 
-  '4+4': { base: 50, over50: 40 } 
-};
-const PAPER_PRICES = { 
-  '80':  { base: 9,  over50: 5 }, 
-  '120': { base: 17, over50: 13 }, 
-  '160': { base: 23, over50: 20 }, 
-  '200': { base: 25, over50: 22 }, 
-  '250': { base: 27, over50: 23 }, 
-  '300': { base: 30, over50: 25 } 
-};
-
-const WASTE_FACTOR = 1.05; // Всего 5% на приладку для цифры (а не 15%)
-const PRICE_CUT = 0.72;
-const PRICE_LAM1 = 10;
-const PRICE_LAM2 = 20;
-const PRICE_CREASE = 10;
-const PRICE_ROUND = 1.2;
-
-// Цены для книг
-const BOOK_HARD_PRICE = 200; // Уточнено по Excel
-const BOOK_COLLATION = 20;
-const BINDING_PRICES = { 
-  'saddle': 8, 
-  'perfect': 500, // 500 рублей по вашему требованию
-  'wire': 55, 
-  'hard': BOOK_HARD_PRICE 
-};
-
+const PRINT_PRICES = { '1+0': { base: 10, over50: 10 }, '1+1': { base: 20, over50: 20 }, '4+0': { base: 25, over50: 20 }, '4+4': { base: 50, over50: 40 } };
+const PAPER_PRICES = { '80': { base: 9, over50: 5 }, '120': { base: 17, over50: 13 }, '160': { base: 23, over50: 20 }, '200': { base: 25, over50: 22 }, '250': { base: 27, over50: 23 }, '300': { base: 30, over50: 25 } };
+const WASTE_FACTOR = 1.05;
+const PRICE_CUT = 0.72; const PRICE_LAM1 = 10; const PRICE_LAM2 = 20; const PRICE_CREASE = 10; const PRICE_ROUND = 1.2;
+const BOOK_HARD_PRICE = 200; const BOOK_COLLATION = 20;
+const BINDING_PRICES = { 'saddle': 8, 'perfect': 500, 'wire': 55, 'hard': BOOK_HARD_PRICE };
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
-
 function updateUI() {
-  const prodSelect = document.getElementById('product');
-  const type = prodSelect.selectedOptions[0].dataset.type;
-  
+  const type = document.getElementById('product').selectedOptions[0].dataset.type;
   document.getElementById('leaflet-options').style.display = (type === 'leaflet') ? 'block' : 'none';
   document.getElementById('book-options').style.display = (type === 'book') ? 'block' : 'none';
-  
   calc();
 }
-
 function calc() {
-  const prodSelect = document.getElementById('product');
-  const type = prodSelect.selectedOptions[0].dataset.type;
+  const prodSelect = document.getElementById('product'); const type = prodSelect.selectedOptions[0].dataset.type;
   const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
-  
-  let html = '';
-  let total = 0;
-  let plainText = "Смета цифровой печати (Типография Екатеринбургской Епархии)\n";
-  plainText += "--------------------------------------------------\n";
-
-  const row = (l, v, detail = '') => {
-    plainText += `${l}: ${v} ${detail ? '(' + detail + ')' : ''}\n`;
-    return `<div class="row">
-              <span>${l}</span>
-              <span>${v} <span class="unit-price">${detail}</span></span>
-            </div>`;
-  };
-
-  // 1. ЖУРНАЛЫ (ФИКС)
+  let html = ''; let total = 0; let plainText = "Смета цифровой печати\n---\n";
+  const row = (l, v, detail = '') => { plainText += `${l}: ${v} ${detail ? '('+detail+')' : ''}\n`; return `<div class="row"><span>${l}</span><span>${v} <span class="unit-price">${detail}</span></span></div>`; };
   if (type === 'magazine') {
     const fixedPrice = prodSelect.value === 'mag_30' ? 2300 : 2700;
-    const volText = prodSelect.value === 'mag_30' ? 'До 30 стр.' : 'До 40 стр.';
     total = qty * fixedPrice;
-    
-    plainText += `Тираж: ${fmt(qty)} шт\n`;
-    plainText += `Объем: ${volText}\n`;
-    
-    html = row('Тираж', fmt(qty) + ' шт') +
-           row('Объем', volText) +
-           row('Фиксированная цена', fmt(total) + ' ₽', `${qty} шт × ${fixedPrice} ₽`);
-  
-  // 2. КНИГИ
+    html = row('Тираж', fmt(qty)+' шт') + row('Объем', prodSelect.value === 'mag_30' ? 'До 30 стр.' : 'До 40 стр.') + row('Фикс. цена', fmt(total)+' ₽', `${qty} шт × ${fixedPrice} ₽`);
   } else if (type === 'book') {
-    const format = document.getElementById('book-format').value;
-    const pages = Math.max(4, Math.round(+document.getElementById('book-pages').value || 4));
-    const pBlock = document.getElementById('book-paper').value;
-    const cBlock = document.getElementById('book-color').value;
-    const pCover = document.getElementById('book-cover-paper').value;
-    const cCover = document.getElementById('book-cover-color').value;
-    const lamCover = parseInt(document.getElementById('book-cover-lam').value);
-    const binding = document.getElementById('book-binding').value;
-
-    // Блок (А5 - 8 страниц на А3, А4 - 4 страницы на А3)
-    const pagesPerSheet = (format === 'A5') ? 8 : 4;
-    let blockSheetsPerCopy = Math.ceil(pages / pagesPerSheet);
-    let cleanBlockSheets = blockSheetsPerCopy * qty;
-    const totalBlockSheets = Math.ceil(cleanBlockSheets * WASTE_FACTOR);
-
+    const format = document.getElementById('book-format').value; const pages = Math.max(4, Math.round(+document.getElementById('book-pages').value || 4));
+    const pBlock = document.getElementById('book-paper').value; const cBlock = document.getElementById('book-color').value;
+    const pCover = document.getElementById('book-cover-paper').value; const cCover = document.getElementById('book-cover-color').value;
+    const lamCover = parseInt(document.getElementById('book-cover-lam').value); const binding = document.getElementById('book-binding').value;
+    const pagesPerSheet = (format === 'A5') ? 8 : 4; let blockSheetsPerCopy = Math.ceil(pages / pagesPerSheet);
+    let cleanBlockSheets = blockSheetsPerCopy * qty; const totalBlockSheets = Math.ceil(cleanBlockSheets * WASTE_FACTOR);
     const isOver50Block = totalBlockSheets >= 50;
     const printCostBlock = cleanBlockSheets * (isOver50Block ? PRINT_PRICES[cBlock].over50 : PRINT_PRICES[cBlock].base);
     const paperCostBlock = totalBlockSheets * (isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base);
-
-    // Обложка (1 лист А3 на 2 книги А5)
-    const coversPerSheet = (format === 'A5') ? 2 : 1;
-    let cleanCoverSheets = Math.ceil(qty / coversPerSheet);
-    const totalCoverSheets = Math.ceil(cleanCoverSheets * WASTE_FACTOR);
-
+    const coversPerSheet = (format === 'A5') ? 2 : 1; let cleanCoverSheets = Math.ceil(qty / coversPerSheet); const totalCoverSheets = Math.ceil(cleanCoverSheets * WASTE_FACTOR);
     const isOver50Cover = totalCoverSheets >= 50;
     const printCostCover = cleanCoverSheets * (isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base);
     const paperCostCover = totalCoverSheets * (isOver50Cover ? PAPER_PRICES[pCover].over50 : PAPER_PRICES[pCover].base);
     const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
-
-    // Переплет
-    let bindingCostPerUnit = BINDING_PRICES[binding];
-    if (binding === 'wire' && format === 'A5') bindingCostPerUnit = 40;
-    const totalBindingCost = qty * bindingCostPerUnit;
-    const totalCollationCost = (binding === 'hard') ? qty * BOOK_COLLATION : 0;
-
+    let bindingCostPerUnit = BINDING_PRICES[binding]; if (binding === 'wire' && format === 'A5') bindingCostPerUnit = 40;
+    const totalBindingCost = qty * bindingCostPerUnit; const totalCollationCost = (binding === 'hard') ? qty * BOOK_COLLATION : 0;
     total = printCostBlock + paperCostBlock + printCostCover + paperCostCover + lamCostCover + totalBindingCost + totalCollationCost;
-
-    plainText += `Тираж: ${fmt(qty)} шт\n`;
-    plainText += `Формат: ${format}, ${pages} стр.\n`;
-
-    html = row('Тираж', fmt(qty) + ' шт') +
-           row('Листов А3 на блок', fmt(totalBlockSheets) + ' шт', `${blockSheetsPerCopy} л. × ${qty} экз. + 5%`) +
-           row('Печать блока', fmt(printCostBlock) + ' ₽', `${cleanBlockSheets} отт. × ${isOver50Block ? PRINT_PRICES[cBlock].over50 : PRINT_PRICES[cBlock].base} ₽`) +
-           row('Бумага блока', fmt(paperCostBlock) + ' ₽', `${totalBlockSheets} л. × ${isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base} ₽`) +
-           row('Листов А3 на обложку', fmt(totalCoverSheets) + ' шт') +
-           row('Печать обложки', fmt(printCostCover) + ' ₽', `${cleanCoverSheets} отт. × ${isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base} ₽`) +
-           row('Бумага обложки', fmt(paperCostCover) + ' ₽', `${totalCoverSheets} л. × ${isOver50Cover ? PAPER_PRICES[pCover].over50 : PAPER_PRICES[pCover].base} ₽`) +
-           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽', `${totalCoverSheets} л. × ${lamCover} ₽`) : '') +
-           row('Переплет', fmt(totalBindingCost) + ' ₽', `${qty} шт × ${bindingCostPerUnit} ₽`) +
-           (totalCollationCost ? row('Подборка', fmt(totalCollationCost) + ' ₽', `${qty} шт × ${BOOK_COLLATION} ₽`) : '');
-
-  // 3. ЛИСТОВКИ
+    html = row('Тираж', fmt(qty)+' шт') + row('Листов А3 на блок', fmt(totalBlockSheets)+' шт', `${blockSheetsPerCopy} л. × ${qty} экз. + 5%`) + row('Печать блока', fmt(printCostBlock)+' ₽', `${cleanBlockSheets} отт. × ${isOver50Block ? PRINT_PRICES[cBlock].over50 : PRINT_PRICES[cBlock].base} ₽`) + row('Бумага блока', fmt(paperCostBlock)+' ₽', `${totalBlockSheets} л. × ${isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base} ₽`) + row('Листов А3 на обложку', fmt(totalCoverSheets)+' шт') + row('Печать обложки', fmt(printCostCover)+' ₽', `${cleanCoverSheets} отт. × ${isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base} ₽`) + row('Бумага обложки', fmt(paperCostCover)+' ₽', `${totalCoverSheets} л. × ${isOver50Cover ? PAPER_PRICES[pCover].over50 : PAPER_PRICES[pCover].base} ₽`) + (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover)+' ₽', `${totalCoverSheets} л. × ${lamCover} ₽`) : '') + row('Переплет', fmt(totalBindingCost)+' ₽', `${qty} шт × ${bindingCostPerUnit} ₽`) + (totalCollationCost ? row('Подборка', fmt(totalCollationCost)+' ₽', `${qty} шт × ${BOOK_COLLATION} ₽`) : '');
   } else {
-    const itemsPerA3 = parseInt(prodSelect.selectedOptions[0].dataset.items);
-    const paper = document.getElementById('paper').value;
-    const color = document.getElementById('color').value;
-    const isLam1 = document.getElementById('lam1').checked;
-    const isLam2 = document.getElementById('lam2').checked;
-    const isCut = document.getElementById('cut').checked;
-    const isCrease = document.getElementById('crease').checked;
-    const isRound = document.getElementById('round').checked;
-
-    let cleanSheets = Math.ceil(qty / itemsPerA3);
-    let sheets = Math.ceil(cleanSheets * WASTE_FACTOR);
-    const isOver50 = sheets >= 50;
-
+    const itemsPerA3 = parseInt(prodSelect.selectedOptions[0].dataset.items); const paper = document.getElementById('paper').value; const color = document.getElementById('color').value;
+    const isLam1 = document.getElementById('lam1').checked; const isLam2 = document.getElementById('lam2').checked; const isCut = document.getElementById('cut').checked; const isCrease = document.getElementById('crease').checked; const isRound = document.getElementById('round').checked;
+    let cleanSheets = Math.ceil(qty / itemsPerA3); let sheets = Math.ceil(cleanSheets * WASTE_FACTOR); const isOver50 = sheets >= 50;
     const printCost = cleanSheets * (isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base);
     const paperCost = sheets * (isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base);
-    const cutCost = isCut ? sheets * PRICE_CUT : 0;
-    const lamCost = isLam2 ? sheets * PRICE_LAM2 : (isLam1 ? sheets * PRICE_LAM1 : 0);
-    const creaseCost = isCrease ? sheets * PRICE_CREASE : 0;
-    const roundCost = isRound ? qty * PRICE_ROUND : 0;
-
-    total = printCost + paperCost + cutCost + lamCost + creaseCost + roundCost;
-    total = Math.max(total, 300); // Мин заказ 300р
-
-    plainText += `Тираж: ${fmt(qty)} шт\n`;
-    plainText += `Красочность: ${color}\n`;
-
-    html = row('Тираж', fmt(qty) + ' шт') +
-           row('Потребуется листов А3', sheets + ' шт', `${cleanSheets} л. + 5%`) +
-           row('Печать (' + color + ')', fmt(printCost) + ' ₽', `${cleanSheets} отт. × ${isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base} ₽`) +
-           row('Бумага', fmt(paperCost) + ' ₽', `${sheets} л. × ${isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base} ₽`) +
-           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${sheets} л. × ${PRICE_CUT} ₽`) : '') +
-           (lamCost ? row('Ламинация', fmt(lamCost) + ' ₽', `${sheets} л. × ${isLam2 ? PRICE_LAM2 : PRICE_LAM1} ₽`) : '') +
-           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽', `${sheets} л. × ${PRICE_CREASE} ₽`) : '') +
-           (roundCost ? row('Скругление', fmt(roundCost) + ' ₽', `${qty} шт × ${PRICE_ROUND} ₽`) : '');
+    const cutCost = isCut ? sheets * PRICE_CUT : 0; const lamCost = isLam2 ? sheets * PRICE_LAM2 : (isLam1 ? sheets * PRICE_LAM1 : 0); const creaseCost = isCrease ? sheets * PRICE_CREASE : 0; const roundCost = isRound ? qty * PRICE_ROUND : 0;
+    total = Math.max(printCost + paperCost + cutCost + lamCost + creaseCost + roundCost, 300);
+    html = row('Тираж', fmt(qty)+' шт') + row('Потребуется листов А3', sheets+' шт', `${cleanSheets} л. + 5%`) + row('Печать ('+color+')', fmt(printCost)+' ₽', `${cleanSheets} отт. × ${isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base} ₽`) + row('Бумага', fmt(paperCost)+' ₽', `${sheets} л. × ${isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base} ₽`) + (cutCost ? row('Резка', fmt(cutCost)+' ₽', `${sheets} л. × ${PRICE_CUT} ₽`) : '') + (lamCost ? row('Ламинация', fmt(lamCost)+' ₽', `${sheets} л. × ${isLam2 ? PRICE_LAM2 : PRICE_LAM1} ₽`) : '') + (creaseCost ? row('Биговка', fmt(creaseCost)+' ₽', `${sheets} л. × ${PRICE_CREASE} ₽`) : '') + (roundCost ? row('Скругление', fmt(roundCost)+' ₽', `${qty} шт × ${PRICE_ROUND} ₽`) : '');
   }
-
-  // Общее округление и вывод
-  total = Math.round(total / 10) * 10;
-  plainText += "--------------------------------------------------\n";
-  plainText += `ИТОГО: ${fmt(total)} ₽ (${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт)\n`;
-  
-  document.getElementById('result').innerHTML = html +
-    `<div class="total">
-       <span class="lbl">Итого</span>
-       <span class="val">${fmt(total)} ₽</span>
-     </div>
-     <div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
-
+  total = Math.round(total / 10) * 10; plainText += `---\nИТОГО: ${fmt(total)} ₽ (${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт)\n`;
+  document.getElementById('result').innerHTML = html + `<div class="total"><span class="lbl">Итого</span><span class="val">${fmt(total)} ₽</span></div><div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
   window.lastCalculationText = plainText;
 }
-
-function copySummary() {
-  navigator.clipboard.writeText(window.lastCalculationText).then(() => {
-    const btn = document.querySelector('.btn-copy');
-    const originalText = btn.innerText;
-    btn.innerText = "Скопировано!";
-    btn.style.background = "#e7f7ec";
-    btn.style.color = "#1a7f37";
-    btn.style.borderColor = "#b7e4c7";
-    setTimeout(() => {
-      btn.innerText = originalText;
-      btn.style.background = "#fff";
-      btn.style.color = "var(--berry)";
-      btn.style.borderColor = "var(--berry)";
-    }, 2000);
-  }).catch(err => {
-    alert("Ошибка при копировании: " + err);
-  });
-}
-
-// Слушатели
-['change', 'input'].forEach(ev => {
-  document.getElementById('product').addEventListener(ev, updateUI);
-  document.getElementById('qty').addEventListener(ev, calc);
-  
-  document.getElementById('paper').addEventListener(ev, calc);
-  document.getElementById('color').addEventListener(ev, calc);
-  
-  document.getElementById('book-format').addEventListener(ev, calc);
-  document.getElementById('book-pages').addEventListener(ev, calc);
-  document.getElementById('book-paper').addEventListener(ev, calc);
-  document.getElementById('book-color').addEventListener(ev, calc);
-  document.getElementById('book-cover-paper').addEventListener(ev, calc);
-  document.getElementById('book-cover-color').addEventListener(ev, calc);
-  document.getElementById('book-cover-lam').addEventListener(ev, calc);
-  document.getElementById('book-binding').addEventListener(ev, calc);
-});
-['lam1', 'lam2', 'cut', 'crease', 'round'].forEach(id => {
-  document.getElementById(id).addEventListener('change', calc);
-});
-
-// Подсветка чекбоксов
-document.querySelectorAll('.chk input').forEach(i => {
-  const sync = () => i.closest('.chk').classList.toggle('on', i.checked);
-  i.addEventListener('change', sync); sync();
-});
-
-// Запуск
+function copySummary() { navigator.clipboard.writeText(window.lastCalculationText).then(() => { const btn = document.querySelector('.btn-copy'); const originalText = btn.innerText; btn.innerText = "Скопировано!"; btn.style.background = "#e7f7ec"; btn.style.color = "#1a7f37"; btn.style.borderColor = "#b7e4c7"; setTimeout(() => { btn.innerText = originalText; btn.style.background = "#fff"; btn.style.color = "var(--berry)"; btn.style.borderColor = "var(--berry)"; }, 2000); }).catch(err => alert("Ошибка при копировании: " + err)); }
+['change', 'input'].forEach(ev => { document.getElementById('product').addEventListener(ev, updateUI); document.getElementById('qty').addEventListener(ev, calc); document.getElementById('paper').addEventListener(ev, calc); document.getElementById('color').addEventListener(ev, calc); document.getElementById('book-format').addEventListener(ev, calc); document.getElementById('book-pages').addEventListener(ev, calc); document.getElementById('book-paper').addEventListener(ev, calc); document.getElementById('book-color').addEventListener(ev, calc); document.getElementById('book-cover-paper').addEventListener(ev, calc); document.getElementById('book-cover-color').addEventListener(ev, calc); document.getElementById('book-cover-lam').addEventListener(ev, calc); document.getElementById('book-binding').addEventListener(ev, calc); });
+['lam1', 'lam2', 'cut', 'crease', 'round'].forEach(id => { document.getElementById(id).addEventListener('change', calc); });
+document.querySelectorAll('.chk input').forEach(i => { const sync = () => i.closest('.chk').classList.toggle('on', i.checked); i.addEventListener('change', sync); sync(); });
 updateUI();
 </script>
 </body>
