@@ -37,6 +37,12 @@
   select,input[type=number]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;color:var(--ink);background:#ffffff;outline:none;font-family:inherit;font-weight:400;transition:.15s;box-shadow:0 2px 4px rgba(0,0,0,0.02);}
   select:focus,input:focus{border-color:var(--angel-blue);box-shadow:0 0 0 3px rgba(110,166,216,.15)}
   
+  .chks{display:flex;flex-wrap:wrap;gap:10px; align-items: center;}
+  .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.5);border:1px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--berry);margin:0;transition:.15s}
+  .chk:hover{background:rgba(255,255,255,0.8)}
+  .chk input{accent-color:var(--berry);width:16px;height:16px;cursor:pointer}
+  .chk.on{background:#fff;border-color:var(--angel-blue);box-shadow:0 2px 6px rgba(0,0,0,0.03)}
+
   .result{background: #ffffff; color: var(--berry); border: 2px solid var(--angel-blue); box-shadow: 0 8px 24px rgba(139,28,66,.05);}
   .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line); flex-wrap: wrap;}
   .row:last-of-type{border-bottom:none}
@@ -48,7 +54,6 @@
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 400;}
 
   .hint-box {background: #fff8e6; border: 1px solid #ffe0a3; color: #7a5a00; padding: 15px; border-radius: 10px; font-size: 14px; margin-top: 15px; line-height: 1.5;}
-  .hint-box strong {color: var(--berry);}
 
   .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);border:1px solid rgba(139,28,66,0.05)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
@@ -97,7 +102,7 @@
 
   <div class="page-title">
     <h2>Офсетная печать</h2>
-    <p>Идеальное решение для больших тиражей. Чем больше тираж, тем ниже цена за экземпляр.</p>
+    <p>Идеальное решение для больших тиражей. Печать на листах формата А2.</p>
   </div>
 
   <div class="card">
@@ -105,13 +110,13 @@
     <div class="grid">
       <div>
         <label>Тип продукции</label>
-        <select id="product" onchange="toggleBookFields()">
-          <option value="leaflet">Листовки / Буклеты</option>
-          <option value="book" selected>Книги / Каталоги</option>
+        <select id="product">
+          <option value="leaflet" selected>Листовки / Буклеты</option>
+          <option value="book">Книги / Каталоги</option>
         </select>
       </div>
       <div>
-        <label>Формат</label>
+        <label>Формат изделия</label>
         <select id="format">
           <option value="A4">А4 (210×297)</option>
           <option value="A5" selected>А5 (148×210)</option>
@@ -119,31 +124,36 @@
         </select>
       </div>
       
-      <!-- Поля только для книг -->
-      <div id="pages-wrapper">
-        <label>Количество страниц в блоке</label>
-        <input type="number" id="pages" value="400" min="8" step="4">
-      </div>
-      <div id="binding-wrapper">
-        <label>Переплет</label>
-        <select id="binding">
-          <option value="soft">Мягкий (КБС / Скоба)</option>
-          <option value="hard" selected>Твердый переплет</option>
+      <div>
+        <label>Бумага</label>
+        <select id="paper">
+          <option value="80">Офсетная 80 г/м²</option>
+          <option value="130" selected>Мелованная 130 г/м²</option>
+          <option value="250">Мелованная 250 г/м²</option>
+          <option value="300">Картон 300 г/м²</option>
         </select>
       </div>
-      
       <div>
         <label>Красочность</label>
         <select id="color">
           <option value="1+0">1+0 (ч/б)</option>
-          <option value="1+1" selected>1+1 (ч/б двусторонняя)</option>
+          <option value="1+1">1+1 (ч/б двусторонняя)</option>
           <option value="4+0">4+0 (цветная)</option>
-          <option value="4+4">4+4 (цветная двусторонняя)</option>
+          <option value="4+4" selected>4+4 (цветная двусторонняя)</option>
         </select>
       </div>
       <div>
         <label>Тираж, шт</label>
-        <input type="number" id="qty" value="500" min="100" max="100000">
+        <input type="number" id="qty" value="10000" min="100" max="100000">
+      </div>
+    </div>
+
+    <div style="margin-top: 15px;">
+      <div class="chks">
+        <label class="chk on"><input type="checkbox" id="cut" checked> Резка</label>
+        <label class="chk"><input type="checkbox" id="lam1"> Ламинация 1 сторона</label>
+        <label class="chk"><input type="checkbox" id="lam2"> Ламинация 2 стороны</label>
+        <label class="chk"><input type="checkbox" id="crease"> Биговка / Фальцовка</label>
       </div>
     </div>
   </div>
@@ -151,7 +161,7 @@
   <div class="card result" id="result"></div>
   
   <div class="hint-box">
-    <strong>Важно:</strong> Офсетный расчет является предварительным. Точная стоимость зависит от спуска полос (раскладки страниц на печатном листе), процента техотходов и фактического расхода бумаги. Менеджер уточнит все детали после получения заявки.
+    <strong>Важно:</strong> Офсетный расчет является предварительным. Точная стоимость зависит от спуска полос (раскладки страниц на листе А2), процента техотходов и фактического расхода бумаги. Менеджер уточнит все детали после получения заявки.
   </div>
 
   <footer class="footer">
@@ -168,82 +178,69 @@
 
 <script>
 /* ============================================================
-   НАСТРОЙКИ ОФСЕТА (Меняйте цифры здесь, если изменится прайс)
+   НАСТРОЙКИ ОФСЕТА (ПОД ФОРМАТ А2)
    ============================================================ */
 const PLATE_PRICE = 500;        // Стоимость одной печатной формы
-const SETUP_PRICE = 1000;       // Стоимость приладки (настройки машины) за 1 краску
-const PRINT_PRICE_PER_SHEET = 3.5; // Стоимость печати 1 листа А1 (или А2) 
-const BIND_HARD_PRICE = 120;    // Твердый переплет за шт
-const BIND_SOFT_PRICE = 25;     // Мягкий переплет за шт
-const WASTE_FACTOR = 1.15;      // 15% на техотходы (брак при приладке)
+const SETUP_PRICE = 500;        // Стоимость приладки (на 1 краску/форму)
+const PRINT_PRICE_PER_SHEET = 2.0; // Стоимость печати 1 листа А2
+const WASTE_FACTOR = 1.15;      // 15% на техотходы
 
-// Сколько страниц формата X помещается на один печатный лист А1
-// (Для офсета обычно используют большие листы, например А1 или А2)
-const PAGES_PER_SHEET = {
-  'A5': 16, // На А1 помещается 16 страниц А5
-  'A4': 8,  // На А1 помещается 8 страниц А4
-  'A3': 4   // На А1 помещается 4 страницы А3
+// Стоимость бумаги за 1 лист А2 (примерно вдвое меньше, чем А1)
+const PAPER_PRICE_PER_SHEET = { 
+  '80': 2.5, 
+  '130': 3.5, 
+  '250': 7.5, 
+  '300': 10 
+};
+
+// Стоимость постобработки за 1 лист А2
+const PRICE_CUT = 1.0;
+const PRICE_LAM1 = 5.0;
+const PRICE_LAM2 = 10.0;
+const PRICE_CREASE = 2.5;
+
+// Сколько изделий помещается на один лист А2
+const ITEMS_PER_A2 = { 
+  'A5': 8,  // На А2 помещается 8 изделий А5
+  'A4': 4,  // На А2 помещается 4 изделия А4
+  'A3': 2   // На А2 помещается 2 изделия А3
 };
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
 
-function toggleBookFields() {
-  const isBook = document.getElementById('product').value === 'book';
-  document.getElementById('pages-wrapper').style.display = isBook ? 'block' : 'none';
-  document.getElementById('binding-wrapper').style.display = isBook ? 'block' : 'none';
-  calc();
-}
-
 function calc() {
-  const product = document.getElementById('product').value;
   const format = document.getElementById('format').value;
   const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
+  const paper = document.getElementById('paper').value;
   const color = document.getElementById('color').value;
-  const binding = document.getElementById('binding').value;
-  const pages = Math.max(4, Math.round(+document.getElementById('pages').value || 4));
 
-  let sheets = 0;
+  const isCut = document.getElementById('cut').checked;
+  const isLam1 = document.getElementById('lam1').checked;
+  const isLam2 = document.getElementById('lam2').checked;
+  const isCrease = document.getElementById('crease').checked;
+
+  // 1. Считаем количество листов А2
+  const itemsPerA2 = ITEMS_PER_A2[format];
+  let sheets = Math.ceil((qty / itemsPerA2) * WASTE_FACTOR);
+
+  // 2. Считаем количество форм (стандартная схема, без «само на себя»)
   let plates = 0;
-
-  // Считаем количество печатных листов и форм (пластин)
   if (color === '1+0') plates = 1;
   if (color === '1+1') plates = 2;
   if (color === '4+0') plates = 4;
   if (color === '4+4') plates = 8;
 
-  if (product === 'book') {
-    // Для книги: количество листов = (Страницы / страниц на листе) * Тираж
-    let sheetsPerCopy = pages / PAGES_PER_SHEET[format];
-    sheets = Math.ceil(sheetsPerCopy * qty * WASTE_FACTOR);
-    
-    // Для книг формы считаются по количеству страниц (каждые 16 страниц А5 - новая форма)
-    // Но для простоты калькулятора берем базовые формы + формы на блок
-    let blockPlates = Math.ceil(pages / PAGES_PER_SHEET[format]) * (plates / 2); // Упрощенно
-    plates = plates + blockPlates; 
-  } else {
-    // Для листовок: 1 лист = 1 изделие
-    sheets = Math.ceil(qty * WASTE_FACTOR);
-    // На один большой лист может помещаться несколько изделий, но для простоты считаем 1 к 1
-  }
-
-  // 1. Стоимость форм и приладки (Фиксированная стоимость)
+  // 3. Стоимость
   const platesCost = plates * PLATE_PRICE;
-  const setupCost = (plates / 2) * SETUP_PRICE; // Приладка идет на группу красок
-  
-  // 2. Стоимость печати тиража
+  const setupCost = plates * SETUP_PRICE; 
   const printCost = sheets * PRINT_PRICE_PER_SHEET;
+  const paperCost = sheets * PAPER_PRICE_PER_SHEET[paper];
+  
+  const cutCost = isCut ? sheets * PRICE_CUT : 0;
+  const lamCost = isLam2 ? sheets * PRICE_LAM2 : (isLam1 ? sheets * PRICE_LAM1 : 0);
+  const creaseCost = isCrease ? sheets * PRICE_CREASE : 0;
 
-  // 3. Переплет
-  let bindCost = 0;
-  if (product === 'book') {
-    bindCost = qty * (binding === 'hard' ? BIND_HARD_PRICE : BIND_SOFT_PRICE);
-  }
-
-  // 4. Бумага (Упрощенно: заложим среднюю стоимость бумаги в 5 руб за лист)
-  const paperCost = sheets * 5;
-
-  // ИТОГО
-  let total = platesCost + setupCost + printCost + bindCost + paperCost;
+  let total = platesCost + setupCost + printCost + paperCost + cutCost + lamCost + creaseCost;
   total = Math.round(total / 10) * 10;
   
   const perUnit = total / qty;
@@ -252,12 +249,16 @@ function calc() {
   const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
   
   document.getElementById('result').innerHTML =
-    row('Печатных листов (с отходами)', fmt(sheets) + ' шт') +
-    row('Печатных форм (пластин)', fmt(plates) + ' шт') +
+    row('Тираж', fmt(qty) + ' шт') +
+    row('Изделий на листе А2', itemsPerA2 + ' шт') +
+    row('Печатных листов А2 (с отходами)', fmt(sheets) + ' шт') +
+    row('Количество печатных форм', fmt(plates) + ' шт') +
     row('Формы и приладка', fmt(platesCost + setupCost) + ' ₽') +
     row('Печать тиража', fmt(printCost) + ' ₽') +
-    row('Бумага (ориентировочно)', fmt(paperCost) + ' ₽') +
-    (bindCost ? row('Переплет', fmt(bindCost) + ' ₽') : '') +
+    row('Бумага', fmt(paperCost) + ' ₽') +
+    (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
+    (lamCost ? row('Ламинация', fmt(lamCost) + ' ₽') : '') +
+    (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost) + ' ₽') : '') +
     `<div class="total">
        <span class="lbl">Итого</span>
        <span class="val">${fmt(total)} ₽</span>
@@ -267,16 +268,23 @@ function calc() {
 
 // Слушатели
 ['change', 'input'].forEach(ev => {
-  document.getElementById('product').addEventListener(ev, toggleBookFields);
   document.getElementById('format').addEventListener(ev, calc);
-  document.getElementById('pages').addEventListener(ev, calc);
-  document.getElementById('binding').addEventListener(ev, calc);
+  document.getElementById('paper').addEventListener(ev, calc);
   document.getElementById('color').addEventListener(ev, calc);
   document.getElementById('qty').addEventListener(ev, calc);
 });
+['cut', 'lam1', 'lam2', 'crease'].forEach(id => {
+  document.getElementById(id).addEventListener('change', calc);
+});
+
+// Подсветка чекбоксов
+document.querySelectorAll('.chk input').forEach(i => {
+  const sync = () => i.closest('.chk').classList.toggle('on', i.checked);
+  i.addEventListener('change', sync); sync();
+});
 
 // Запуск
-toggleBookFields();
+calc();
 </script>
 </body>
 </html>
