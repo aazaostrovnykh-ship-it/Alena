@@ -53,8 +53,18 @@
   .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px}
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 400;}
 
-  .btn-submit{width:100%;margin-top:8px;padding:14px;background:var(--berry);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight: 500;cursor:pointer;font-family:inherit;transition:.15s;box-shadow:0 4px 12px rgba(139,28,66,.15);}
-  .btn-submit:hover{background:#6c1230;}
+  /* Кнопки действий */
+  .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+  .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 500; text-align: center; cursor: pointer; transition: 0.15s; border: none; font-family: inherit; }
+  .btn-print { background: var(--berry); color: #fff; box-shadow: 0 4px 12px rgba(139,28,66,.15); }
+  .btn-print:hover { background: #6c1230; }
+  .btn-copy { background: #fff; color: var(--berry); border: 2px solid var(--berry); }
+  .btn-copy:hover { background: var(--berry-light); }
+
+  /* Заголовок для печати */
+  .print-header { display: none; text-align: center; margin-bottom: 20px; }
+  .print-header h2 { font-size: 24px; margin: 0 0 5px; }
+  .print-header p { margin: 0; font-size: 14px; color: #555; }
 
   .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);border:1px solid rgba(139,28,66,0.05)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
@@ -75,6 +85,18 @@
     .footer { flex-direction: column; align-items: center; text-align: center; }
     .footer-col { align-items: center; }
     select, input, textarea { font-size: 16px !important; }
+    .actions { flex-direction: column; }
+  }
+
+  /* Стили для печати (PDF) */
+  @media print {
+    body { background: #fff; padding: 0; color: #000; }
+    .brand, .nav-menu, .header-contacts, .page-title, .card:not(.result), .hint-box, .footer, .actions { display: none !important; }
+    .result { border: 2px solid #000; box-shadow: none; margin: 0; padding: 20px; }
+    .print-header { display: block !important; color: #000; }
+    .total .val { color: #000; }
+    .row span:first-child { color: #000; }
+    @page { margin: 20mm; }
   }
 </style>
 </head>
@@ -240,7 +262,18 @@
     </div>
   </div>
 
+  <!-- Заголовок для печатной версии -->
+  <div class="print-header">
+    <h2>Типография Екатеринбургской Епархии</h2>
+    <p>Предварительная смета цифровой печати</p>
+  </div>
+
   <div class="card result" id="result"></div>
+
+  <div class="actions">
+    <button class="btn-action btn-print" onclick="window.print()">Распечатать / Сохранить в PDF</button>
+    <button class="btn-action btn-copy" onclick="copySummary()">Скопировать смету</button>
+  </div>
 
   <footer class="footer">
     <div class="footer-col">
@@ -268,7 +301,6 @@ const PRICE_ROUND = 1.2;
 // Цены для книг
 const BOOK_HARD_PRICE = 200;
 const BOOK_COLLATION = 20;
-// ОБНОВЛЕНО: КБС (Термопереплет) теперь стоит 500 рублей
 const BINDING_PRICES = { 
   'saddle': 8, 
   'perfect': 500, 
@@ -292,16 +324,26 @@ function calc() {
   const prodSelect = document.getElementById('product');
   const type = prodSelect.selectedOptions[0].dataset.type;
   const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
-  const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
-
+  
   let html = '';
   let total = 0;
+  let plainText = "Смета цифровой печати (Типография Екатеринбургской Епархии)\n";
+  plainText += "--------------------------------------------------\n";
+
+  // Функция для добавления строки в HTML и текст
+  const row = (l, v) => {
+    plainText += `${l}: ${v}\n`;
+    return `<div class="row"><span>${l}</span><span>${v}</span></div>`;
+  };
 
   // 1. ЖУРНАЛЫ (ФИКС)
   if (type === 'magazine') {
     const fixedPrice = prodSelect.value === 'mag_30' ? 2300 : 2700;
     const volText = prodSelect.value === 'mag_30' ? 'До 30 стр.' : 'До 40 стр.';
     total = qty * fixedPrice;
+    
+    plainText += `Тираж: ${fmt(qty)} шт\n`;
+    plainText += `Объем: ${volText}\n`;
     
     html = row('Тираж', fmt(qty) + ' шт') +
            row('Объем', volText) +
@@ -335,7 +377,7 @@ function calc() {
 
     const printCostCover = totalCoverSheets * (isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base);
     const paperCostCover = totalCoverSheets * (isOver50Cover ? PAPER_PRICES[pCover].over50 : PAPER_PRICES[pCover].base);
-    const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0; // Цена ламинации за лист А3
+    const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
 
     // Переплет
     let bindingCostPerUnit = BINDING_PRICES[binding];
@@ -345,7 +387,11 @@ function calc() {
 
     total = printCostBlock + paperCostBlock + printCostCover + paperCostCover + lamCostCover + totalBindingCost + totalCollationCost;
 
+    plainText += `Тираж: ${fmt(qty)} шт\n`;
+    plainText += `Формат: ${format}, ${pages} стр.\n`;
+
     html = row('Тираж', fmt(qty) + ' шт') +
+           row('Формат', format + ' (' + pages + ' стр.)') +
            row('Листов А3 на блок (с отходами)', blockSheetsPerCopy + ' шт') +
            row('Печать блока', fmt(printCostBlock) + ' ₽') +
            row('Бумага блока', fmt(paperCostBlock) + ' ₽') +
@@ -380,6 +426,9 @@ function calc() {
     total = printCost + paperCost + cutCost + lamCost + creaseCost + roundCost;
     total = Math.max(total, 300); // Мин заказ 300р
 
+    plainText += `Тираж: ${fmt(qty)} шт\n`;
+    plainText += `Красочность: ${color}\n`;
+
     html = row('Потребуется листов А3', sheets + ' шт') +
            row('Печать (' + color + ')', fmt(printCost) + ' ₽') +
            row('Бумага', fmt(paperCost) + ' ₽') +
@@ -391,12 +440,37 @@ function calc() {
 
   // Общее округление и вывод
   total = Math.round(total / 10) * 10;
+  plainText += "--------------------------------------------------\n";
+  plainText += `ИТОГО: ${fmt(total)} ₽ (${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт)\n`;
+  
   document.getElementById('result').innerHTML = html +
     `<div class="total">
        <span class="lbl">Итого</span>
        <span class="val">${fmt(total)} ₽</span>
      </div>
      <div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
+
+  // Сохраняем текст для копирования
+  window.lastCalculationText = plainText;
+}
+
+function copySummary() {
+  navigator.clipboard.writeText(window.lastCalculationText).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    const originalText = btn.innerText;
+    btn.innerText = "Скопировано!";
+    btn.style.background = "#e7f7ec";
+    btn.style.color = "#1a7f37";
+    btn.style.borderColor = "#b7e4c7";
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.style.background = "#fff";
+      btn.style.color = "var(--berry)";
+      btn.style.borderColor = "var(--berry)";
+    }, 2000);
+  }).catch(err => {
+    alert("Ошибка при копировании: " + err);
+  });
 }
 
 // Слушатели
