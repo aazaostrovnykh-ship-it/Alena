@@ -10,40 +10,70 @@
 <style>
   :root{ --berry: #8B1C42; --berry-light: #FCF2F5; --angel-blue: #6EA6D8; --bg: #fff; --ink: #1a1a1a; --muted: #666; --line: #e5ccd5; }
   *{box-sizing:border-box}
-  body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--berry-light); }
+  ::-webkit-scrollbar-thumb { background: var(--angel-blue); border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--berry); }
+
+  body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased; animation: pageFadeIn 0.5s ease-out forwards;}
+  @keyframes pageFadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
   .calc{max-width:980px;margin:0 auto}
-  .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
+  
+  .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap; position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 10px 0; border-bottom: 1px solid rgba(139,28,66,0.1); transition: all 0.3s ease;}
   .brand-left a{display:flex;align-items:center;gap:18px;text-decoration:none}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0}
   .nav-menu{display:flex;gap:20px;align-items:center;margin-left:20px}
   .nav-menu a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px;transition:.15s;padding-bottom:4px;border-bottom:2px solid transparent}
   .nav-menu a:hover,.nav-menu a.active{color:var(--angel-blue);border-bottom-color:var(--angel-blue)}
+  
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
-  .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500}
-  @media(max-width:980px){.brand{flex-direction:column;align-items:flex-start}.nav-menu{margin-left:0;margin-top:15px;flex-wrap:wrap}.header-contacts{text-align:left;margin-top:10px}}
+  .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500; transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px;}
+  .header-contacts a:hover{ color: var(--angel-blue); }
+  .phone-icon { width: 16px; height: 16px; fill: var(--berry); display: inline-block; transform-origin: center; animation: ring-phone 2.5s infinite ease-in-out; }
+  @keyframes ring-phone { 0%, 60%, 100% { transform: rotate(0deg); } 5%, 15%, 25% { transform: rotate(-15deg); } 10%, 20%, 30% { transform: rotate(15deg); } }
+
   .page-title {margin-bottom: 30px;}
   .page-title h2 {font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;}
   .page-title p {color: var(--muted); font-size: 16px; margin: 0; line-height: 1.5;}
+  
   .card{background:var(--berry-light);border-radius:16px;padding:28px;margin-bottom:20px;border:1px solid rgba(139,28,66,0.05);box-shadow:0 6px 24px rgba(139,28,66,.05)}
   .card h3{font-size:22px;color:var(--berry);margin:0 0 15px;font-weight:500}
   .card p, .card li{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:10px}
+  
   .specs-table {width: 100%; border-collapse: collapse; margin-top: 10px;}
   .specs-table td {padding: 12px 10px; border-bottom: 1px solid var(--line); font-size: 15px;}
   .specs-table td:first-child {color: var(--berry); font-weight: 500; width: 40%;}
   .specs-table td:last-child {color: var(--muted);}
   .specs-table tr:last-child td {border-bottom: none;}
+  
   .types-grid {display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;}
   @media(max-width:680px){.types-grid {grid-template-columns: 1fr;}}
   .type-item {background: #fff; padding: 20px; border-radius: 12px; border: 1px solid var(--line);}
   .type-item h4 {color: var(--berry); margin: 0 0 10px; font-size: 18px; font-weight: 500;}
   .type-item p {font-size: 14px; margin-bottom: 0;}
-  .btn-action {display: inline-block; padding: 14px 28px; background: var(--berry); color: #fff; text-decoration: none; border-radius: 10px; font-weight: 500; font-size: 16px; transition: 0.15s; margin-top: 10px;}
+  
+  .btn-action {display: inline-block; padding: 14px 28px; background: var(--berry); color: #fff; text-decoration: none; border-radius: 10px; font-weight: 500; font-size: 16px; transition: 0.15s; margin-top: 10px; position: relative; overflow: hidden;}
   .btn-action:hover {background: #6c1230;}
+  
+  .ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.4); transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none; }
+  @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
   .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);border:1px solid rgba(139,28,66,0.05)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
-  .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase}
+  .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase; display: flex; align-items: center; gap: 8px;}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px}
   @media(max-width:560px){.footer{flex-direction:column;align-items:flex-start}}
+
+  #scrollTopBtn { position: fixed; bottom: 30px; right: 30px; z-index: 999; width: 50px; height: 50px; border-radius: 50%; background: var(--berry); color: #fff; border: none; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(139,28,66,0.3); transition: all 0.3s ease; opacity: 0; transform: translateY(20px); }
+  #scrollTopBtn.show { display: flex; opacity: 1; transform: translateY(0); }
+  #scrollTopBtn:hover { background: var(--angel-blue); transform: translateY(-5px); }
+
+  @media(max-width: 980px){
+    .brand{flex-direction:column;align-items:flex-start; position: relative;}
+    .nav-menu{margin-left:0;margin-top:15px;flex-wrap:wrap;}
+    .header-contacts{text-align:left;margin-top:10px;}
+  }
 </style>
 </head>
 <body>
@@ -55,7 +85,7 @@
     <nav class="nav-menu">
       <a href="index.html">Цифра</a>
       <a href="offset.html">Офсет</a>
-      <a href="services.html" class="active">Услуги</a>
+      <a href="services.html">Услуги</a>
       <a href="portfolio.html">Портфолио</a>
       <a href="about.html">О компании</a>
       <a href="post.html">Требования</a>
@@ -63,12 +93,14 @@
     </nav>
     <div class="header-contacts">
       <div style="font-size:12px; color:var(--muted); margin-bottom:2px;">Менеджер: Алена Заостровных</div>
-      <a href="tel:+73432789642">+7 (343) 278-96-42</a><br>
+      <a href="tel:+73432789642"><svg class="phone-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg> +7 (343) 278-96-42</a><br>
       <a href="tel:+79960320581">+7 (996) 032-05-81</a><br>
       <a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a>
     </div>
   </header>
+  
   <div class="page-title"><h2>Пакеты и коробки</h2><p>Создаем премиальную брендированную упаковку, которая подчеркивает статус вашего бренда и создает правильное впечатление у клиентов.</p></div>
+  
   <div class="card">
     <h3>Виды продукции</h3>
     <div class="types-grid">
@@ -78,6 +110,7 @@
       <div class="type-item"><h4>Упаковка для еды</h4><p>Эко-коробки для пиццы, бургеров, выпечки. Печать на пищевом картоне безопасными красками.</p></div>
     </div>
   </div>
+  
   <div class="card">
     <h3>Технические характеристики</h3>
     <table class="specs-table">
@@ -88,6 +121,7 @@
       <tr><td>Сроки</td><td>от 5 до 10 рабочих дней (зависит от сложности вырубки)</td></tr>
     </table>
   </div>
+  
   <div class="card">
     <h3>Премиальная отделка</h3>
     <p>Чтобы упаковка выглядела по-настоящему дорого, мы применяем:</p>
@@ -97,13 +131,39 @@
       <li><b>Выборочный УФ-лак:</b> создает эффект глянцевых элементов на матовом фоне;</li>
       <li><b>Тиснение блинтом (без фольги)</b> для эффекта объема.</li>
     </ul>
-    <br><a href="index.html#custom-order" class="btn-action">Заказать расчет упаковки</a>
+    <br><a href="contacts.html" class="btn-action">Заказать расчет упаковки</a>
   </div>
+  
   <footer class="footer">
-    <div class="footer-col"><strong>Позвонить</strong><span style="font-size:13px; color:var(--berry); margin-bottom:4px;">Менеджер Алена Заостровных</span><a href="tel:+73432789642">+7 (343) 278-96-42</a><a href="tel:+79960320581">+7 (996) 032-05-81</a></div>
+    <div class="footer-col"><strong>Позвонить <svg class="phone-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></strong><span style="font-size:13px; color:var(--berry); margin-bottom:4px;">Менеджер Алена Заостровных</span><a href="tel:+73432789642">+7 (343) 278-96-42</a><a href="tel:+79960320581">+7 (996) 032-05-81</a></div>
     <div class="footer-col"><strong>Написать</strong><a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a></div>
     <div class="footer-col"><strong>Приехать</strong><span style="font-size:16px;font-weight:500;color:var(--berry)">г. Екатеринбург, ул. Репина, 6а</span></div>
   </footer>
 </div>
+
+<button id="scrollTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+window.onscroll = function() {
+  const btn = document.getElementById("scrollTopBtn");
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { btn.classList.add("show"); } else { btn.classList.remove("show"); }
+};
+document.addEventListener('click', function(e) {
+  const target = e.target.closest('.btn-action');
+  if (!target) return;
+  const circle = document.createElement('span');
+  const diameter = Math.max(target.clientWidth, target.clientHeight);
+  const radius = diameter / 2;
+  circle.style.width = circle.style.height = `${diameter}px`;
+  circle.style.left = `${e.clientX - target.getBoundingClientRect().left - radius}px`;
+  circle.style.top = `${e.clientY - target.getBoundingClientRect().top - radius}px`;
+  circle.classList.add('ripple');
+  const ripple = target.querySelector('.ripple');
+  if (ripple) { ripple.remove(); }
+  target.appendChild(circle);
+});
+</script>
 </body>
 </html>
