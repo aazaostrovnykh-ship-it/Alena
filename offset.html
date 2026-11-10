@@ -139,6 +139,7 @@
         <label>Тип продукции</label>
         <select id="product" onchange="updateUI()">
           <option value="leaflet">Листовки / Буклеты</option>
+          <option value="brochure">Брошюры (сшивные)</option>
           <option value="book" selected>Книги / Каталоги</option>
         </select>
       </div>
@@ -176,6 +177,70 @@
             <option value="1+1">1+1 (ч/б двусторонняя)</option>
             <option value="4+0">4+0 (цветная)</option>
             <option value="4+4" selected>4+4 (цветная двусторонняя)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- БЛОК ДЛЯ БРОШЮР -->
+    <div id="brochure-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+      <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры брошюры</h4>
+      <div class="grid">
+        <div>
+          <label>Формат брошюры</label>
+          <select id="brochure-format">
+            <option value="A5" selected>А5 (145×205)</option>
+            <option value="A4">А4 (205×290)</option>
+          </select>
+        </div>
+        <div>
+          <label>Кол-во страниц в блоке</label>
+          <input type="number" id="brochure-pages" value="16" min="4" step="4">
+        </div>
+      </div>
+
+      <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Внутренний блок</h4>
+      <div class="grid">
+        <div>
+          <label>Бумага блока</label>
+          <select id="brochure-paper">
+            <option value="80" selected>Офсетная 80 г/м²</option>
+            <option value="115">Мелованная 115 г/м²</option>
+            <option value="130">Мелованная 130 г/м²</option>
+          </select>
+        </div>
+        <div>
+          <label>Красочность блока</label>
+          <select id="brochure-color">
+            <option value="1+0">1+0 (ч/б)</option>
+            <option value="1+1" selected>1+1 (ч/б двусторонняя)</option>
+            <option value="4+4">4+4 (цветная)</option>
+          </select>
+        </div>
+      </div>
+
+      <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Обложка и переплет</h4>
+      <div class="grid">
+        <div>
+          <label>Бумага обложки</label>
+          <select id="brochure-cover-paper">
+            <option value="130" selected>Мелованная 130 г/м²</option>
+            <option value="200">Мелованная 200 г/м²</option>
+            <option value="250">Мелованная 250 г/м²</option>
+          </select>
+        </div>
+        <div>
+          <label>Красочность обложки</label>
+          <select id="brochure-cover-color">
+            <option value="4+0" selected>4+0 (цветная 1 сторона)</option>
+            <option value="4+4">4+4 (цветная 2 стороны)</option>
+          </select>
+        </div>
+        <div>
+          <label>Переплет</label>
+          <select id="brochure-binding">
+            <option value="saddle" selected>Скрепка (2 скобы)</option>
+            <option value="perfect">Термопереплет (КБС)</option>
           </select>
         </div>
       </div>
@@ -309,6 +374,7 @@ const PAPER_PRICE_PER_SHEET = {
   '80': 2.5, 
   '115': 3.0, 
   '130': 3.0, 
+  '200': 12.0,
   '250': 15.0, 
   '300': 18.0 
 };
@@ -319,14 +385,17 @@ const PRICE_CREASE = 2.5;
 const ITEMS_PER_A2 = { 'A5': 8, 'A4': 4, 'A3': 2 };
 const PAGES_PER_A2 = { 'A5': 16, 'A4': 8 }; 
 const COVERS_PER_A2 = { 'A5': 8, 'A4': 4 };
-const BINDING_PRICES = { 'soft': 30, 'hard': 120 };
+const BINDING_PRICES = { 'saddle': 8, 'perfect': 30, 'soft': 30, 'hard': 120 };
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
 
 function updateUI() {
-  const isBook = document.getElementById('product').value === 'book';
-  document.getElementById('book-options').style.display = isBook ? 'block' : 'none';
-  document.getElementById('leaflet-options').style.display = isBook ? 'none' : 'block';
+  const product = document.getElementById('product').value;
+  
+  document.getElementById('leaflet-options').style.display = (product === 'leaflet') ? 'block' : 'none';
+  document.getElementById('brochure-options').style.display = (product === 'brochure') ? 'block' : 'none';
+  document.getElementById('book-options').style.display = (product === 'book') ? 'block' : 'none';
+  
   calc();
 }
 
@@ -351,7 +420,6 @@ function calc() {
             </div>`;
   };
 
-  // Считаем количество форм на 1 экземпляр (лист) с учетом красочности
   function getPlatesPerSheet(color, selfTurn) {
     let front = 0;
     let back = 0;
@@ -360,28 +428,30 @@ function calc() {
     
     if (color === '1+1' || color === '4+4') back = front;
     
-    // Если включена схема «Само на себя», формы на оборот не нужны
     return front + (selfTurn ? 0 : back);
   }
 
-  if (product === 'book') {
-    const format = document.getElementById('book-format').value;
-    const pages = Math.max(8, Math.round(+document.getElementById('book-pages').value || 8));
-    const pBlock = document.getElementById('book-paper').value;
-    const cBlock = document.getElementById('book-color').value;
-    const pCover = document.getElementById('book-cover-paper').value;
-    const cCover = document.getElementById('book-cover-color').value;
-    const lamCover = parseInt(document.getElementById('book-cover-lam').value);
-    const binding = document.getElementById('book-binding').value;
-
-    // --- 1. Блок ---
-    const pagesPerSheet = PAGES_PER_A2[format];
-    let sheetsPerCopy = Math.ceil(pages / pagesPerSheet); // Например, 19 листов на 1 экз.
-    let cleanBlockSheets = sheetsPerCopy * qty; // 19 * 300 = 5700 листов всего
+  // --- ЛОГИКА ДЛЯ КНИГ И БРОШЮР (ОНИ ОЧЕНЬ ПОХОЖИ) ---
+  if (product === 'book' || product === 'brochure') {
+    const isBook = product === 'book';
     
-    // Форм нужно: (кол-во листов на 1 экз) * (кол-во красок на лист)
+    // Выбираем ID полей в зависимости от типа
+    const format = document.getElementById(isBook ? 'book-format' : 'brochure-format').value;
+    const pages = Math.max(4, Math.round(+document.getElementById(isBook ? 'book-pages' : 'brochure-pages').value || 4));
+    const pBlock = document.getElementById(isBook ? 'book-paper' : 'brochure-paper').value;
+    const cBlock = document.getElementById(isBook ? 'book-color' : 'brochure-color').value;
+    const pCover = document.getElementById(isBook ? 'book-cover-paper' : 'brochure-cover-paper').value;
+    const cCover = document.getElementById(isBook ? 'book-cover-color' : 'brochure-cover-color').value;
+    const binding = document.getElementById(isBook ? 'book-binding' : 'brochure-binding').value;
+    const lamCover = isBook ? parseInt(document.getElementById('book-cover-lam').value) : 0;
+
+    // Блок
+    const pagesPerSheet = PAGES_PER_A2[format];
+    let sheetsPerCopy = Math.ceil(pages / pagesPerSheet);
+    let cleanBlockSheets = sheetsPerCopy * qty;
+    
     let platesPerSheet = getPlatesPerSheet(cBlock, isSelfTurn);
-    let platesBlock = sheetsPerCopy * platesPerSheet; // 19 * 2 = 38 форм
+    let platesBlock = sheetsPerCopy * platesPerSheet;
 
     const wasteBlockSheets = platesBlock * WASTE_PER_FORM;
     const totalBlockSheets = cleanBlockSheets + wasteBlockSheets;
@@ -390,11 +460,11 @@ function calc() {
     const paperCostBlock = totalBlockSheets * PAPER_PRICE_PER_SHEET[pBlock];
     const platesCostBlock = platesBlock * PLATE_PRICE;
 
-    // --- 2. Обложка ---
+    // Обложка
     const coversPerSheet = COVERS_PER_A2[format];
-    let cleanCoverSheets = Math.ceil(qty / coversPerSheet); // 300 / 8 = 38 листов
+    let cleanCoverSheets = Math.ceil(qty / coversPerSheet);
     
-    let platesCover = getPlatesPerSheet(cCover, isSelfTurn); // 4 или 8 форм
+    let platesCover = getPlatesPerSheet(cCover, isSelfTurn); 
     const wasteCoverSheets = platesCover * WASTE_PER_FORM;
     const totalCoverSheets = cleanCoverSheets + wasteCoverSheets;
 
@@ -403,8 +473,10 @@ function calc() {
     const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
     const platesCostCover = platesCover * PLATE_PRICE;
 
-    // --- 3. Постпечать ---
-    const bindCost = qty * BINDING_PRICES[binding];
+    // Постпечать
+    let bindPrice = BINDING_PRICES[binding];
+    // Если это брошюра на скрепке, а тираж маленький, может быть другой тариф, но пока берем базовый
+    const bindCost = qty * bindPrice;
     const cutCost = isCut ? (totalBlockSheets + totalCoverSheets) * PRICE_CUT : 0;
     const creaseCost = isCrease ? totalBlockSheets * PRICE_CREASE : 0;
 
@@ -428,10 +500,11 @@ function calc() {
            row('Бумага обложки', fmt(paperCostCover) + ' ₽', `${totalCoverSheets} лист. × ${PAPER_PRICE_PER_SHEET[pCover]} ₽`) +
            row('Формы обложки', fmt(platesCostCover) + ' ₽', `${platesCover} шт × ${PLATE_PRICE} ₽`) +
            (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽', `${totalCoverSheets} лист. × ${lamCover} ₽`) : '') +
-           row('Переплет', fmt(bindCost) + ' ₽', `${qty} шт × ${BINDING_PRICES[binding]} ₽`) +
+           row('Переплет', fmt(bindCost) + ' ₽', `${qty} шт × ${bindPrice} ₽`) +
            (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalBlockSheets + totalCoverSheets} лист. × ${PRICE_CUT} ₽`) : '') +
            (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽', `${totalBlockSheets} лист. × ${PRICE_CREASE} ₽`) : '');
 
+  // --- ЛОГИКА ДЛЯ ЛИСТОВОК ---
   } else {
     const format = document.getElementById('leaflet-format').value;
     const paper = document.getElementById('leaflet-paper').value;
@@ -501,8 +574,11 @@ function copySummary() {
 
 // Слушатели
 document.getElementById('product').addEventListener('change', updateUI);
-['qty', 'book-format', 'book-pages', 'book-paper', 'book-color', 'book-cover-paper', 'book-cover-color', 'book-cover-lam', 'book-binding',
- 'leaflet-format', 'leaflet-paper', 'leaflet-color'].forEach(id => {
+['qty', 
+ 'leaflet-format', 'leaflet-paper', 'leaflet-color',
+ 'brochure-format', 'brochure-pages', 'brochure-paper', 'brochure-color', 'brochure-cover-paper', 'brochure-cover-color', 'brochure-binding',
+ 'book-format', 'book-pages', 'book-paper', 'book-color', 'book-cover-paper', 'book-cover-color', 'book-cover-lam', 'book-binding'
+].forEach(id => {
   document.getElementById(id).addEventListener('change', calc);
   document.getElementById(id).addEventListener('input', calc);
 });
