@@ -289,6 +289,7 @@
     <button class="btn-action btn-copy" onclick="copySummary()">Скопировать смету</button>
   </div>
 
+  <!-- БЛОК СРАВНЕНИЯ (ОБНОВЛЕН) -->
   <div class="card compare-block">
     <h3>Что дешевле: Цифра или Офсет?</h3>
     <p style="margin-top:-10px; font-size:14px; margin-bottom:15px;">Введите параметры, чтобы узнать, какой способ печати выгоднее для вашего тиража.</p>
@@ -307,6 +308,7 @@
       <div>
         <label for="c-paper">Бумага</label>
         <select id="c-paper" onchange="updateCompare()">
+          <option value="80">ВХИ 80 г/м²</option>
           <option value="115">Мелованная 115 г/м²</option>
           <option value="130" selected>Мелованная 130 г/м²</option>
         </select>
@@ -314,8 +316,10 @@
       <div>
         <label for="c-color">Красочность</label>
         <select id="c-color" onchange="updateCompare()">
-          <option value="4+4" selected>4+4 (цветная двусторонняя)</option>
+          <option value="1+0">1+0 (ч/б)</option>
           <option value="1+1">1+1 (ч/б двусторонняя)</option>
+          <option value="4+0">4+0 (цветная 1 сторона)</option>
+          <option value="4+4" selected>4+4 (цветная двусторонняя)</option>
         </select>
       </div>
     </div>
@@ -390,7 +394,7 @@ function calc() {
     };
   } else {
     options = {
-      format: productValue.toUpperCase(), // Будет A4, A5, VIZITKA
+      format: productValue.toUpperCase(), 
       paper: document.getElementById('paper').value,
       color: document.getElementById('color').value,
       cut: document.getElementById('cut').checked,
