@@ -6,7 +6,7 @@
 <link rel="canonical" href="https://print-games.ru/" />
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <title>Цифровая печать — Типография Екатеринбургской Епархии</title>
-<meta name="description" content="Оперативный расчет стоимости цифровой печати в Екатеринбурге. Листовки, визитки, буклеты, книги. Выгодные цены, высокое качество.">
+<meta name="description" content="Оперативный расчет стоимости цифровой печати. Листовки, визитки, журналы, книги.">
 <style>
   :root{ --berry: #8B1C42; --berry-light: #FCF2F5; --angel-blue: #6EA6D8; --bg: #fff; --ink: #1a1a1a; --muted: #666; --line: #e5ccd5; --price: var(--angel-blue); }
   *{box-sizing:border-box}
@@ -103,7 +103,7 @@
 
   <div class="page-title">
     <h2>Расчет цифровой печати</h2>
-    <p>Точный расчет стоимости листовой продукции и книг по вашему прайс-листу.</p>
+    <p>Точный расчет стоимости листовой продукции, журналов и книг.</p>
   </div>
 
   <div class="card">
@@ -111,60 +111,92 @@
       <div>
         <label>Продукция</label>
         <select id="product">
-          <option value="a6" data-items="8">Листовки А6 (8 шт на А3)</option>
-          <option value="a5" data-items="4">Листовки А5 (4 шт на А3)</option>
-          <option value="a4" data-items="2" selected>Листовки А4 (2 шт на А3)</option>
-          <option value="a3" data-items="1">Листовки А3 (1 шт на А3)</option>
-          <option value="vizitka" data-items="24">Визитки (24 шт на А3)</option>
-          <option value="book_a4" data-fixed="true">Книга/Журнал А4 (фикс. цена)</option>
+          <option value="a6" data-type="leaflet" data-items="8">Листовки А6 (8 шт на А3)</option>
+          <option value="a5" data-type="leaflet" data-items="4">Листовки А5 (4 шт на А3)</option>
+          <option value="a4" data-type="leaflet" data-items="2" selected>Листовки А4 (2 шт на А3)</option>
+          <option value="a3" data-type="leaflet" data-items="1">Листовки А3 (1 шт на А3)</option>
+          <option value="vizitka" data-type="leaflet" data-items="24">Визитки (24 шт на А3)</option>
+          
+          <!-- Отдельные пункты -->
+          <option value="mag_30" data-type="magazine">Журнал А4 (до 30 страниц)</option>
+          <option value="mag_40" data-type="magazine">Журнал А4 (до 40 страниц)</option>
+          <option value="book" data-type="book">Книга (индивидуальный расчет)</option>
         </select>
       </div>
       <div>
         <label>Тираж, шт</label>
         <input type="number" id="qty" value="100" min="1" max="100000">
       </div>
-      
-      <!-- Скрытый блок для объема книги -->
-      <div id="book-volume-wrapper" style="display:none;">
-        <label>Объем А4</label>
-        <select id="book-volume">
-          <option value="2300">До 30 страниц</option>
-          <option value="2700">До 40 страниц</option>
-        </select>
-      </div>
+    </div>
 
-      <div id="paper-wrapper">
-        <label>Бумага «Колотек»</label>
-        <select id="paper">
-          <option value="80">ВХИ 80 г/м²</option>
-          <option value="90">90 г/м²</option>
-          <option value="100">100 г/м²</option>
-          <option value="120" selected>120 г/м²</option>
-          <option value="160">160 г/м²</option>
-          <option value="200">200 г/м²</option>
-          <option value="250">250 г/м²</option>
-          <option value="300">300 г/м²</option>
-        </select>
+    <!-- БЛОК ДЛЯ ЛИСТОВОК -->
+    <div id="leaflet-options" style="margin-top: 15px;">
+      <div class="grid">
+        <div>
+          <label>Бумага</label>
+          <select id="paper">
+            <option value="80">ВХИ 80 г/м²</option>
+            <option value="120" selected>120 г/м²</option>
+            <option value="160">160 г/м²</option>
+            <option value="200">200 г/м²</option>
+            <option value="250">250 г/м²</option>
+            <option value="300">300 г/м²</option>
+          </select>
+        </div>
+        <div>
+          <label>Красочность</label>
+          <select id="color">
+            <option value="1+0">1+0 (ч/б)</option>
+            <option value="1+1">1+1 (ч/б двусторонняя)</option>
+            <option value="4+0">4+0 (цветная)</option>
+            <option value="4+4" selected>4+4 (цветная двусторонняя)</option>
+          </select>
+        </div>
       </div>
-      <div id="color-wrapper">
-        <label>Красочность</label>
-        <select id="color">
-          <option value="1+0">1+0 (ч/б)</option>
-          <option value="1+1">1+1 (ч/б двусторонняя)</option>
-          <option value="4+0">4+0 (цветная)</option>
-          <option value="4+4" selected>4+4 (цветная двусторонняя)</option>
-        </select>
+      <div style="margin-top: 15px;">
+        <label>Дополнительно</label>
+        <div class="chks">
+          <label class="chk"><input type="checkbox" id="lam1"> Ламинация 1 сторона</label>
+          <label class="chk"><input type="checkbox" id="lam2"> Ламинация 2 стороны</label>
+          <label class="chk"><input type="checkbox" id="cut" checked> Резка</label>
+          <label class="chk"><input type="checkbox" id="crease"> Биговка</label>
+          <label class="chk"><input type="checkbox" id="round"> Скругление</label>
+        </div>
       </div>
     </div>
 
-    <div style="margin-top: 20px;" id="extras-wrapper">
-      <label>Дополнительно</label>
-      <div class="chks">
-        <label class="chk"><input type="checkbox" id="lam1"> Ламинация 1 сторона</label>
-        <label class="chk"><input type="checkbox" id="lam2"> Ламинация 2 стороны</label>
-        <label class="chk"><input type="checkbox" id="cut" checked> Резка</label>
-        <label class="chk"><input type="checkbox" id="crease"> Биговка</label>
-        <label class="chk"><input type="checkbox" id="round"> Скругление</label>
+    <!-- БЛОК ДЛЯ КНИГ -->
+    <div id="book-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+      <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
+      <div class="grid">
+        <div>
+          <label>Формат</label>
+          <select id="book-format">
+            <option value="A5">А5 (145×205)</option>
+            <option value="A4">А4 (205×290)</option>
+          </select>
+        </div>
+        <div>
+          <label>Кол-во страниц</label>
+          <input type="number" id="book-pages" value="120" min="4" step="4">
+        </div>
+        <div>
+          <label>Переплет</label>
+          <select id="book-binding">
+            <option value="saddle">Скрепка</option>
+            <option value="perfect">КБС (Термопереплет)</option>
+            <option value="wire">Пружина</option>
+            <option value="hard" selected>Твердый переплет</option>
+          </select>
+        </div>
+        <div>
+          <label>Бумага блока</label>
+          <select id="book-paper">
+            <option value="80">ВХИ 80 г/м²</option>
+            <option value="120" selected>Офсетная 120 г/м²</option>
+            <option value="160">Мелованная 160 г/м²</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -184,24 +216,9 @@
 </div>
 
 <script>
-const PRINT_PRICES = {
-  '1+0': { base: 10, over50: 10 },
-  '1+1': { base: 20, over50: 20 },
-  '4+0': { base: 25, over50: 20 },
-  '4+4': { base: 50, over50: 40 }
-};
-
-const PAPER_PRICES = {
-  '80':  { base: 9,  over50: 5 },
-  '90':  { base: 12, over50: 8 },
-  '100': { base: 12, over50: 8 },
-  '120': { base: 17, over50: 13 },
-  '160': { base: 23, over50: 20 },
-  '200': { base: 25, over50: 22 },
-  '250': { base: 27, over50: 23 },
-  '300': { base: 30, over50: 25 }
-};
-
+// Цены для листовок
+const PRINT_PRICES = { '1+0': { base: 10, over50: 10 }, '1+1': { base: 20, over50: 20 }, '4+0': { base: 25, over50: 20 }, '4+4': { base: 50, over50: 40 } };
+const PAPER_PRICES = { '80': { base: 9, over50: 5 }, '120': { base: 17, over50: 13 }, '160': { base: 23, over50: 20 }, '200': { base: 25, over50: 22 }, '250': { base: 27, over50: 23 }, '300': { base: 30, over50: 25 } };
 const WASTE_FACTOR = 1.15;
 const PRICE_CUT = 0.72;
 const PRICE_LAM1 = 10;
@@ -209,87 +226,114 @@ const PRICE_LAM2 = 20;
 const PRICE_CREASE = 10;
 const PRICE_ROUND = 1.2;
 
+// Цены для книг
+const BOOK_HARD_PRICE = 200;
+const BOOK_COLLATION = 20;
+const BINDING_PRICES = { 'saddle': 8, 'perfect': 15, 'wire': 55, 'hard': BOOK_HARD_PRICE };
+
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
 
 function updateUI() {
   const prodSelect = document.getElementById('product');
-  const isFixedBook = prodSelect.value === 'book_a4';
+  const type = prodSelect.selectedOptions[0].dataset.type;
   
-  // Прячем/показываем нужные блоки
-  document.getElementById('book-volume-wrapper').style.display = isFixedBook ? 'block' : 'none';
-  document.getElementById('paper-wrapper').style.display = isFixedBook ? 'none' : 'block';
-  document.getElementById('color-wrapper').style.display = isFixedBook ? 'none' : 'block';
-  document.getElementById('extras-wrapper').style.display = isFixedBook ? 'none' : 'block';
+  document.getElementById('leaflet-options').style.display = (type === 'leaflet') ? 'block' : 'none';
+  document.getElementById('book-options').style.display = (type === 'book') ? 'block' : 'none';
   
   calc();
 }
 
 function calc() {
-  const product = document.getElementById('product');
-  const isFixedBook = product.value === 'book_a4';
+  const prodSelect = document.getElementById('product');
+  const type = prodSelect.selectedOptions[0].dataset.type;
   const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
+  const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
 
-  // --- ЛОГИКА ДЛЯ КНИГ/ЖУРНАЛОВ А4 (ФИКС) ---
-  if (isFixedBook) {
-    const fixedPrice = parseInt(document.getElementById('book-volume').value);
-    const total = qty * fixedPrice;
-    const volumeText = fixedPrice === 2300 ? 'До 30 стр.' : 'До 40 стр.';
+  let html = '';
+  let total = 0;
+
+  // 1. ЖУРНАЛЫ (ФИКС)
+  if (type === 'magazine') {
+    const fixedPrice = prodSelect.value === 'mag_30' ? 2300 : 2700;
+    const volText = prodSelect.value === 'mag_30' ? 'До 30 стр.' : 'До 40 стр.';
+    total = qty * fixedPrice;
     
-    const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
-    document.getElementById('result').innerHTML =
-      row('Тираж', fmt(qty) + ' шт') +
-      row('Формат', 'А4') +
-      row('Объем', volumeText) +
-      row('Фиксированная цена за шт.', fmt(fixedPrice) + ' ₽') +
-      `<div class="total">
-         <span class="lbl">Итого</span>
-         <span class="val">${fmt(total)} ₽</span>
-       </div>
-       <div class="perunit">${fixedPrice.toFixed(2).replace('.', ',')} ₽ / шт</div>`;
-    return; // Выходим, чтобы не считать дальше
+    html = row('Тираж', fmt(qty) + ' шт') +
+           row('Объем', volText) +
+           row('Фиксированная цена за шт.', fmt(fixedPrice) + ' ₽');
+  
+  // 2. КНИГИ
+  } else if (type === 'book') {
+    const format = document.getElementById('book-format').value;
+    const pages = Math.max(4, Math.round(+document.getElementById('book-pages').value || 4));
+    const binding = document.getElementById('book-binding').value;
+    const pBlock = document.getElementById('book-paper').value;
+
+    const pagesPerSheet = (format === 'A5') ? 8 : 4;
+    let blockSheetsPerCopy = Math.ceil(pages / pagesPerSheet);
+    blockSheetsPerCopy = Math.ceil(blockSheetsPerCopy * WASTE_FACTOR);
+    const totalBlockSheets = blockSheetsPerCopy * qty;
+
+    const coversPerSheet = (format === 'A5') ? 2 : 1;
+    const totalCoverSheets = Math.ceil(qty / coversPerSheet);
+
+    const isOver50Block = totalBlockSheets >= 50;
+    const printCostBlock = totalBlockSheets * (isOver50Block ? PRINT_PRICES['1+1'].over50 : PRINT_PRICES['1+1'].base);
+    const paperCostBlock = totalBlockSheets * (isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base);
+    const printCostCover = totalCoverSheets * PRINT_PRICES['4+4'].base;
+    const paperCostCover = totalCoverSheets * PAPER_PRICES['200'].base;
+
+    let bindingCostPerUnit = BINDING_PRICES[binding];
+    if (binding === 'wire' && format === 'A5') bindingCostPerUnit = 40;
+    const totalBindingCost = qty * bindingCostPerUnit;
+    const totalCollationCost = (binding === 'hard') ? qty * BOOK_COLLATION : 0;
+
+    total = printCostBlock + paperCostBlock + printCostCover + paperCostCover + totalBindingCost + totalCollationCost;
+
+    html = row('Тираж', fmt(qty) + ' шт') +
+           row('Листов А3 на 1 книгу', blockSheetsPerCopy + ' шт') +
+           row('Печать и бумага блока', fmt(printCostBlock + paperCostBlock) + ' ₽') +
+           row('Печать и бумага обложки', fmt(printCostCover + paperCostCover) + ' ₽') +
+           row('Переплет', fmt(totalBindingCost) + ' ₽') +
+           (totalCollationCost ? row('Подборка', fmt(totalCollationCost) + ' ₽') : '');
+
+  // 3. ЛИСТОВКИ
+  } else {
+    const itemsPerA3 = parseInt(prodSelect.selectedOptions[0].dataset.items);
+    const paper = document.getElementById('paper').value;
+    const color = document.getElementById('color').value;
+    const isLam1 = document.getElementById('lam1').checked;
+    const isLam2 = document.getElementById('lam2').checked;
+    const isCut = document.getElementById('cut').checked;
+    const isCrease = document.getElementById('crease').checked;
+    const isRound = document.getElementById('round').checked;
+
+    let sheets = Math.ceil(qty / itemsPerA3);
+    sheets = Math.ceil(sheets * WASTE_FACTOR);
+    const isOver50 = sheets >= 50;
+
+    const printCost = sheets * (isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base);
+    const paperCost = sheets * (isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base);
+    const cutCost = isCut ? sheets * PRICE_CUT : 0;
+    const lamCost = isLam2 ? sheets * PRICE_LAM2 : (isLam1 ? sheets * PRICE_LAM1 : 0);
+    const creaseCost = isCrease ? sheets * PRICE_CREASE : 0;
+    const roundCost = isRound ? qty * PRICE_ROUND : 0;
+
+    total = printCost + paperCost + cutCost + lamCost + creaseCost + roundCost;
+    total = Math.max(total, 300); // Мин заказ 300р
+
+    html = row('Потребуется листов А3', sheets + ' шт') +
+           row('Печать (' + color + ')', fmt(printCost) + ' ₽') +
+           row('Бумага', fmt(paperCost) + ' ₽') +
+           (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
+           (lamCost ? row('Ламинация', fmt(lamCost) + ' ₽') : '') +
+           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽') : '') +
+           (roundCost ? row('Скругление', fmt(roundCost) + ' ₽') : '');
   }
 
-  // --- СТАНДАРТНАЯ ЛОГИКА ДЛЯ ЛИСТОВОК ---
-  const itemsPerA3 = parseInt(product.selectedOptions[0].dataset.items);
-  const paper = document.getElementById('paper').value;
-  const color = document.getElementById('color').value;
-  
-  const isLam1 = document.getElementById('lam1').checked;
-  const isLam2 = document.getElementById('lam2').checked;
-  const isCut = document.getElementById('cut').checked;
-  const isCrease = document.getElementById('crease').checked;
-  const isRound = document.getElementById('round').checked;
-
-  let sheets = Math.ceil(qty / itemsPerA3);
-  sheets = Math.ceil(sheets * WASTE_FACTOR);
-  
-  const isOver50 = sheets >= 50;
-
-  const printCost = sheets * (isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base);
-  const paperCost = sheets * (isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base);
-
-  const cutCost = isCut ? sheets * PRICE_CUT : 0;
-  const lamCost = isLam2 ? sheets * PRICE_LAM2 : (isLam1 ? sheets * PRICE_LAM1 : 0);
-  const creaseCost = isCrease ? sheets * PRICE_CREASE : 0;
-  const roundCost = isRound ? qty * PRICE_ROUND : 0;
-
-  let total = printCost + paperCost + cutCost + lamCost + creaseCost + roundCost;
-  
-  const MIN_ORDER = 300;
-  const oldTotal = total;
-  total = Math.max(total, MIN_ORDER);
-
-  const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
-  
-  document.getElementById('result').innerHTML =
-    row('Потребуется листов А3', sheets + ' шт') +
-    row('Печать (' + color + ')', fmt(printCost) + ' ₽') +
-    row('Бумага (' + paper + ' г/м²)', fmt(paperCost) + ' ₽') +
-    (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
-    (lamCost ? row('Ламинация', fmt(lamCost) + ' ₽') : '') +
-    (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽') : '') +
-    (roundCost ? row('Скругление', fmt(roundCost) + ' ₽') : '') +
-    (oldTotal < MIN_ORDER ? row('Доплата до мин. заказа', fmt(MIN_ORDER - oldTotal) + ' ₽') : '') +
+  // Общее округление и вывод
+  total = Math.round(total / 10) * 10;
+  document.getElementById('result').innerHTML = html +
     `<div class="total">
        <span class="lbl">Итого</span>
        <span class="val">${fmt(total)} ₽</span>
@@ -300,10 +344,17 @@ function calc() {
 // Слушатели
 ['change', 'input'].forEach(ev => {
   document.getElementById('product').addEventListener(ev, updateUI);
-  document.getElementById('book-volume').addEventListener(ev, calc);
   document.getElementById('qty').addEventListener(ev, calc);
+  
+  // Для листовок
   document.getElementById('paper').addEventListener(ev, calc);
   document.getElementById('color').addEventListener(ev, calc);
+  
+  // Для книг
+  document.getElementById('book-format').addEventListener(ev, calc);
+  document.getElementById('book-pages').addEventListener(ev, calc);
+  document.getElementById('book-binding').addEventListener(ev, calc);
+  document.getElementById('book-paper').addEventListener(ev, calc);
 });
 ['lam1', 'lam2', 'cut', 'crease', 'round'].forEach(id => {
   document.getElementById(id).addEventListener('change', calc);
