@@ -201,22 +201,11 @@
           </select>
         </div>
       </div>
-      
-      <!-- ИСПРАВЛЕНО: Заменены две галочки на один выпадающий список -->
-      <div class="grid" style="margin-top: 15px;">
-        <div>
-          <label for="lam">Ламинация</label>
-          <select id="lam">
-            <option value="0">Без ламинации</option>
-            <option value="1" selected>1 сторона</option>
-            <option value="2">2 стороны</option>
-          </select>
-        </div>
-      </div>
-
       <div style="margin-top: 15px;">
         <label>Дополнительно</label>
         <div class="chks">
+          <label class="chk"><input type="checkbox" id="lam1"> Ламинация 1 сторона</label>
+          <label class="chk"><input type="checkbox" id="lam2"> Ламинация 2 стороны</label>
           <label class="chk"><input type="checkbox" id="cut" checked> Резка</label>
           <label class="chk"><input type="checkbox" id="crease"> Биговка</label>
           <label class="chk"><input type="checkbox" id="round"> Скругление</label>
@@ -404,11 +393,12 @@ function calc() {
     };
   } else {
     options = {
-      format: productValue.toUpperCase(), 
+      format: productValue,
       paper: document.getElementById('paper').value,
       color: document.getElementById('color').value,
       cut: document.getElementById('cut').checked,
-      lam: parseInt(document.getElementById('lam').value), // ИСПРАВЛЕНО: берем значение из select
+      lam1: document.getElementById('lam1').checked,
+      lam2: document.getElementById('lam2').checked,
       crease: document.getElementById('crease').checked,
       round: document.getElementById('round').checked
     };
@@ -435,7 +425,7 @@ function updateCompare() {
   const paper = document.getElementById('c-paper').value;
   const color = document.getElementById('c-color').value;
 
-  const digOpts = { format: format, paper: paper, color: color, cut: true, lam: 0, crease: false, round: false };
+  const digOpts = { format: format, paper: paper, color: color, cut: true, lam1: false, lam2: false, crease: false, round: false };
   const offOpts = { format: format, paper: paper, color: color, cut: true, crease: false, selfTurn: false };
 
   const digRes = calcDigital('leaflet', qty, digOpts);
@@ -492,7 +482,6 @@ function copySummary() {
   document.getElementById('qty').addEventListener(ev, calc);
   document.getElementById('paper').addEventListener(ev, calc);
   document.getElementById('color').addEventListener(ev, calc);
-  document.getElementById('lam').addEventListener(ev, calc);
   document.getElementById('book-format').addEventListener(ev, calc);
   document.getElementById('book-pages').addEventListener(ev, calc);
   document.getElementById('book-paper').addEventListener(ev, calc);
@@ -502,7 +491,7 @@ function copySummary() {
   document.getElementById('book-cover-lam').addEventListener(ev, calc);
   document.getElementById('book-binding').addEventListener(ev, calc);
 });
-['cut', 'crease', 'round'].forEach(id => { document.getElementById(id).addEventListener('change', calc); });
+['lam1', 'lam2', 'cut', 'crease', 'round'].forEach(id => { document.getElementById(id).addEventListener('change', calc); });
 document.querySelectorAll('.chk input').forEach(i => { const sync = () => i.closest('.chk').classList.toggle('on', i.checked); i.addEventListener('change', sync); sync(); });
 
 window.onscroll = function() {
