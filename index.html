@@ -11,19 +11,19 @@
   :root{ --berry: #8B1C42; --berry-light: #FCF2F5; --angel-blue: #6EA6D8; --bg: #fff; --ink: #1a1a1a; --muted: #666; --line: #e5ccd5; --price: var(--angel-blue); }
   *{box-sizing:border-box}
   
-  /* 4. Кастомный скроллбар */
+  /* Кастомный скроллбар */
   ::-webkit-scrollbar { width: 10px; }
   ::-webkit-scrollbar-track { background: var(--berry-light); }
   ::-webkit-scrollbar-thumb { background: var(--angel-blue); border-radius: 5px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--berry); }
 
-  /* 5. Плавное появление страницы */
+  /* Плавное появление */
   body { margin:0; padding:32px 16px; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; font-weight:400; -webkit-font-smoothing:antialiased; animation: pageFadeIn 0.5s ease-out forwards; }
   @keyframes pageFadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
   .calc{max-width:980px;margin:0 auto}
   
-  /* 1. Липкая шапка */
+  /* Липкая шапка */
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap; position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 10px 0; border-bottom: 1px solid rgba(139,28,66,0.1); transition: all 0.3s ease;}
   .brand-left a{display:flex;align-items:center;gap:18px;text-decoration:none}
   .brand img{height:66px;width:auto;display:block;flex-shrink:0; transition: transform 0.3s ease;}
@@ -75,7 +75,19 @@
   .total .val.updated { color: var(--berry); }
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 400;}
 
-  /* 9. Ripple эффект */
+  /* Сравнение */
+  .compare-block {margin-top: 30px;}
+  .compare-results {display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;}
+  .compare-card {flex: 1; min-width: 200px; padding: 20px; border-radius: 12px; border: 2px solid var(--line); background: #fff; transition: 0.3s;}
+  .compare-card .c-title {font-size: 14px; font-weight: 500; margin-bottom: 5px; color: var(--muted);}
+  .compare-card .c-price {font-size: 28px; font-weight: bold; margin-bottom: 5px; color: var(--ink);}
+  .compare-card .c-unit {font-size: 13px; color: var(--muted);}
+  .compare-card.cheaper {background: #e7f7ec; border-color: #1a7f37;}
+  .compare-card.cheaper .c-title {color: #1a7f37;}
+  .compare-card.cheaper .c-price {color: #1a7f37;}
+  .compare-badge {display: inline-block; margin-top: 10px; font-weight: bold; font-size: 13px; color: #1a7f37;}
+
+  /* Ripple эффект */
   .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
   .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 500; text-align: center; cursor: pointer; transition: 0.2s; border: none; font-family: inherit; position: relative; overflow: hidden;}
   .btn-action:active { transform: scale(0.98); }
@@ -95,7 +107,7 @@
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase; display: flex; align-items: center; gap: 8px;}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px}
 
-  /* 3. Кнопка наверх */
+  /* Кнопка наверх */
   #scrollTopBtn { position: fixed; bottom: 30px; right: 30px; z-index: 999; width: 50px; height: 50px; border-radius: 50%; background: var(--berry); color: #fff; border: none; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(139,28,66,0.3); transition: all 0.3s ease; opacity: 0; transform: translateY(20px); }
   #scrollTopBtn.show { display: flex; opacity: 1; transform: translateY(0); }
   #scrollTopBtn:hover { background: var(--angel-blue); transform: translateY(-5px); }
@@ -111,12 +123,12 @@
     .footer-col { align-items: center; }
     select, input, textarea { font-size: 16px !important; }
     .actions { flex-direction: column; }
+    .compare-results { flex-direction: column; }
   }
   
-  /* 10. Улучшенный CSS для печати */
   @media print {
     body { background: #fff; padding: 0; color: #000; animation: none; }
-    header.brand, .nav-menu, .header-contacts, .page-title, .card:not(.result), .footer, .actions, #scrollTopBtn { display: none !important; }
+    header.brand, .nav-menu, .header-contacts, .page-title, .card:not(.result), .compare-block, .footer, .actions, #scrollTopBtn { display: none !important; }
     .calc { max-width: 100% !important; margin: 0 !important; }
     .result { border: 2px solid #8B1C42 !important; border-radius: 0 !important; box-shadow: none !important; padding: 30px !important; margin: 0; }
     .result::before { content: "Смета действительна на " attr(data-date); display: block; margin-bottom: 20px; font-weight: bold; color: #8B1C42; }
@@ -149,14 +161,16 @@
       <a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a>
     </div>
   </header>
+  
   <div class="page-title">
-    <h2>Расчет цифровой печати</h2>
+    <h1 style="font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;">Расчет цифровой печати</h1>
     <p>Точный расчет стоимости листовой продукции, журналов и книг.</p>
   </div>
+  
   <div class="card">
     <div class="grid">
       <div>
-        <label>Продукция</label>
+        <label for="product">Продукция</label>
         <select id="product">
           <option value="a6" data-type="leaflet" data-items="8">Листовки А6 (8 шт на А3)</option>
           <option value="a5" data-type="leaflet" data-items="4">Листовки А5 (4 шт на А3)</option>
@@ -168,12 +182,13 @@
           <option value="book" data-type="book">Книга (индивидуальный расчет)</option>
         </select>
       </div>
-      <div><label>Тираж, шт</label><input type="number" id="qty" value="300" min="1" max="100000"></div>
+      <div><label for="qty">Тираж, шт</label><input type="number" id="qty" value="300" min="1" max="100000"></div>
     </div>
+    
     <div id="leaflet-options" class="options-block show">
       <div class="grid">
         <div>
-          <label>Бумага</label>
+          <label for="paper">Бумага</label>
           <select id="paper">
             <option value="80">ВХИ 80 г/м²</option>
             <option value="120" selected>120 г/м²</option>
@@ -184,7 +199,7 @@
           </select>
         </div>
         <div>
-          <label>Красочность</label>
+          <label for="color">Красочность</label>
           <select id="color">
             <option value="1+0">1+0 (ч/б)</option>
             <option value="1+1">1+1 (ч/б двусторонняя)</option>
@@ -204,22 +219,23 @@
         </div>
       </div>
     </div>
+    
     <div id="book-options" class="options-block">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
       <div class="grid">
         <div>
-          <label>Формат</label>
+          <label for="book-format">Формат</label>
           <select id="book-format">
             <option value="A5">А5 (145×205)</option>
             <option value="A4">А4 (205×290)</option>
           </select>
         </div>
-        <div><label>Кол-во страниц в блоке</label><input type="number" id="book-pages" value="300" min="4" step="4"></div>
+        <div><label for="book-pages">Кол-во страниц в блоке</label><input type="number" id="book-pages" value="300" min="4" step="4"></div>
       </div>
       <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Внутренний блок</h4>
       <div class="grid">
         <div>
-          <label>Бумага блока</label>
+          <label for="book-paper">Бумага блока</label>
           <select id="book-paper">
             <option value="80">ВХИ 80 г/м²</option>
             <option value="120" selected>Офсетная 120 г/м²</option>
@@ -227,7 +243,7 @@
           </select>
         </div>
         <div>
-          <label>Красочность блока</label>
+          <label for="book-color">Красочность блока</label>
           <select id="book-color">
             <option value="1+0">1+0 (ч/б)</option>
             <option value="1+1" selected>1+1 (ч/б двусторонняя)</option>
@@ -238,7 +254,7 @@
       <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Обложка</h4>
       <div class="grid">
         <div>
-          <label>Бумага обложки</label>
+          <label for="book-cover-paper">Бумага обложки</label>
           <select id="book-cover-paper">
             <option value="200" selected>Мелованная 200 г/м²</option>
             <option value="250">Мелованная 250 г/м²</option>
@@ -246,22 +262,22 @@
           </select>
         </div>
         <div>
-          <label>Красочность обложки</label>
+          <label for="book-cover-color">Красочность обложки</label>
           <select id="book-cover-color">
             <option value="4+0">4+0 (цветная 1 сторона)</option>
             <option value="4+4" selected>4+4 (цветная 2 стороны)</option>
           </select>
         </div>
         <div>
-          <label>Ламинация обложки</label>
+          <label for="book-cover-lam">Ламинация обложки</label>
           <select id="book-cover-lam">
             <option value="0">Без ламинации</option>
-            <option value="10" selected>1 сторона (Мат/Глянец)</option>
-            <option value="20">2 стороны (Мат/Глянец)</option>
+            <option value="1" selected>1 сторона (Мат/Глянец)</option>
+            <option value="2">2 стороны (Мат/Глянец)</option>
           </select>
         </div>
         <div>
-          <label>Переплет</label>
+          <label for="book-binding">Переплет</label>
           <select id="book-binding">
             <option value="saddle">Скрепка</option>
             <option value="perfect" selected>КБС (Термопереплет)</option>
@@ -272,12 +288,50 @@
       </div>
     </div>
   </div>
+  
   <div class="print-header"><h2>Типография Екатеринбургской Епархии</h2><p>Предварительная смета цифровой печати</p></div>
   <div class="card result" id="result"></div>
   <div class="actions">
     <button class="btn-action btn-print" onclick="window.print()">Распечатать / Сохранить в PDF</button>
     <button class="btn-action btn-copy" onclick="copySummary()">Скопировать смету</button>
   </div>
+
+  <!-- БЛОК СРАВНЕНИЯ -->
+  <div class="card compare-block">
+    <h3>Что дешевле: Цифра или Офсет?</h3>
+    <p style="margin-top:-10px; font-size:14px; margin-bottom:15px;">Введите параметры, чтобы узнать, какой способ печати выгоднее для вашего тиража.</p>
+    <div class="grid">
+      <div>
+        <label for="c-qty">Тираж, шт</label>
+        <input type="number" id="c-qty" value="1000" min="10" oninput="updateCompare()">
+      </div>
+      <div>
+        <label for="c-format">Формат листовки</label>
+        <select id="c-format" onchange="updateCompare()">
+          <option value="A4">А4 (210×297)</option>
+          <option value="A5" selected>А5 (148×210)</option>
+        </select>
+      </div>
+      <div>
+        <label for="c-paper">Бумага</label>
+        <select id="c-paper" onchange="updateCompare()">
+          <option value="130" selected>Мелованная 130 г/м²</option>
+          <option value="115">Мелованная 115 г/м²</option>
+        </select>
+      </div>
+      <div>
+        <label for="c-color">Красочность</label>
+        <select id="c-color" onchange="updateCompare()">
+          <option value="4+4" selected>4+4 (цветная двусторонняя)</option>
+          <option value="1+1">1+1 (ч/б двусторонняя)</option>
+        </select>
+      </div>
+    </div>
+    <div class="compare-results" id="compare-results">
+      <!-- Сюда JS вставит карточки -->
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="footer-col"><strong>Позвонить <svg class="phone-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></strong><span style="font-size:13px; color:var(--berry); margin-bottom:4px;">Менеджер Алена Заостровных</span><a href="tel:+73432789642">+7 (343) 278-96-42</a><a href="tel:+79960320581">+7 (996) 032-05-81</a></div>
     <div class="footer-col"><strong>Написать</strong><a href="mailto:alena@orthodox-polygraphy.ru">alena@orthodox-polygraphy.ru</a></div>
@@ -290,14 +344,6 @@
 </button>
 
 <script>
-const PRINT_PRICES = { '1+0': { base: 10, over50: 10 }, '1+1': { base: 20, over50: 20 }, '4+0': { base: 25, over50: 20 }, '4+4': { base: 50, over50: 40 } };
-const PAPER_PRICES = { '80': { base: 9, over50: 5 }, '120': { base: 17, over50: 13 }, '160': { base: 23, over50: 20 }, '200': { base: 25, over50: 22 }, '250': { base: 27, over50: 23 }, '300': { base: 30, over50: 25 } };
-const WASTE_FACTOR = 1.05;
-const PRICE_CUT = 0.72; const PRICE_LAM1 = 10; const PRICE_LAM2 = 20; const PRICE_CREASE = 10; const PRICE_ROUND = 1.2;
-const BOOK_HARD_PRICE = 200; const BOOK_COLLATION = 20;
-const BINDING_PRICES = { 'saddle': 8, 'perfect': 500, 'wire': 55, 'hard': BOOK_HARD_PRICE };
-const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
-
 let currentDisplayedTotal = 0;
 function animatePrice(targetValue) {
   const priceEl = document.querySelector('.total .val');
@@ -329,58 +375,112 @@ function updateUI() {
 }
 
 function calc() {
-  const prodSelect = document.getElementById('product'); const type = prodSelect.selectedOptions[0].dataset.type;
+  const prodSelect = document.getElementById('product');
+  const type = prodSelect.selectedOptions[0].dataset.type;
+  const productValue = prodSelect.value;
   const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
-  let html = ''; let total = 0; let plainText = "Смета цифровой печати\n---\n";
-  const row = (l, v, detail = '') => { plainText += `${l}: ${v} ${detail ? '('+detail+')' : ''}\n`; return `<div class="row"><span>${l}</span><span>${v} <span class="unit-price">${detail}</span></span></div>`; };
   
+  let options = {};
+  let productType = type;
+
   if (type === 'magazine') {
-    const fixedPrice = prodSelect.value === 'mag_30' ? 2300 : 2700;
-    total = qty * fixedPrice;
-    html = row('Тираж', fmt(qty)+' шт') + row('Объем', prodSelect.value === 'mag_30' ? 'До 30 стр.' : 'До 40 стр.') + row('Фикс. цена', fmt(total)+' ₽', `${qty} шт × ${fixedPrice} ₽`);
+    options.magType = productValue === 'mag_30' ? '30' : '40';
   } else if (type === 'book') {
-    const format = document.getElementById('book-format').value; const pages = Math.max(4, Math.round(+document.getElementById('book-pages').value || 4));
-    const pBlock = document.getElementById('book-paper').value; const cBlock = document.getElementById('book-color').value;
-    const pCover = document.getElementById('book-cover-paper').value; const cCover = document.getElementById('book-cover-color').value;
-    const lamCover = parseInt(document.getElementById('book-cover-lam').value); const binding = document.getElementById('book-binding').value;
-    const pagesPerSheet = (format === 'A5') ? 8 : 4; let blockSheetsPerCopy = Math.ceil(pages / pagesPerSheet);
-    let cleanBlockSheets = blockSheetsPerCopy * qty; const totalBlockSheets = Math.ceil(cleanBlockSheets * WASTE_FACTOR);
-    const isOver50Block = totalBlockSheets >= 50;
-    const printCostBlock = cleanBlockSheets * (isOver50Block ? PRINT_PRICES[cBlock].over50 : PRINT_PRICES[cBlock].base);
-    const paperCostBlock = totalBlockSheets * (isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base);
-    const coversPerSheet = (format === 'A5') ? 2 : 1; let cleanCoverSheets = Math.ceil(qty / coversPerSheet); const totalCoverSheets = Math.ceil(cleanCoverSheets * WASTE_FACTOR);
-    const isOver50Cover = totalCoverSheets >= 50;
-    const printCostCover = cleanCoverSheets * (isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base);
-    const paperCostCover = totalCoverSheets * (isOver50Cover ? PAPER_PRICES[pCover].over50 : PAPER_PRICES[pCover].base);
-    const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
-    let bindingCostPerUnit = BINDING_PRICES[binding]; if (binding === 'wire' && format === 'A5') bindingCostPerUnit = 40;
-    const totalBindingCost = qty * bindingCostPerUnit; const totalCollationCost = (binding === 'hard') ? qty * BOOK_COLLATION : 0;
-    total = printCostBlock + paperCostBlock + printCostCover + paperCostCover + lamCostCover + totalBindingCost + totalCollationCost;
-    html = row('Тираж', fmt(qty)+' шт') + row('Листов А3 на блок', fmt(totalBlockSheets)+' шт', `${blockSheetsPerCopy} л. × ${qty} экз. + 5%`) + row('Печать блока', fmt(printCostBlock)+' ₽', `${cleanBlockSheets} отт. × ${isOver50Block ? PRINT_PRICES[cBlock].over50 : PRINT_PRICES[cBlock].base} ₽`) + row('Бумага блока', fmt(paperCostBlock)+' ₽', `${totalBlockSheets} л. × ${isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base} ₽`) + row('Листов А3 на обложку', fmt(totalCoverSheets)+' шт') + row('Печать обложки', fmt(printCostCover)+' ₽', `${cleanCoverSheets} отт. × ${isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base} ₽`) + row('Бумага обложки', fmt(paperCostCover)+' ₽', `${totalCoverSheets} л. × ${isOver50Cover ? PAPER_PRICES[pCover].over50 : PAPER_PRICES[pCover].base} ₽`) + (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover)+' ₽', `${totalCoverSheets} л. × ${lamCover} ₽`) : '') + row('Переплет', fmt(totalBindingCost)+' ₽', `${qty} шт × ${bindingCostPerUnit} ₽`) + (totalCollationCost ? row('Подборка', fmt(totalCollationCost)+' ₽', `${qty} шт × ${BOOK_COLLATION} ₽`) : '');
+    options = {
+      format: document.getElementById('book-format').value,
+      pages: Math.max(4, Math.round(+document.getElementById('book-pages').value || 4)),
+      paperBlock: document.getElementById('book-paper').value,
+      colorBlock: document.getElementById('book-color').value,
+      paperCover: document.getElementById('book-cover-paper').value,
+      colorCover: document.getElementById('book-cover-color').value,
+      lamCover: parseInt(document.getElementById('book-cover-lam').value),
+      binding: document.getElementById('book-binding').value
+    };
   } else {
-    const itemsPerA3 = parseInt(prodSelect.selectedOptions[0].dataset.items); const paper = document.getElementById('paper').value; const color = document.getElementById('color').value;
-    const isLam1 = document.getElementById('lam1').checked; const isLam2 = document.getElementById('lam2').checked; const isCut = document.getElementById('cut').checked; const isCrease = document.getElementById('crease').checked; const isRound = document.getElementById('round').checked;
-    let cleanSheets = Math.ceil(qty / itemsPerA3); let sheets = Math.ceil(cleanSheets * WASTE_FACTOR); const isOver50 = sheets >= 50;
-    const printCost = cleanSheets * (isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base);
-    const paperCost = sheets * (isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base);
-    const cutCost = isCut ? sheets * PRICE_CUT : 0; const lamCost = isLam2 ? sheets * PRICE_LAM2 : (isLam1 ? sheets * PRICE_LAM1 : 0); const creaseCost = isCrease ? sheets * PRICE_CREASE : 0; const roundCost = isRound ? qty * PRICE_ROUND : 0;
-    total = Math.max(printCost + paperCost + cutCost + lamCost + creaseCost + roundCost, 300);
-    html = row('Тираж', fmt(qty)+' шт') + row('Потребуется листов А3', sheets+' шт', `${cleanSheets} л. + 5%`) + row('Печать ('+color+')', fmt(printCost)+' ₽', `${cleanSheets} отт. × ${isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base} ₽`) + row('Бумага', fmt(paperCost)+' ₽', `${sheets} л. × ${isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base} ₽`) + (cutCost ? row('Резка', fmt(cutCost)+' ₽', `${sheets} л. × ${PRICE_CUT} ₽`) : '') + (lamCost ? row('Ламинация', fmt(lamCost)+' ₽', `${sheets} л. × ${isLam2 ? PRICE_LAM2 : PRICE_LAM1} ₽`) : '') + (creaseCost ? row('Биговка', fmt(creaseCost)+' ₽', `${sheets} л. × ${PRICE_CREASE} ₽`) : '') + (roundCost ? row('Скругление', fmt(roundCost)+' ₽', `${qty} шт × ${PRICE_ROUND} ₽`) : '');
+    options = {
+      format: productValue.toUpperCase(),
+      paper: document.getElementById('paper').value,
+      color: document.getElementById('color').value,
+      cut: document.getElementById('cut').checked,
+      lam1: document.getElementById('lam1').checked,
+      lam2: document.getElementById('lam2').checked,
+      crease: document.getElementById('crease').checked,
+      round: document.getElementById('round').checked
+    };
   }
-  
-  total = Math.round(total / 10) * 10; plainText += `---\nИТОГО: ${fmt(total)} ₽ (${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт)\n`;
-  
+
+  const res = calcDigital(productType, qty, options);
   const resultContainer = document.getElementById('result');
+  
+  let html = '';
+  res.details.forEach(d => {
+    html += `<div class="row"><span>${d.label}</span><span>${d.val} <span class="unit-price">${d.unit || ''}</span></span></div>`;
+  });
+
   resultContainer.innerHTML = html + `<div class="total"><span class="lbl">Итого</span><span class="val"></span></div><div class="perunit"></div>`;
   resultContainer.setAttribute('data-date', new Date().toLocaleDateString('ru-RU'));
   
-  document.querySelector('.perunit').textContent = `${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт`;
-  animatePrice(total);
-  
-  window.lastCalculationText = plainText;
+  document.querySelector('.perunit').textContent = `${(res.total / qty).toFixed(2).replace('.', ',')} ₽ / шт`;
+  animatePrice(res.total);
 }
 
-function copySummary() { navigator.clipboard.writeText(window.lastCalculationText).then(() => { const btn = document.querySelector('.btn-copy'); const originalText = btn.innerText; btn.innerText = "Скопировано!"; btn.style.background = "#e7f7ec"; btn.style.color = "#1a7f37"; btn.style.borderColor = "#b7e4c7"; setTimeout(() => { btn.innerText = originalText; btn.style.background = "#fff"; btn.style.color = "var(--berry)"; btn.style.borderColor = "var(--berry)"; }, 2000); }).catch(err => alert("Ошибка: " + err)); }
+function updateCompare() {
+  const qty = Math.max(10, Math.round(+document.getElementById('c-qty').value || 10));
+  const format = document.getElementById('c-format').value;
+  const paper = document.getElementById('c-paper').value;
+  const color = document.getElementById('c-color').value;
+
+  const digOpts = { format: format, paper: paper, color: color, cut: true, lam1: false, lam2: false, crease: false, round: false };
+  const offOpts = { format: format, paper: paper, color: color, cut: true, crease: false, selfTurn: false };
+
+  const digRes = calcDigital('leaflet', qty, digOpts);
+  const offRes = calcOffset('leaflet', qty, offOpts);
+
+  const resultDiv = document.getElementById('compare-results');
+  const isDigitalCheaper = digRes.total <= offRes.total;
+
+  let html = `
+    <div class="compare-card ${isDigitalCheaper ? 'cheaper' : ''}">
+      <div class="c-title">Цифровая печать</div>
+      <div class="c-price">${fmt(digRes.total)} ₽</div>
+      <div class="c-unit">${(digRes.total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>
+      ${isDigitalCheaper ? '<div class="compare-badge">👍 Выгоднее!</div>' : ''}
+    </div>
+    <div class="compare-card ${!isDigitalCheaper ? 'cheaper' : ''}">
+      <div class="c-title">Офсетная печать</div>
+      <div class="c-price">${fmt(offRes.total)} ₽</div>
+      <div class="c-unit">${(offRes.total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>
+      ${!isDigitalCheaper ? '<div class="compare-badge">👍 Выгоднее!</div>' : ''}
+    </div>
+  `;
+  resultDiv.innerHTML = html;
+}
+
+function copySummary() {
+  const resultContainer = document.getElementById('result');
+  const rows = resultContainer.querySelectorAll('.row');
+  const total = resultContainer.querySelector('.total .val').textContent;
+  const perunit = resultContainer.querySelector('.perunit').textContent;
+  
+  let text = "Смета цифровой печати\n---\n";
+  rows.forEach(r => {
+    const label = r.querySelector('span:first-child').textContent;
+    const val = r.querySelector('span:last-child').childNodes[0].textContent.trim();
+    text += `${label}: ${val}\n`;
+  });
+  text += `---\nИТОГО: ${total} (${perunit})\n`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    const originalText = btn.innerText;
+    btn.innerText = "Скопировано!";
+    btn.style.background = "#e7f7ec"; btn.style.color = "#1a7f37"; btn.style.borderColor = "#b7e4c7";
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.style.background = "#fff"; btn.style.color = "var(--berry)"; btn.style.borderColor = "var(--berry)";
+    }, 2000);
+  }).catch(err => alert("Ошибка: " + err));
+}
 
 ['change', 'input'].forEach(ev => {
   document.getElementById('product').addEventListener(ev, updateUI);
@@ -399,13 +499,11 @@ function copySummary() { navigator.clipboard.writeText(window.lastCalculationTex
 ['lam1', 'lam2', 'cut', 'crease', 'round'].forEach(id => { document.getElementById(id).addEventListener('change', calc); });
 document.querySelectorAll('.chk input').forEach(i => { const sync = () => i.closest('.chk').classList.toggle('on', i.checked); i.addEventListener('change', sync); sync(); });
 
-// 3. Кнопка наверх
 window.onscroll = function() {
   const btn = document.getElementById("scrollTopBtn");
   if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { btn.classList.add("show"); } else { btn.classList.remove("show"); }
 };
 
-// 9. Ripple эффект
 document.addEventListener('click', function(e) {
   const target = e.target.closest('.btn-action, .btn, .btn-submit');
   if (!target) return;
@@ -421,11 +519,13 @@ document.addEventListener('click', function(e) {
   target.appendChild(circle);
 });
 
+// Инициализация
 updateUI();
+updateCompare();
 </script>
-  <!-- Yandex.Metrika counter -->
+
+<script src="pricing.js"></script>
 <script src="metrika.js" async></script>
 <noscript><div><img src="https://mc.yandex.ru/watch/111380122" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
 </body>
 </html>
