@@ -55,10 +55,23 @@
 
   .hint-box {background: #fff8e6; border: 1px solid #ffe0a3; color: #7a5a00; padding: 15px; border-radius: 10px; font-size: 14px; margin-top: 15px; line-height: 1.5;}
 
+  /* Кнопки действий */
+  .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+  .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 500; text-align: center; cursor: pointer; transition: 0.15s; border: none; font-family: inherit; }
+  .btn-print { background: var(--berry); color: #fff; box-shadow: 0 4px 12px rgba(139,28,66,.15); }
+  .btn-print:hover { background: #6c1230; }
+  .btn-copy { background: #fff; color: var(--berry); border: 2px solid var(--berry); }
+  .btn-copy:hover { background: var(--berry-light); }
+
   .footer{background:var(--berry-light);border-radius:16px;padding:20px 22px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink);border:1px solid rgba(139,28,66,0.05)}
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px}
+
+  /* Заголовок для печати */
+  .print-header { display: none; text-align: center; margin-bottom: 20px; }
+  .print-header h2 { font-size: 24px; margin: 0 0 5px; }
+  .print-header p { margin: 0; font-size: 14px; color: #555; }
 
   /* Мобильная адаптация */
   @media(max-width: 768px){
@@ -74,6 +87,18 @@
     .footer { flex-direction: column; align-items: center; text-align: center; }
     .footer-col { align-items: center; }
     select, input, textarea { font-size: 16px !important; }
+    .actions { flex-direction: column; }
+  }
+
+  /* Стили для печати (PDF) */
+  @media print {
+    body { background: #fff; padding: 0; color: #000; }
+    .brand, .nav-menu, .header-contacts, .page-title, .card:not(.result), .hint-box, .footer, .actions { display: none !important; }
+    .result { border: 2px solid #000; box-shadow: none; margin: 0; padding: 20px; }
+    .print-header { display: block !important; color: #000; }
+    .total .val { color: #000; }
+    .row span:first-child { color: #000; }
+    @page { margin: 20mm; }
   }
 </style>
 </head>
@@ -233,8 +258,19 @@
     </div>
   </div>
 
+  <!-- Заголовок для печатной версии -->
+  <div class="print-header">
+    <h2>Типография Екатеринбургской Епархии</h2>
+    <p>Предварительная смета офсетной печати</p>
+  </div>
+
   <div class="card result" id="result"></div>
   
+  <div class="actions">
+    <button class="btn-action btn-print" onclick="window.print()">Распечатать / Сохранить в PDF</button>
+    <button class="btn-action btn-copy" onclick="copySummary()">Скопировать смету</button>
+  </div>
+
   <div class="hint-box">
     <strong>Важно:</strong> Офсетный расчет является предварительным. Точная стоимость зависит от спуска полос, раскладки страниц на листе А2, процента техотходов и фактического расхода бумаги. Менеджер уточнит все детали после получения заявки.
   </div>
@@ -252,25 +288,16 @@
 </div>
 
 <script>
-/* ============================================================
-   НАСТРОЙКИ ОФСЕТА (ПОД ФОРМАТ А2)
-   ============================================================ */
-const PLATE_PRICE = 400;        // Стоимость одной печатной формы
-const SETUP_PRICE = 500;        // Стоимость приладки (настройки машины) за 1 форму/цвет
-const PRINT_PRICE_PER_SHEET = 10.0; // Стоимость печати 1 листа А2
-const WASTE_PER_FORM = 50;      // КОЛИЧЕСТВО ЛИСТОВ БУМАГИ НА НАСТРОЙКУ ОДНОЙ ФОРМЫ (техотходы)
-
+const PLATE_PRICE = 400;
+const SETUP_PRICE = 500;
+const PRINT_PRICE_PER_SHEET = 10.0;
+const WASTE_PER_FORM = 50;
 const PAPER_PRICE_PER_SHEET = { '80': 5.2, '130': 10.5, '250': 23.0, '300': 25.0 };
 const PRICE_CUT = 1.0;
 const PRICE_CREASE = 2.5;
-
-// Сколько изделий помещается на один лист А2
 const ITEMS_PER_A2 = { 'A5': 8, 'A4': 4, 'A3': 2 };
-// Для книг (сколько страниц помещается на 1 лист А2)
 const PAGES_PER_A2 = { 'A5': 16, 'A4': 8 }; 
-// Сколько обложек помещается на 1 лист А2
 const COVERS_PER_A2 = { 'A5': 8, 'A4': 4 };
-
 const BINDING_PRICES = { 'soft': 30, 'hard': 120 };
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
@@ -285,14 +312,19 @@ function updateUI() {
 function calc() {
   const product = document.getElementById('product').value;
   const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
-  
   const isSelfTurn = document.getElementById('selfTurn').checked;
   const isCut = document.getElementById('cut').checked;
   const isCrease = document.getElementById('crease').checked;
 
   let html = '';
   let total = 0;
-  const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
+  let plainText = "Смета офсетной печати (Типография Екатеринбургской Епархии)\n";
+  plainText += "--------------------------------------------------\n";
+
+  const row = (l, v) => {
+    plainText += `${l}: ${v}\n`;
+    return `<div class="row"><span>${l}</span><span>${v}</span></div>`;
+  };
 
   if (product === 'book') {
     const format = document.getElementById('book-format').value;
@@ -304,11 +336,10 @@ function calc() {
     const lamCover = parseInt(document.getElementById('book-cover-lam').value);
     const binding = document.getElementById('book-binding').value;
 
-    // --- 1. Блок ---
+    // Блок
     const pagesPerSheet = PAGES_PER_A2[format];
     let sheetsPerCopy = Math.ceil(pages / pagesPerSheet);
     let finishBlockSheets = sheetsPerCopy * qty;
-
     let platesBlock = 0;
     if (cBlock === '1+0') platesBlock = 1;
     if (cBlock === '1+1') platesBlock = 2;
@@ -316,7 +347,6 @@ function calc() {
     if (cBlock === '4+4') platesBlock = 8;
     if (isSelfTurn && platesBlock > 1) platesBlock = platesBlock / 2;
 
-    // Считаем техотходы бумаги для блока
     const wasteBlockSheets = platesBlock * WASTE_PER_FORM;
     const totalBlockSheets = finishBlockSheets + wasteBlockSheets;
 
@@ -325,16 +355,14 @@ function calc() {
     const platesCostBlock = platesBlock * PLATE_PRICE;
     const setupCostBlock = platesBlock * SETUP_PRICE;
 
-    // --- 2. Обложка ---
+    // Обложка
     const coversPerSheet = COVERS_PER_A2[format];
     let finishCoverSheets = Math.ceil(qty / coversPerSheet);
-
     let platesCover = 0;
     if (cCover === '4+0') platesCover = 4;
     if (cCover === '4+4') platesCover = 8;
     if (isSelfTurn && platesCover > 1) platesCover = platesCover / 2;
 
-    // Считаем техотходы бумаги для обложки
     const wasteCoverSheets = platesCover * WASTE_PER_FORM;
     const totalCoverSheets = finishCoverSheets + wasteCoverSheets;
 
@@ -344,7 +372,7 @@ function calc() {
     const platesCostCover = platesCover * PLATE_PRICE;
     const setupCostCover = platesCover * SETUP_PRICE;
 
-    // --- 3. Постпечать ---
+    // Постпечать
     const bindCost = qty * BINDING_PRICES[binding];
     const cutCost = isCut ? (totalBlockSheets + totalCoverSheets) * PRICE_CUT : 0;
     const creaseCost = isCrease ? totalBlockSheets * PRICE_CREASE : 0;
@@ -353,14 +381,17 @@ function calc() {
             platesCostCover + setupCostCover + printCostCover + paperCostCover + lamCostCover +
             bindCost + cutCost + creaseCost;
 
+    plainText += `Тираж: ${fmt(qty)} шт\n`;
+    plainText += `Формат: ${format}, ${pages} стр.\n`;
+    
     html = row('Тираж', fmt(qty) + ' шт') +
+           row('Формат', format + ' (' + pages + ' стр.)') +
            row('Листов А2 на блок (чистых)', fmt(finishBlockSheets) + ' шт') +
            row('Техотходы бумаги (блок)', fmt(wasteBlockSheets) + ' шт') +
            row('Печать блока', fmt(printCostBlock) + ' ₽') +
            row('Бумага блока', fmt(paperCostBlock) + ' ₽') +
            row('Формы блока (шт)', fmt(platesBlock) + ' шт / ' + fmt(platesCostBlock) + ' ₽') +
            row('Приладка блока', fmt(setupCostBlock) + ' ₽') +
-           
            row('Листов А2 на обложку (чистых)', fmt(finishCoverSheets) + ' шт') +
            row('Техотходы бумаги (обложка)', fmt(wasteCoverSheets) + ' шт') +
            row('Печать обложки', fmt(printCostCover) + ' ₽') +
@@ -368,20 +399,17 @@ function calc() {
            row('Формы обложки (шт)', fmt(platesCover) + ' шт / ' + fmt(platesCostCover) + ' ₽') +
            row('Приладка обложки', fmt(setupCostCover) + ' ₽') +
            (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽') : '') +
-           
            row('Переплет', fmt(bindCost) + ' ₽') +
            (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
            (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽') : '');
 
   } else {
-    // (Логика для листовок аналогичная, с добавлением техотходов)
     const format = document.getElementById('leaflet-format').value;
     const paper = document.getElementById('leaflet-paper').value;
     const color = document.getElementById('leaflet-color').value;
 
     const itemsPerA2 = ITEMS_PER_A2[format];
     let finishSheets = Math.ceil(qty / itemsPerA2);
-
     let plates = 0;
     if (color === '1+0') plates = 1;
     if (color === '1+1') plates = 2;
@@ -401,6 +429,9 @@ function calc() {
 
     total = platesCost + setupCost + printCost + paperCost + cutCost + creaseCost;
 
+    plainText += `Тираж: ${fmt(qty)} шт\n`;
+    plainText += `Формат: ${format}, Красочность: ${color}\n`;
+
     html = row('Тираж', fmt(qty) + ' шт') +
            row('Листов А2 чистых', fmt(finishSheets) + ' шт') +
            row('Техотходы бумаги', fmt(wasteSheets) + ' шт') +
@@ -413,12 +444,38 @@ function calc() {
   }
 
   total = Math.round(total / 10) * 10;
+  
+  plainText += "--------------------------------------------------\n";
+  plainText += `ИТОГО: ${fmt(total)} ₽ (${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт)\n`;
+
   document.getElementById('result').innerHTML = html +
     `<div class="total">
        <span class="lbl">Итого</span>
        <span class="val">${fmt(total)} ₽</span>
      </div>
      <div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
+
+  // Сохраняем текст для копирования
+  window.lastCalculationText = plainText;
+}
+
+function copySummary() {
+  navigator.clipboard.writeText(window.lastCalculationText).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    const originalText = btn.innerText;
+    btn.innerText = "Скопировано!";
+    btn.style.background = "#e7f7ec";
+    btn.style.color = "#1a7f37";
+    btn.style.borderColor = "#b7e4c7";
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.style.background = "#fff";
+      btn.style.color = "var(--berry)";
+      btn.style.borderColor = "var(--berry)";
+    }, 2000);
+  }).catch(err => {
+    alert("Ошибка при копировании: " + err);
+  });
 }
 
 // Слушатели
