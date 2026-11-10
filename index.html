@@ -12,44 +12,74 @@
   *{box-sizing:border-box}
   body{margin:0;padding:32px 16px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
   .calc{max-width:980px;margin:0 auto}
+  
+  /* Шапка */
   .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px;flex-wrap:wrap}
   .brand-left a{display:flex;align-items:center;gap:18px;text-decoration:none}
-  .brand img{height:66px;width:auto;display:block;flex-shrink:0}
+  .brand img{height:66px;width:auto;display:block;flex-shrink:0; transition: transform 0.3s ease;}
+  .brand a:hover img{ transform: scale(1.02); }
   .nav-menu{display:flex;gap:20px;align-items:center;margin-left:20px}
   .nav-menu a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px;transition:.15s;padding-bottom:4px;border-bottom:2px solid transparent}
   .nav-menu a:hover,.nav-menu a.active{color:var(--angel-blue);border-bottom-color:var(--angel-blue)}
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
-  .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500}
+  .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500; transition: color 0.2s;}
+  .header-contacts a:hover{ color: var(--angel-blue); }
+  
   .page-title {margin-bottom: 30px;}
   .page-title h2 {font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;}
   .page-title p {color: var(--muted); font-size: 16px; margin: 0; line-height: 1.5;}
-  .card{background:var(--berry-light);border-radius:16px;padding:22px;margin-bottom:16px;border:1px solid rgba(139,28,66,0.05);box-shadow:0 6px 24px rgba(139,28,66,.05)}
+
+  /* Блоки с анимацией наведения */
+  .card{background:var(--berry-light);border-radius:16px;padding:22px;margin-bottom:16px;border:1px solid rgba(139,28,66,0.05);box-shadow:0 6px 24px rgba(139,28,66,.05); transition: box-shadow 0.3s ease;}
+  .card:hover{ box-shadow:0 8px 30px rgba(139,28,66,.1); }
   .card h3{font-size:20px;color:var(--berry);margin:0 0 15px;font-weight:500}
+  
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   label{display:block;font-size:13px;font-weight:500;color:var(--berry);margin-bottom:6px}
-  select,input[type=number]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;color:var(--ink);background:#ffffff;outline:none;font-family:inherit;font-weight:400;transition:.15s;box-shadow:0 2px 4px rgba(0,0,0,0.02);}
-  select:focus,input:focus{border-color:var(--angel-blue);box-shadow:0 0 0 3px rgba(110,166,216,.15)}
+  
+  /* Поля ввода с мягким фокусом */
+  select,input[type=number]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;color:var(--ink);background:#ffffff;outline:none;font-family:inherit;font-weight:400;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,0.02);}
+  select:focus,input:focus{border-color:var(--angel-blue);box-shadow:0 0 0 3px rgba(110,166,216,.15); transform: translateY(-1px);}
+  
+  /* Чекбоксы */
   .chks{display:flex;flex-wrap:wrap;gap:10px; align-items: center;}
-  .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.5);border:1px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--berry);margin:0;transition:.15s}
-  .chk:hover{background:rgba(255,255,255,0.8)}
+  .chk{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.5);border:1px solid transparent;padding:9px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--berry);margin:0;transition:.2s;}
+  .chk:hover{background:rgba(255,255,255,0.8); transform: translateY(-1px);}
   .chk input{accent-color:var(--berry);width:16px;height:16px;cursor:pointer}
   .chk.on{background:#fff;border-color:var(--angel-blue);box-shadow:0 2px 6px rgba(0,0,0,0.03)}
+
+  /* Плавное появление скрытых блоков (Книга) */
+  .options-block {
+    max-height: 0; opacity: 0; overflow: hidden; 
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  }
+  .options-block.show {
+    max-height: 800px; opacity: 1; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);
+  }
+
+  /* Результат */
   .result{background: #ffffff; color: var(--berry); border: 2px solid var(--angel-blue); box-shadow: 0 8px 24px rgba(139,28,66,.05);}
   .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line); flex-wrap: wrap; align-items: baseline;}
   .row:last-of-type{border-bottom:none}
   .row span:first-child{color:var(--muted); font-weight: 400;}
   .row span:last-child{font-weight: 500;}
   .row .unit-price {font-size: 12px; color: #999; margin-left: 6px; font-weight: 400;}
+  
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-top:20px;border-top:2px solid var(--angel-blue)}
   .total .lbl{font-size:16px;color:var(--berry); font-weight: 500;}
-  .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px}
+  .total .val{font-size:40px;font-weight: 400;color:var(--price);letter-spacing:-1px; transition: color 0.3s;}
+  .total .val.updated { color: var(--berry); } /* Вспышка цвета при обновлении */
   .perunit{text-align:right;font-size:14px;color:var(--muted);margin-top:4px; font-weight: 400;}
+
+  /* Кнопки */
   .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-  .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 500; text-align: center; cursor: pointer; transition: 0.15s; border: none; font-family: inherit; }
+  .btn-action { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 500; text-align: center; cursor: pointer; transition: 0.2s; border: none; font-family: inherit; }
+  .btn-action:active { transform: scale(0.98); }
   .btn-print { background: var(--berry); color: #fff; box-shadow: 0 4px 12px rgba(139,28,66,.15); }
-  .btn-print:hover { background: #6c1230; }
+  .btn-print:hover { background: #6c1230; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139,28,66,.25); }
   .btn-copy { background: #fff; color: var(--berry); border: 2px solid var(--berry); }
-  .btn-copy:hover { background: var(--berry-light); }
+  .btn-copy:hover { background: var(--berry-light); transform: translateY(-2px); }
+
   .print-header { display: none; text-align: center; margin-bottom: 20px; }
   .print-header h2 { font-size: 24px; margin: 0 0 5px; }
   .print-header p { margin: 0; font-size: 14px; color: #555; }
@@ -57,14 +87,13 @@
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px}
+
   @media(max-width: 768px){
     body { padding: 16px 10px; }
     .brand { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
     .brand-left a { flex-direction: column; gap: 10px; }
     .nav-menu { margin-left: 0; justify-content: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
-    .nav-menu a { font-size: 14px; }
     .header-contacts { text-align: center; margin-top: 10px; }
-    .header-contacts div, .header-contacts a { font-size: 14px; }
     .grid { grid-template-columns: 1fr; }
     .footer { flex-direction: column; align-items: center; text-align: center; }
     .footer-col { align-items: center; }
@@ -125,7 +154,7 @@
       </div>
       <div><label>Тираж, шт</label><input type="number" id="qty" value="300" min="1" max="100000"></div>
     </div>
-    <div id="leaflet-options" style="margin-top: 15px;">
+    <div id="leaflet-options" class="options-block show">
       <div class="grid">
         <div>
           <label>Бумага</label>
@@ -159,7 +188,7 @@
         </div>
       </div>
     </div>
-    <div id="book-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+    <div id="book-options" class="options-block">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
       <div class="grid">
         <div>
@@ -240,6 +269,7 @@
   </footer>
 </div>
 <script>
+// --- ЛОГИКА ЦИФРОВОЙ ПЕЧАТИ ---
 const PRINT_PRICES = { '1+0': { base: 10, over50: 10 }, '1+1': { base: 20, over50: 20 }, '4+0': { base: 25, over50: 20 }, '4+4': { base: 50, over50: 40 } };
 const PAPER_PRICES = { '80': { base: 9, over50: 5 }, '120': { base: 17, over50: 13 }, '160': { base: 23, over50: 20 }, '200': { base: 25, over50: 22 }, '250': { base: 27, over50: 23 }, '300': { base: 30, over50: 25 } };
 const WASTE_FACTOR = 1.05;
@@ -247,17 +277,66 @@ const PRICE_CUT = 0.72; const PRICE_LAM1 = 10; const PRICE_LAM2 = 20; const PRIC
 const BOOK_HARD_PRICE = 200; const BOOK_COLLATION = 20;
 const BINDING_PRICES = { 'saddle': 8, 'perfect': 500, 'wire': 55, 'hard': BOOK_HARD_PRICE };
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
+
+// --- АНИМАЦИЯ ПОДСЧЕТА ЦИФР ---
+let currentDisplayedTotal = 0;
+function animatePrice(targetValue) {
+  const priceEl = document.querySelector('.total .val');
+  if (!priceEl) return;
+  
+  const duration = 400; // ms
+  const startValue = currentDisplayedTotal;
+  const startTime = performance.now();
+  
+  // Легкая вспышка при старте
+  priceEl.classList.add('updated');
+  setTimeout(() => priceEl.classList.remove('updated'), 300);
+
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Плавное затухание (easeOutQuart)
+    const ease = 1 - Math.pow(1 - progress, 4);
+    
+    const currentVal = startValue + (targetValue - startValue) * ease;
+    priceEl.textContent = fmt(currentVal) + ' ₽';
+    
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      currentDisplayedTotal = targetValue;
+    }
+  }
+  requestAnimationFrame(update);
+}
+
+// --- ОСТАЛЬНАЯ ЛОГИКА ---
 function updateUI() {
   const type = document.getElementById('product').selectedOptions[0].dataset.type;
-  document.getElementById('leaflet-options').style.display = (type === 'leaflet') ? 'block' : 'none';
-  document.getElementById('book-options').style.display = (type === 'book') ? 'block' : 'none';
-  calc();
+  
+  const leafletBlock = document.getElementById('leaflet-options');
+  const bookBlock = document.getElementById('book-options');
+
+  if (type === 'leaflet') {
+    leafletBlock.classList.add('show');
+    bookBlock.classList.remove('show');
+  } else if (type === 'book') {
+    leafletBlock.classList.remove('show');
+    bookBlock.classList.add('show');
+  } else {
+    leafletBlock.classList.remove('show');
+    bookBlock.classList.remove('show');
+  }
+  
+  setTimeout(calc, 100); // Даем анимации раскрытия шанс начаться
 }
+
 function calc() {
   const prodSelect = document.getElementById('product'); const type = prodSelect.selectedOptions[0].dataset.type;
   const qty = Math.max(1, Math.round(+document.getElementById('qty').value || 1));
   let html = ''; let total = 0; let plainText = "Смета цифровой печати\n---\n";
   const row = (l, v, detail = '') => { plainText += `${l}: ${v} ${detail ? '('+detail+')' : ''}\n`; return `<div class="row"><span>${l}</span><span>${v} <span class="unit-price">${detail}</span></span></div>`; };
+  
   if (type === 'magazine') {
     const fixedPrice = prodSelect.value === 'mag_30' ? 2300 : 2700;
     total = qty * fixedPrice;
@@ -291,14 +370,45 @@ function calc() {
     total = Math.max(printCost + paperCost + cutCost + lamCost + creaseCost + roundCost, 300);
     html = row('Тираж', fmt(qty)+' шт') + row('Потребуется листов А3', sheets+' шт', `${cleanSheets} л. + 5%`) + row('Печать ('+color+')', fmt(printCost)+' ₽', `${cleanSheets} отт. × ${isOver50 ? PRINT_PRICES[color].over50 : PRINT_PRICES[color].base} ₽`) + row('Бумага', fmt(paperCost)+' ₽', `${sheets} л. × ${isOver50 ? PAPER_PRICES[paper].over50 : PAPER_PRICES[paper].base} ₽`) + (cutCost ? row('Резка', fmt(cutCost)+' ₽', `${sheets} л. × ${PRICE_CUT} ₽`) : '') + (lamCost ? row('Ламинация', fmt(lamCost)+' ₽', `${sheets} л. × ${isLam2 ? PRICE_LAM2 : PRICE_LAM1} ₽`) : '') + (creaseCost ? row('Биговка', fmt(creaseCost)+' ₽', `${sheets} л. × ${PRICE_CREASE} ₽`) : '') + (roundCost ? row('Скругление', fmt(roundCost)+' ₽', `${qty} шт × ${PRICE_ROUND} ₽`) : '');
   }
+  
   total = Math.round(total / 10) * 10; plainText += `---\nИТОГО: ${fmt(total)} ₽ (${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт)\n`;
-  document.getElementById('result').innerHTML = html + `<div class="total"><span class="lbl">Итого</span><span class="val">${fmt(total)} ₽</span></div><div class="perunit">${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт</div>`;
+  
+  const resultContainer = document.getElementById('result');
+  let totalRow = resultContainer.querySelector('.total');
+  
+  if (!totalRow) {
+    // Если блока с итогом еще нет (первый расчет), создаем его
+    resultContainer.innerHTML = html + `<div class="total"><span class="lbl">Итого</span><span class="val">0 ₽</span></div><div class="perunit"></div>`;
+  } else {
+    // Если есть, обновляем только строки, чтобы не сбрасывать анимацию
+    resultContainer.innerHTML = html + `<div class="total"><span class="lbl">Итого</span><span class="val"></span></div><div class="perunit"></div>`;
+  }
+  
+  document.querySelector('.perunit').textContent = `${(total / qty).toFixed(2).replace('.', ',')} ₽ / шт`;
+  animatePrice(total); // Запускаем анимацию цифры
+  
   window.lastCalculationText = plainText;
 }
+
 function copySummary() { navigator.clipboard.writeText(window.lastCalculationText).then(() => { const btn = document.querySelector('.btn-copy'); const originalText = btn.innerText; btn.innerText = "Скопировано!"; btn.style.background = "#e7f7ec"; btn.style.color = "#1a7f37"; btn.style.borderColor = "#b7e4c7"; setTimeout(() => { btn.innerText = originalText; btn.style.background = "#fff"; btn.style.color = "var(--berry)"; btn.style.borderColor = "var(--berry)"; }, 2000); }).catch(err => alert("Ошибка при копировании: " + err)); }
-['change', 'input'].forEach(ev => { document.getElementById('product').addEventListener(ev, updateUI); document.getElementById('qty').addEventListener(ev, calc); document.getElementById('paper').addEventListener(ev, calc); document.getElementById('color').addEventListener(ev, calc); document.getElementById('book-format').addEventListener(ev, calc); document.getElementById('book-pages').addEventListener(ev, calc); document.getElementById('book-paper').addEventListener(ev, calc); document.getElementById('book-color').addEventListener(ev, calc); document.getElementById('book-cover-paper').addEventListener(ev, calc); document.getElementById('book-cover-color').addEventListener(ev, calc); document.getElementById('book-cover-lam').addEventListener(ev, calc); document.getElementById('book-binding').addEventListener(ev, calc); });
+
+['change', 'input'].forEach(ev => {
+  document.getElementById('product').addEventListener(ev, updateUI);
+  document.getElementById('qty').addEventListener(ev, calc);
+  document.getElementById('paper').addEventListener(ev, calc);
+  document.getElementById('color').addEventListener(ev, calc);
+  document.getElementById('book-format').addEventListener(ev, calc);
+  document.getElementById('book-pages').addEventListener(ev, calc);
+  document.getElementById('book-paper').addEventListener(ev, calc);
+  document.getElementById('book-color').addEventListener(ev, calc);
+  document.getElementById('book-cover-paper').addEventListener(ev, calc);
+  document.getElementById('book-cover-color').addEventListener(ev, calc);
+  document.getElementById('book-cover-lam').addEventListener(ev, calc);
+  document.getElementById('book-binding').addEventListener(ev, calc);
+});
 ['lam1', 'lam2', 'cut', 'crease', 'round'].forEach(id => { document.getElementById(id).addEventListener('change', calc); });
 document.querySelectorAll('.chk input').forEach(i => { const sync = () => i.closest('.chk').classList.toggle('on', i.checked); i.addEventListener('change', sync); sync(); });
+
 updateUI();
 </script>
 </body>
