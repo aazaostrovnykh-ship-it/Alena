@@ -117,7 +117,7 @@
       </div>
       <div>
         <label>Тираж, шт</label>
-        <input type="number" id="qty" value="5000" min="100" max="100000">
+        <input type="number" id="qty" value="300" min="100" max="100000">
       </div>
     </div>
 
@@ -167,7 +167,7 @@
         </div>
         <div>
           <label>Кол-во страниц в блоке</label>
-          <input type="number" id="book-pages" value="120" min="8" step="4">
+          <input type="number" id="book-pages" value="300" min="8" step="4">
         </div>
       </div>
 
@@ -217,8 +217,8 @@
         <div>
           <label>Переплет</label>
           <select id="book-binding">
-            <option value="soft">Мягкий (КБС / Скоба)</option>
-            <option value="hard" selected>Твердый переплет</option>
+            <option value="soft" selected>Мягкий (КБС / Скоба)</option>
+            <option value="hard">Твердый переплет</option>
           </select>
         </div>
       </div>
@@ -236,7 +236,7 @@
   <div class="card result" id="result"></div>
   
   <div class="hint-box">
-    <strong>Важно:</strong> Офсетный расчет является предварительным. Точная стоимость зависит от спуска полос (раскладки страниц на листе А2), процента техотходов и фактического расхода бумаги. Менеджер уточнит все детали после получения заявки.
+    <strong>Важно:</strong> Офсетный расчет является предварительным. Точная стоимость зависит от спуска полос, раскладки страниц на листе А2, процента техотходов и фактического расхода бумаги. Менеджер уточнит все детали после получения заявки.
   </div>
 
   <footer class="footer">
@@ -255,12 +255,12 @@
 /* ============================================================
    НАСТРОЙКИ ОФСЕТА (ПОД ФОРМАТ А2)
    ============================================================ */
-const PLATE_PRICE = 500;        // Стоимость одной печатной формы
-const SETUP_PRICE = 500;        // Стоимость приладки (на 1 краску/форму)
-const PRINT_PRICE_PER_SHEET = 2.0; // Стоимость печати 1 листа А2
-const WASTE_FACTOR = 1.15;      // 15% на техотходы
+const PLATE_PRICE = 400;        // Стоимость одной печатной формы
+const SETUP_PRICE = 500;        // Стоимость приладки (настройки машины) за 1 форму/цвет
+const PRINT_PRICE_PER_SHEET = 10.0; // Стоимость печати 1 листа А2
+const WASTE_PER_FORM = 50;      // КОЛИЧЕСТВО ЛИСТОВ БУМАГИ НА НАСТРОЙКУ ОДНОЙ ФОРМЫ (техотходы)
 
-const PAPER_PRICE_PER_SHEET = { '80': 2.5, '130': 3.5, '250': 7.5, '300': 10 };
+const PAPER_PRICE_PER_SHEET = { '80': 5.2, '130': 10.5, '250': 23.0, '300': 25.0 };
 const PRICE_CUT = 1.0;
 const PRICE_CREASE = 2.5;
 
@@ -271,7 +271,7 @@ const PAGES_PER_A2 = { 'A5': 16, 'A4': 8 };
 // Сколько обложек помещается на 1 лист А2
 const COVERS_PER_A2 = { 'A5': 8, 'A4': 4 };
 
-const BINDING_PRICES = { 'soft': 25, 'hard': 120 };
+const BINDING_PRICES = { 'soft': 30, 'hard': 120 };
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
 
@@ -294,7 +294,6 @@ function calc() {
   let total = 0;
   const row = (l, v) => `<div class="row"><span>${l}</span><span>${v}</span></div>`;
 
-  // --- ЛОГИКА ДЛЯ КНИГ ---
   if (product === 'book') {
     const format = document.getElementById('book-format').value;
     const pages = Math.max(8, Math.round(+document.getElementById('book-pages').value || 8));
@@ -305,11 +304,10 @@ function calc() {
     const lamCover = parseInt(document.getElementById('book-cover-lam').value);
     const binding = document.getElementById('book-binding').value;
 
-    // 1. Блок
+    // --- 1. Блок ---
     const pagesPerSheet = PAGES_PER_A2[format];
-    let blockSheetsPerCopy = Math.ceil(pages / pagesPerSheet);
-    blockSheetsPerCopy = Math.ceil(blockSheetsPerCopy * WASTE_FACTOR);
-    const totalBlockSheets = blockSheetsPerCopy * qty;
+    let sheetsPerCopy = Math.ceil(pages / pagesPerSheet);
+    let finishBlockSheets = sheetsPerCopy * qty;
 
     let platesBlock = 0;
     if (cBlock === '1+0') platesBlock = 1;
@@ -318,29 +316,37 @@ function calc() {
     if (cBlock === '4+4') platesBlock = 8;
     if (isSelfTurn && platesBlock > 1) platesBlock = platesBlock / 2;
 
+    // Считаем техотходы бумаги для блока
+    const wasteBlockSheets = platesBlock * WASTE_PER_FORM;
+    const totalBlockSheets = finishBlockSheets + wasteBlockSheets;
+
     const printCostBlock = totalBlockSheets * PRINT_PRICE_PER_SHEET;
     const paperCostBlock = totalBlockSheets * PAPER_PRICE_PER_SHEET[pBlock];
     const platesCostBlock = platesBlock * PLATE_PRICE;
     const setupCostBlock = platesBlock * SETUP_PRICE;
 
-    // 2. Обложка (печатается отдельно)
+    // --- 2. Обложка ---
     const coversPerSheet = COVERS_PER_A2[format];
-    const totalCoverSheets = Math.ceil((qty / coversPerSheet) * WASTE_FACTOR);
+    let finishCoverSheets = Math.ceil(qty / coversPerSheet);
 
     let platesCover = 0;
     if (cCover === '4+0') platesCover = 4;
     if (cCover === '4+4') platesCover = 8;
     if (isSelfTurn && platesCover > 1) platesCover = platesCover / 2;
 
+    // Считаем техотходы бумаги для обложки
+    const wasteCoverSheets = platesCover * WASTE_PER_FORM;
+    const totalCoverSheets = finishCoverSheets + wasteCoverSheets;
+
     const printCostCover = totalCoverSheets * PRINT_PRICE_PER_SHEET;
     const paperCostCover = totalCoverSheets * PAPER_PRICE_PER_SHEET[pCover];
+    const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
     const platesCostCover = platesCover * PLATE_PRICE;
     const setupCostCover = platesCover * SETUP_PRICE;
-    const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
 
-    // 3. Переплет и резка
+    // --- 3. Постпечать ---
     const bindCost = qty * BINDING_PRICES[binding];
-    const cutCost = isCut ? totalBlockSheets * PRICE_CUT + totalCoverSheets * PRICE_CUT : 0;
+    const cutCost = isCut ? (totalBlockSheets + totalCoverSheets) * PRICE_CUT : 0;
     const creaseCost = isCrease ? totalBlockSheets * PRICE_CREASE : 0;
 
     total = platesCostBlock + setupCostBlock + printCostBlock + paperCostBlock +
@@ -348,25 +354,33 @@ function calc() {
             bindCost + cutCost + creaseCost;
 
     html = row('Тираж', fmt(qty) + ' шт') +
-           row('Листов А2 на блок (с отходами)', fmt(totalBlockSheets) + ' шт') +
-           row('Формы и печать блока', fmt(platesCostBlock + setupCostBlock + printCostBlock) + ' ₽') +
+           row('Листов А2 на блок (чистых)', fmt(finishBlockSheets) + ' шт') +
+           row('Техотходы бумаги (блок)', fmt(wasteBlockSheets) + ' шт') +
+           row('Печать блока', fmt(printCostBlock) + ' ₽') +
            row('Бумага блока', fmt(paperCostBlock) + ' ₽') +
-           row('Листов А2 на обложку', fmt(totalCoverSheets) + ' шт') +
-           row('Формы и печать обложки', fmt(platesCostCover + setupCostCover + printCostCover) + ' ₽') +
+           row('Формы блока (шт)', fmt(platesBlock) + ' шт / ' + fmt(platesCostBlock) + ' ₽') +
+           row('Приладка блока', fmt(setupCostBlock) + ' ₽') +
+           
+           row('Листов А2 на обложку (чистых)', fmt(finishCoverSheets) + ' шт') +
+           row('Техотходы бумаги (обложка)', fmt(wasteCoverSheets) + ' шт') +
+           row('Печать обложки', fmt(printCostCover) + ' ₽') +
            row('Бумага обложки', fmt(paperCostCover) + ' ₽') +
+           row('Формы обложки (шт)', fmt(platesCover) + ' шт / ' + fmt(platesCostCover) + ' ₽') +
+           row('Приладка обложки', fmt(setupCostCover) + ' ₽') +
            (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽') : '') +
+           
            row('Переплет', fmt(bindCost) + ' ₽') +
            (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
            (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽') : '');
 
-  // --- ЛОГИКА ДЛЯ ЛИСТОВОК ---
   } else {
+    // (Логика для листовок аналогичная, с добавлением техотходов)
     const format = document.getElementById('leaflet-format').value;
     const paper = document.getElementById('leaflet-paper').value;
     const color = document.getElementById('leaflet-color').value;
 
     const itemsPerA2 = ITEMS_PER_A2[format];
-    let sheets = Math.ceil((qty / itemsPerA2) * WASTE_FACTOR);
+    let finishSheets = Math.ceil(qty / itemsPerA2);
 
     let plates = 0;
     if (color === '1+0') plates = 1;
@@ -375,22 +389,25 @@ function calc() {
     if (color === '4+4') plates = 8;
     if (isSelfTurn && plates > 1) plates = plates / 2;
 
+    const wasteSheets = plates * WASTE_PER_FORM;
+    const totalSheets = finishSheets + wasteSheets;
+
     const platesCost = plates * PLATE_PRICE;
     const setupCost = plates * SETUP_PRICE;
-    const printCost = sheets * PRINT_PRICE_PER_SHEET;
-    const paperCost = sheets * PAPER_PRICE_PER_SHEET[paper];
-    const cutCost = isCut ? sheets * PRICE_CUT : 0;
-    const creaseCost = isCrease ? sheets * PRICE_CREASE : 0;
+    const printCost = totalSheets * PRINT_PRICE_PER_SHEET;
+    const paperCost = totalSheets * PAPER_PRICE_PER_SHEET[paper];
+    const cutCost = isCut ? totalSheets * PRICE_CUT : 0;
+    const creaseCost = isCrease ? totalSheets * PRICE_CREASE : 0;
 
     total = platesCost + setupCost + printCost + paperCost + cutCost + creaseCost;
 
     html = row('Тираж', fmt(qty) + ' шт') +
-           row('Изделий на листе А2', itemsPerA2 + ' шт') +
-           row('Печатных листов А2 (с отходами)', fmt(sheets) + ' шт') +
-           row('Количество печатных форм', fmt(plates) + ' шт' + (isSelfTurn ? ' (Само на себя)' : '')) +
-           row('Формы и приладка', fmt(platesCost + setupCost) + ' ₽') +
+           row('Листов А2 чистых', fmt(finishSheets) + ' шт') +
+           row('Техотходы бумаги', fmt(wasteSheets) + ' шт') +
            row('Печать тиража', fmt(printCost) + ' ₽') +
            row('Бумага', fmt(paperCost) + ' ₽') +
+           row('Печатные формы', fmt(plates) + ' шт / ' + fmt(platesCost) + ' ₽') +
+           row('Приладка', fmt(setupCost) + ' ₽') +
            (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
            (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost) + ' ₽') : '');
   }
