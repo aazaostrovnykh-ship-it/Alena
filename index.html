@@ -117,7 +117,6 @@
           <option value="a3" data-type="leaflet" data-items="1">Листовки А3 (1 шт на А3)</option>
           <option value="vizitka" data-type="leaflet" data-items="24">Визитки (24 шт на А3)</option>
           
-          <!-- Отдельные пункты -->
           <option value="mag_30" data-type="magazine">Журнал А4 (до 30 страниц)</option>
           <option value="mag_40" data-type="magazine">Журнал А4 (до 40 страниц)</option>
           <option value="book" data-type="book">Книга (индивидуальный расчет)</option>
@@ -168,6 +167,7 @@
     <!-- БЛОК ДЛЯ КНИГ -->
     <div id="book-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
+      
       <div class="grid">
         <div>
           <label>Формат</label>
@@ -177,24 +177,63 @@
           </select>
         </div>
         <div>
-          <label>Кол-во страниц</label>
+          <label>Кол-во страниц в блоке</label>
           <input type="number" id="book-pages" value="120" min="4" step="4">
         </div>
-        <div>
-          <label>Переплет</label>
-          <select id="book-binding">
-            <option value="saddle">Скрепка</option>
-            <option value="perfect">КБС (Термопереплет)</option>
-            <option value="wire">Пружина</option>
-            <option value="hard" selected>Твердый переплет</option>
-          </select>
-        </div>
+      </div>
+
+      <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Внутренний блок</h4>
+      <div class="grid">
         <div>
           <label>Бумага блока</label>
           <select id="book-paper">
             <option value="80">ВХИ 80 г/м²</option>
             <option value="120" selected>Офсетная 120 г/м²</option>
             <option value="160">Мелованная 160 г/м²</option>
+          </select>
+        </div>
+        <div>
+          <label>Красочность блока</label>
+          <select id="book-color">
+            <option value="1+0">1+0 (ч/б)</option>
+            <option value="1+1" selected>1+1 (ч/б двусторонняя)</option>
+            <option value="4+4">4+4 (цветная)</option>
+          </select>
+        </div>
+      </div>
+
+      <h4 style="margin: 15px 0 10px; color: var(--berry); font-size: 15px; border-top: 1px solid var(--line); padding-top: 10px;">Обложка</h4>
+      <div class="grid">
+        <div>
+          <label>Бумага обложки</label>
+          <select id="book-cover-paper">
+            <option value="200" selected>Мелованная 200 г/м²</option>
+            <option value="250">Мелованная 250 г/м²</option>
+            <option value="300">Картон 300 г/м²</option>
+          </select>
+        </div>
+        <div>
+          <label>Красочность обложки</label>
+          <select id="book-cover-color">
+            <option value="4+0">4+0 (цветная 1 сторона)</option>
+            <option value="4+4" selected>4+4 (цветная 2 стороны)</option>
+          </select>
+        </div>
+        <div>
+          <label>Ламинация обложки</label>
+          <select id="book-cover-lam">
+            <option value="0">Без ламинации</option>
+            <option value="10" selected>1 сторона (Мат/Глянец)</option>
+            <option value="20">2 стороны (Мат/Глянец)</option>
+          </select>
+        </div>
+        <div>
+          <label>Переплет</label>
+          <select id="book-binding">
+            <option value="saddle">Скрепка</option>
+            <option value="perfect" selected>КБС (Термопереплет)</option>
+            <option value="wire">Пружина</option>
+            <option value="hard">Твердый переплет</option>
           </select>
         </div>
       </div>
@@ -266,34 +305,47 @@ function calc() {
   } else if (type === 'book') {
     const format = document.getElementById('book-format').value;
     const pages = Math.max(4, Math.round(+document.getElementById('book-pages').value || 4));
-    const binding = document.getElementById('book-binding').value;
     const pBlock = document.getElementById('book-paper').value;
+    const cBlock = document.getElementById('book-color').value;
+    const pCover = document.getElementById('book-cover-paper').value;
+    const cCover = document.getElementById('book-cover-color').value;
+    const lamCover = parseInt(document.getElementById('book-cover-lam').value);
+    const binding = document.getElementById('book-binding').value;
 
+    // Блок
     const pagesPerSheet = (format === 'A5') ? 8 : 4;
     let blockSheetsPerCopy = Math.ceil(pages / pagesPerSheet);
     blockSheetsPerCopy = Math.ceil(blockSheetsPerCopy * WASTE_FACTOR);
     const totalBlockSheets = blockSheetsPerCopy * qty;
 
+    const isOver50Block = totalBlockSheets >= 50;
+    const printCostBlock = totalBlockSheets * (isOver50Block ? PRINT_PRICES[cBlock].over50 : PRINT_PRICES[cBlock].base);
+    const paperCostBlock = totalBlockSheets * (isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base);
+
+    // Обложка
     const coversPerSheet = (format === 'A5') ? 2 : 1;
     const totalCoverSheets = Math.ceil(qty / coversPerSheet);
+    const isOver50Cover = totalCoverSheets >= 50;
 
-    const isOver50Block = totalBlockSheets >= 50;
-    const printCostBlock = totalBlockSheets * (isOver50Block ? PRINT_PRICES['1+1'].over50 : PRINT_PRICES['1+1'].base);
-    const paperCostBlock = totalBlockSheets * (isOver50Block ? PAPER_PRICES[pBlock].over50 : PAPER_PRICES[pBlock].base);
-    const printCostCover = totalCoverSheets * PRINT_PRICES['4+4'].base;
-    const paperCostCover = totalCoverSheets * PAPER_PRICES['200'].base;
+    const printCostCover = totalCoverSheets * (isOver50Cover ? PRINT_PRICES[cCover].over50 : PRINT_PRICES[cCover].base);
+    const paperCostCover = totalCoverSheets * (isOver50Cover ? PAPER_PRICES[pCover].over50 : PAPER_PRICES[pCover].base);
+    const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0; // Цена ламинации за лист А3
 
+    // Переплет
     let bindingCostPerUnit = BINDING_PRICES[binding];
     if (binding === 'wire' && format === 'A5') bindingCostPerUnit = 40;
     const totalBindingCost = qty * bindingCostPerUnit;
     const totalCollationCost = (binding === 'hard') ? qty * BOOK_COLLATION : 0;
 
-    total = printCostBlock + paperCostBlock + printCostCover + paperCostCover + totalBindingCost + totalCollationCost;
+    total = printCostBlock + paperCostBlock + printCostCover + paperCostCover + lamCostCover + totalBindingCost + totalCollationCost;
 
     html = row('Тираж', fmt(qty) + ' шт') +
-           row('Листов А3 на 1 книгу', blockSheetsPerCopy + ' шт') +
-           row('Печать и бумага блока', fmt(printCostBlock + paperCostBlock) + ' ₽') +
-           row('Печать и бумага обложки', fmt(printCostCover + paperCostCover) + ' ₽') +
+           row('Листов А3 на блок (с отходами)', blockSheetsPerCopy + ' шт') +
+           row('Печать блока', fmt(printCostBlock) + ' ₽') +
+           row('Бумага блока', fmt(paperCostBlock) + ' ₽') +
+           row('Печать обложки', fmt(printCostCover) + ' ₽') +
+           row('Бумага обложки', fmt(paperCostCover) + ' ₽') +
+           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽') : '') +
            row('Переплет', fmt(totalBindingCost) + ' ₽') +
            (totalCollationCost ? row('Подборка', fmt(totalCollationCost) + ' ₽') : '');
 
@@ -353,8 +405,12 @@ function calc() {
   // Для книг
   document.getElementById('book-format').addEventListener(ev, calc);
   document.getElementById('book-pages').addEventListener(ev, calc);
-  document.getElementById('book-binding').addEventListener(ev, calc);
   document.getElementById('book-paper').addEventListener(ev, calc);
+  document.getElementById('book-color').addEventListener(ev, calc);
+  document.getElementById('book-cover-paper').addEventListener(ev, calc);
+  document.getElementById('book-cover-color').addEventListener(ev, calc);
+  document.getElementById('book-cover-lam').addEventListener(ev, calc);
+  document.getElementById('book-binding').addEventListener(ev, calc);
 });
 ['lam1', 'lam2', 'cut', 'crease', 'round'].forEach(id => {
   document.getElementById(id).addEventListener('change', calc);
