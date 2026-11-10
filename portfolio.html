@@ -20,7 +20,6 @@
   .nav-menu a:hover,.nav-menu a.active{color:var(--angel-blue);border-bottom-color:var(--angel-blue)}
   .header-contacts{text-align:right;font-size:14px;line-height:1.6}
   .header-contacts a{color:var(--berry);text-decoration:none;font-weight:500}
-  @media(max-width:980px){.brand{flex-direction:column;align-items:flex-start}.nav-menu{margin-left:0;margin-top:15px;flex-wrap:wrap}.header-contacts{text-align:left;margin-top:10px}}
   .page-title {margin-bottom: 30px;}
   .page-title h2 {font-size: 32px; color: var(--berry); font-weight: 500; margin: 0 0 10px;}
   .page-title p {color: var(--muted); font-size: 16px; margin: 0; line-height: 1.5;}
@@ -35,7 +34,22 @@
   .footer-col{display:flex;flex-direction:column;gap:6px}
   .footer-col strong{font-size:13px;color:var(--berry);font-weight:500;text-transform:uppercase}
   .footer a{color:var(--berry);text-decoration:none;font-weight:500;font-size:16px}
-  @media(max-width:560px){.footer{flex-direction:column;align-items:flex-start}}
+  
+  /* МОБИЛЬНАЯ АДАПТАЦИЯ */
+  @media(max-width: 768px){
+    body { padding: 16px 10px; }
+    .brand { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+    .brand-left a { flex-direction: column; gap: 10px; }
+    .brand h1 { font-size: 20px; text-align: center; }
+    .nav-menu { margin-left: 0; justify-content: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+    .nav-menu a { font-size: 14px; }
+    .header-contacts { text-align: center; margin-top: 10px; }
+    .header-contacts div, .header-contacts a { font-size: 14px; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .portfolio-img-container { height: 220px; }
+    .footer { flex-direction: column; align-items: center; text-align: center; }
+    .footer-col { align-items: center; }
+  }
 </style>
 </head>
 <body>
@@ -62,7 +76,6 @@
   <div class="page-title"><h2>Наши работы</h2><p>Примеры реализованных проектов: от тиражных книг до эксклюзивной упаковки.</p></div>
   <div class="portfolio-grid">
     
-    <!-- Работа 1 (КНИГИ) -->
     <div class="portfolio-item">
       <div class="portfolio-img-container">
         <img src="book.jpg" alt="Печать книг в твердом переплете">
@@ -73,7 +86,6 @@
       </div>
     </div>
 
-    <!-- Работа 2 -->
     <div class="portfolio-item">
       <div class="portfolio-img-container">
         <img src="calendar.jpg" alt="Настенный перекидной календарь">
@@ -84,7 +96,6 @@
       </div>
     </div>
 
-    <!-- Работа 3 (ПАКЕТЫ) -->
     <div class="portfolio-item">
       <div class="portfolio-img-container">
         <img src="bag.jpg" alt="Черные брендированные пакеты">
@@ -95,7 +106,6 @@
       </div>
     </div>
 
-    <!-- Работа 4 -->
     <div class="portfolio-item">
       <div class="portfolio-img-container">
         <img src="pressa.jpg" alt="Печать глянцевого журнала">
@@ -106,7 +116,6 @@
       </div>
     </div>
 
-    <!-- Работа 5 -->
     <div class="portfolio-item">
       <div class="portfolio-img-container">
         <img src="vizitki.jpg" alt="Визитки премиум-класса">
@@ -117,7 +126,6 @@
       </div>
     </div>
 
-    <!-- Работа 6 -->
     <div class="portfolio-item">
       <div class="portfolio-img-container">
         <img src="pack.jpg" alt="Премиальная подарочная коробка">
