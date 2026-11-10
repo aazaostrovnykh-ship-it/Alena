@@ -2,8 +2,8 @@
 // Все цены и константы собраны здесь, чтобы их было легко менять.
 
 const PRICES = {
-  // Бумага цифра (А3)
-  digitalPaper: { '80': 9, '120': 17, '160': 23, '200': 25, '250': 27, '300': 30 },
+  // Бумага цифра (А3) — добавил 115 и 130 для сравнения
+  digitalPaper: { '80': 9, '115': 17, '120': 17, '130': 23, '160': 23, '200': 25, '250': 27, '300': 30 },
   // Бумага офсет (А2)
   offsetPaper: { '80': 4.5, '115': 5.0, '130': 6.5, '200': 12.0, '250': 18.0, '300': 20.0 },
   
@@ -23,7 +23,7 @@ const PRICES = {
     amortPerHour: 4189 / 12,   // Амортизация в час
     materialsPerHour: 313 / 12,// Материалы в час
     platePrice: 350,           // Цена формы
-    inkCostPerForm: 150,       // Исправлено: краска зависит от форм, а не фикс
+    inkCostPerForm: 150,       // Краска зависит от форм
     markup: 2.0,               // Наценка
   },
   
@@ -40,7 +40,7 @@ const PRICES = {
   pagesPerA3: { 'A5': 8, 'A4': 4 },
   pagesPerA2: { 'A5': 16, 'A4': 8 },
   coversPerA3: { 'A5': 2, 'A4': 1 },
-  coversPerA2: { 'A5': 4, 'A4': 2 } // Исправлено: А5=4, А4=2
+  coversPerA2: { 'A5': 4, 'A4': 2 } // А5=4, А4=2
 };
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
@@ -56,7 +56,6 @@ function calcDigital(productType, qty, options) {
     details.push({ label: 'Фикс. цена', val: `${fmt(total)} ₽`, unit: `${qty} шт × ${fixedPrice} ₽` });
   } 
   else if (productType === 'book') {
-    // Исправлено: Добавлена резка и биговка, исправлен КБС
     const { format, pages, paperBlock, colorBlock, paperCover, colorCover, lamCover, binding } = options;
     
     // Блок
@@ -87,11 +86,11 @@ function calcDigital(productType, qty, options) {
     
     // Переплет
     let bindPrice = PRICES.binding[binding];
-    if (binding === 'perfect') bindPrice = PRICES.binding.digitalKBS; // Исправлено 500 на 50
+    if (binding === 'perfect') bindPrice = PRICES.binding.digitalKBS;
     if (binding === 'wire' && format === 'A5') bindPrice = 40;
     const bindCost = qty * bindPrice;
     
-    // Отделка (Добавлена для книг!)
+    // Отделка
     const cutCost = (totalBlockSheets + totalCoverSheets) * PRICES.finishing.cut;
     const creaseCost = totalBlockSheets * PRICES.finishing.crease;
 
@@ -107,7 +106,7 @@ function calcDigital(productType, qty, options) {
     if (creaseCost) details.push({ label: 'Биговка', val: `${fmt(creaseCost)} ₽`, unit: `` });
   } 
   else {
-    // Листовки (Исправлен обрыв цен: берем Math.min)
+    // Листовки
     const { format, paper, color, cut, lam1, lam2, crease, round } = options;
     const itemsPerSheet = PRICES.itemsPerA3[format];
     const cleanSheets = Math.ceil(qty / itemsPerSheet);
@@ -148,9 +147,7 @@ function calcOffset(productType, qty, options) {
   let total = 0;
   let details = [];
 
-  // Внутренняя функция расчета стоимости работы машины
   function calcMachineCost(sheets, forms, colorsPerForm) {
-    // Округляем часы до 15 минут (0.25)
     const hours = (PRICES.offset.setupTimePerForm * forms) + (sheets / PRICES.offset.machineSpeed);
     const roundedHours = Math.ceil(hours * 4) / 4;
     
@@ -158,7 +155,7 @@ function calcOffset(productType, qty, options) {
                  (roundedHours * PRICES.offset.amortPerHour) + 
                  (roundedHours * PRICES.offset.materialsPerHour) + 
                  (forms * PRICES.offset.platePrice) + 
-                 (forms * PRICES.offset.inkCostPerForm); // Исправлено: краска от форм
+                 (forms * PRICES.offset.inkCostPerForm);
     return cost * PRICES.offset.markup;
   }
 
@@ -171,7 +168,6 @@ function calcOffset(productType, qty, options) {
   if (productType === 'book' || productType === 'brochure') {
     const { format, pages, paperBlock, colorBlock, paperCover, colorCover, lamCover, binding } = options;
     
-    // Блок
     const pagesPerSheet = PRICES.pagesPerA2[format];
     const sheetsPerCopy = Math.ceil(pages / pagesPerSheet);
     const cleanBlockSheets = sheetsPerCopy * qty;
@@ -179,11 +175,10 @@ function calcOffset(productType, qty, options) {
     const totalFormsBlock = sheetsPerCopy * formsPerSheet;
     
     const printCostBlock = calcMachineCost(cleanBlockSheets, totalFormsBlock, formsPerSheet);
-    const totalBlockSheets = cleanBlockSheets + (totalFormsBlock * 50); // 50 листов на форму
+    const totalBlockSheets = cleanBlockSheets + (totalFormsBlock * 50);
     const paperCostBlock = totalBlockSheets * PRICES.offsetPaper[paperBlock];
 
-    // Обложка
-    const coversPerSheet = PRICES.coversPerA2[format]; // Исправлено (А5=4, А4=2)
+    const coversPerSheet = PRICES.coversPerA2[format];
     const cleanCoverSheets = Math.ceil(qty / coversPerSheet);
     const formsCover = getForms(colorCover);
     
@@ -192,11 +187,10 @@ function calcOffset(productType, qty, options) {
     const paperCostCover = totalCoverSheets * PRICES.offsetPaper[paperCover];
     const lamCost = lamCover > 0 ? totalCoverSheets * (lamCover === 1 ? 10 : 20) : 0;
 
-    // Отделка
     let bindPrice = PRICES.binding[binding];
     const bindCost = qty * bindPrice;
-    const cutCost = (totalBlockSheets + totalCoverSheets) * 1.0; // Резка
-    const creaseCost = totalBlockSheets * 2.5; // Биговка
+    const cutCost = (totalBlockSheets + totalCoverSheets) * 1.0;
+    const creaseCost = totalBlockSheets * 2.5;
 
     total = printCostBlock + paperCostBlock + printCostCover + paperCostCover + lamCost + bindCost + cutCost + creaseCost;
     
@@ -210,7 +204,6 @@ function calcOffset(productType, qty, options) {
     if (creaseCost) details.push({ label: 'Биговка', val: `${fmt(creaseCost)} ₽`, unit: `` });
 
   } else {
-    // Листовки
     const { format, paper, color, cut, crease } = options;
     const itemsPerA2 = PRICES.itemsPerA2[format];
     const cleanSheets = Math.ceil(qty / itemsPerA2);
