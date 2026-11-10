@@ -2,7 +2,7 @@
 // Все цены и константы собраны здесь, чтобы их было легко менять.
 
 const PRICES = {
-  // Бумага цифра (А3) — добавил 115 и 130 для сравнения
+  // Бумага цифра (А3) — добавлены все виды
   digitalPaper: { '80': 9, '115': 17, '120': 17, '130': 23, '160': 23, '200': 25, '250': 27, '300': 30 },
   // Бумага офсет (А2)
   offsetPaper: { '80': 4.5, '115': 5.0, '130': 6.5, '200': 12.0, '250': 18.0, '300': 20.0 },
@@ -27,20 +27,20 @@ const PRICES = {
     markup: 2.0,               // Наценка
   },
   
-  // Переплеты и отделка (единые цены)
-  binding: { saddle: 8, perfect: 30, wire: 55, hard: 120, digitalKBS: 50 },
+  // Переплеты и отделка (ДОБАВЛЕН soft: 30!)
+  binding: { saddle: 8, perfect: 30, wire: 55, hard: 120, digitalKBS: 50, soft: 30 },
   finishing: { cut: 0.72, lam1: 10, lam2: 20, crease: 2.5, round: 1.2 },
   
   // Минимальная стоимость
   minOrder: 300,
   
-  // Вспомогательные данные
-  itemsPerA3: { 'A4': 2, 'A5': 4, 'A6': 8, 'A3': 1, 'vizitka': 24 },
+  // Вспомогательные данные (ИСПРАВЛЕН VIZITKA на верхний регистр!)
+  itemsPerA3: { 'A4': 2, 'A5': 4, 'A6': 8, 'A3': 1, 'VIZITKA': 24 },
   itemsPerA2: { 'A4': 4, 'A5': 8, 'A3': 2 },
   pagesPerA3: { 'A5': 8, 'A4': 4 },
   pagesPerA2: { 'A5': 16, 'A4': 8 },
   coversPerA3: { 'A5': 2, 'A4': 1 },
-  coversPerA2: { 'A5': 4, 'A4': 2 } // А5=4, А4=2
+  coversPerA2: { 'A5': 4, 'A4': 2 }
 };
 
 const fmt = n => new Intl.NumberFormat('ru-RU').format(Math.round(n));
@@ -187,7 +187,7 @@ function calcOffset(productType, qty, options) {
     const paperCostCover = totalCoverSheets * PRICES.offsetPaper[paperCover];
     const lamCost = lamCover > 0 ? totalCoverSheets * (lamCover === 1 ? 10 : 20) : 0;
 
-    let bindPrice = PRICES.binding[binding];
+    let bindPrice = PRICES.binding[binding]; // Теперь 'soft' здесь есть!
     const bindCost = qty * bindPrice;
     const cutCost = (totalBlockSheets + totalCoverSheets) * 1.0;
     const creaseCost = totalBlockSheets * 2.5;
