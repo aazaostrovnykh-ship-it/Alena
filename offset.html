@@ -138,35 +138,35 @@
       <div>
         <label>Тип продукции</label>
         <select id="product" onchange="updateUI()">
-          <option value="leaflet">Листовки / Буклеты</option>
+          <option value="leaflet" selected>Листовки / Буклеты</option>
           <option value="brochure">Брошюры (сшивные)</option>
-          <option value="book" selected>Книги / Каталоги</option>
+          <option value="book">Книги / Каталоги</option>
         </select>
       </div>
       <div>
         <label>Тираж, шт</label>
-        <input type="number" id="qty" value="300" min="100" max="100000">
+        <input type="number" id="qty" value="1000" min="100" max="100000">
       </div>
     </div>
 
     <!-- БЛОК ДЛЯ ЛИСТОВОК -->
-    <div id="leaflet-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+    <div id="leaflet-options" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры листовок</h4>
       <div class="grid">
         <div>
           <label>Формат изделия</label>
           <select id="leaflet-format">
-            <option value="A4">А4 (210×297)</option>
-            <option value="A5" selected>А5 (148×210)</option>
+            <option value="A4" selected>А4 (210×297)</option>
+            <option value="A5">А5 (148×210)</option>
             <option value="A3">А3 (297×420)</option>
           </select>
         </div>
         <div>
           <label>Бумага</label>
           <select id="leaflet-paper">
-            <option value="80">Офсетная 80 г/м²</option>
+            <option value="80" selected>Офсетная 80 г/м²</option>
             <option value="115">Мелованная 115 г/м²</option>
-            <option value="130" selected>Мелованная 130 г/м²</option>
+            <option value="130">Мелованная 130 г/м²</option>
             <option value="250">Мелованная 250 г/м²</option>
           </select>
         </div>
@@ -247,7 +247,7 @@
     </div>
 
     <!-- БЛОК ДЛЯ КНИГ -->
-    <div id="book-options" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+    <div id="book-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
       
       <div class="grid">
@@ -320,8 +320,8 @@
 
     <div style="margin-top: 15px;">
       <div class="chks">
-        <label class="chk"><input type="checkbox" id="selfTurn"> Схема «Само на себя» (скидка на формы)</label>
-        <label class="chk"><input type="checkbox" id="cut" checked> Резка</label>
+        <label class="chk"><input type="checkbox" id="selfTurn" checked> Схема «Само на себя» (скидка на формы)</label>
+        <label class="chk" checked><input type="checkbox" id="cut" checked> Резка</label>
         <label class="chk"><input type="checkbox" id="crease"> Биговка / Фальцовка</label>
       </div>
     </div>
@@ -358,28 +358,28 @@
 
 <script>
 /* ============================================================
-   НАСТРОЙКИ ОФСЕТА (ЗАФИКСИРОВАНЫ СРЕДНИЕ ЗНАЧЕНИЯ ИЗ EXCEL)
+   НАСТРОЙКИ ОФСЕТА (СКОРРЕКТИРОВАНО ПОД ВАШИ ДАННЫЕ)
    ============================================================ */
 const PLATE_PRICE = 500;        
 const WASTE_PER_FORM = 50;      
 
-// Печать за 1 лист А2
+// Цена печати за 1 лист А2 (за 1 прогон/сторону)
 const PRINT_PRICES = { 
-  '1+0': 2, 
-  '1+1': 4, 
-  '4+0': 5, 
-  '4+4': 8 
+  '1+0': 8, 
+  '1+1': 16, 
+  '4+0': 8, 
+  '4+4': 16 
 };
 
 // СТОИМОСТЬ ПАЧКИ БУМАГИ А1 (В пачке 250 листов А1)
 const PACK_SIZE_A1 = 250; 
 const PAPER_PACK_PRICES = { 
-  '80': 1500,   // Цена за 1 пачку (250 листов А1) 80г
-  '115': 1800,  // 115г
-  '130': 2000,  // 130г
-  '200': 3500,  // 200г
-  '250': 4500,  // 250г
-  '300': 5000   // 300г
+  '80': 3250,   // Исправлено на 3250
+  '115': 3500,  
+  '130': 4000,  
+  '200': 6000,  
+  '250': 7500,  
+  '300': 8500   
 };
 
 const PRICE_CUT = 1.0;
@@ -399,7 +399,6 @@ function updateUI() {
   document.getElementById('brochure-options').style.display = (product === 'brochure') ? 'block' : 'none';
   document.getElementById('book-options').style.display = (product === 'book') ? 'block' : 'none';
   
-  // Для листовок галочку "Само на себя" по умолчанию снимаем, для книг/брошюр ставим.
   const selfTurnCheckbox = document.getElementById('selfTurn');
   if (product === 'book' || product === 'brochure') {
     selfTurnCheckbox.checked = true;
@@ -412,7 +411,6 @@ function updateUI() {
 
 // Функция расчета стоимости бумаги пачками А1
 function calcPaperCost(totalSheetsA2, paperKey) {
-  // 1 А1 = 2 листа А2.
   const totalSheetsA1 = Math.ceil(totalSheetsA2 / 2);
   const packs = Math.ceil(totalSheetsA1 / PACK_SIZE_A1);
   return packs * PAPER_PACK_PRICES[paperKey];
@@ -474,7 +472,6 @@ function calc() {
     const totalBlockSheets = cleanBlockSheets + wasteBlockSheets;
 
     const printCostBlock = cleanBlockSheets * PRINT_PRICES[cBlock];
-    // Считаем бумагу для блока
     const paperCostBlock = calcPaperCost(totalBlockSheets, pBlock);
     const platesCostBlock = platesBlock * PLATE_PRICE;
 
@@ -487,7 +484,6 @@ function calc() {
     const totalCoverSheets = cleanCoverSheets + wasteCoverSheets;
 
     const printCostCover = cleanCoverSheets * PRINT_PRICES[cCover];
-    // Считаем бумагу для обложки
     const paperCostCover = calcPaperCost(totalCoverSheets, pCover);
     const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
     const platesCostCover = platesCover * PLATE_PRICE;
@@ -531,7 +527,6 @@ function calc() {
     const totalSheets = cleanSheets + wasteSheets;
 
     const printCost = cleanSheets * PRINT_PRICES[color];
-    // Считаем бумагу пачками
     const paperCost = calcPaperCost(totalSheets, paper);
     const platesCost = plates * PLATE_PRICE;
     const cutCost = isCut ? totalSheets * PRICE_CUT : 0;
@@ -543,7 +538,7 @@ function calc() {
     plainText += `Формат: ${format}, Красочность: ${color}\n`;
 
     html = row('Тираж', fmt(qty) + ' шт') +
-           row('Печать (работа)', fmt(printCost) + ' ₽') +
+           row('Печать (работа)', fmt(printCost) + ' ₽', `${cleanSheets} л. × ${PRINT_PRICES[color]} ₽`) +
            row('Бумага', fmt(paperCost) + ' ₽') +
            row('Печатные формы', fmt(platesCost) + ' ₽', `${plates} шт × ${PLATE_PRICE} ₽`) +
            (cutCost ? row('Резка', fmt(cutCost) + ' ₽') : '') +
