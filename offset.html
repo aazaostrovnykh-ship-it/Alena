@@ -138,36 +138,36 @@
       <div>
         <label>Тип продукции</label>
         <select id="product" onchange="updateUI()">
-          <option value="leaflet">Листовки / Буклеты</option>
+          <option value="leaflet" selected>Листовки / Буклеты</option>
           <option value="brochure">Брошюры (сшивные)</option>
-          <option value="book" selected>Книги / Каталоги</option>
+          <option value="book">Книги / Каталоги</option>
         </select>
       </div>
       <div>
         <label>Тираж, шт</label>
-        <input type="number" id="qty" value="300" min="100" max="100000">
+        <input type="number" id="qty" value="1000" min="100" max="100000">
       </div>
     </div>
 
     <!-- БЛОК ДЛЯ ЛИСТОВОК -->
-    <div id="leaflet-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+    <div id="leaflet-options" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры листовок</h4>
       <div class="grid">
         <div>
           <label>Формат изделия</label>
           <select id="leaflet-format">
-            <option value="A4" selected>А4 (210×297)</option>
+            <option value="A4">А4 (210×297)</option>
             <option value="A5">А5 (148×210)</option>
-            <option value="A3">А3 (297×420)</option>
+            <option value="A3" selected>А3 (297×420)</option>
           </select>
         </div>
         <div>
           <label>Бумага</label>
           <select id="leaflet-paper">
-            <option value="80">ВХИ 80 г/м²</option>
-            <option value="120" selected>Мелованная 120 г/м²</option>
+            <option value="80">Офсетная 80 г/м²</option>
+            <option value="115">Мелованная 115 г/м²</option>
+            <option value="130">Мелованная 130 г/м²</option>
             <option value="250">Мелованная 250 г/м²</option>
-            <option value="300">Мелованная 300 г/м²</option>
           </select>
         </div>
         <div>
@@ -204,8 +204,9 @@
         <div>
           <label>Бумага блока</label>
           <select id="brochure-paper">
-            <option value="80" selected>ВХИ 80 г/м²</option>
-            <option value="120">Мелованная 120 г/м²</option>
+            <option value="80" selected>Офсетная 80 г/м²</option>
+            <option value="115">Мелованная 115 г/м²</option>
+            <option value="130">Мелованная 130 г/м²</option>
           </select>
         </div>
         <div>
@@ -223,9 +224,9 @@
         <div>
           <label>Бумага обложки</label>
           <select id="brochure-cover-paper">
-            <option value="120" selected>Мелованная 120 г/м²</option>
+            <option value="130" selected>Мелованная 130 г/м²</option>
+            <option value="200">Мелованная 200 г/м²</option>
             <option value="250">Мелованная 250 г/м²</option>
-            <option value="300">Мелованная 300 г/м²</option>
           </select>
         </div>
         <div>
@@ -246,7 +247,7 @@
     </div>
 
     <!-- БЛОК ДЛЯ КНИГ -->
-    <div id="book-options" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
+    <div id="book-options" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed var(--berry);">
       <h4 style="margin: 0 0 10px; color: var(--berry); font-size: 15px;">Параметры книги</h4>
       
       <div class="grid">
@@ -268,8 +269,9 @@
         <div>
           <label>Бумага блока</label>
           <select id="book-paper">
-            <option value="80" selected>ВХИ 80 г/м²</option>
-            <option value="120">Мелованная 120 г/м²</option>
+            <option value="80" selected>Офсетная 80 г/м²</option>
+            <option value="115">Мелованная 115 г/м²</option>
+            <option value="130">Мелованная 130 г/м²</option>
           </select>
         </div>
         <div>
@@ -288,7 +290,7 @@
           <label>Бумага обложки</label>
           <select id="book-cover-paper">
             <option value="250" selected>Мелованная 250 г/м²</option>
-            <option value="300">Мелованная 300 г/м²</option>
+            <option value="300">Картон 300 г/м²</option>
           </select>
         </div>
         <div>
@@ -356,24 +358,28 @@
 
 <script>
 /* ============================================================
-   НАСТРОЙКИ ОФСЕТА (ЦЕНЫ ОБНОВЛЕНЫ ПОД НОВЫЕ ПАЧКИ)
+   НАСТРОЙКИ ОФСЕТА
    ============================================================ */
 const PLATE_PRICE = 500;        
 const WASTE_PER_FORM = 50;      
+const SHEETS_PER_PACK = 500;    // Кол-во листов в 1 пачке
 
+// Печать за 1 лист А2 (ЦЕНА ЗА РАБОТУ, ИЗМЕНЕНА НА 16 ДЛЯ 4+4)
 const PRINT_PRICES = { 
   '1+0': 2, 
   '1+1': 4, 
-  '4+0': 5, 
-  '4+4': 8 
+  '4+0': 8, 
+  '4+4': 16 
 };
 
-// Стоимость 1 листа А2 (рассчитано из цены пачки)
+// Бумага за 1 лист А2 (цена в рублях за лист)
 const PAPER_PRICE_PER_SHEET = { 
-  '80': 3.25,  // 3250 / 1000
-  '120': 6.00, // 3000 / 500
-  '250': 11.00,// 3300 / 300
-  '300': 12.00 // 3000 / 250
+  '80': 4.5, 
+  '115': 5.0, 
+  '130': 6.0, 
+  '200': 12.0,
+  '250': 18.0, 
+  '300': 20.0 
 };
 
 const PRICE_CUT = 1.0;
@@ -393,7 +399,7 @@ function updateUI() {
   document.getElementById('brochure-options').style.display = (product === 'brochure') ? 'block' : 'none';
   document.getElementById('book-options').style.display = (product === 'book') ? 'block' : 'none';
   
-  // АВТОМАТИЧЕСКОЕ УПРАВЛЕНИЕ ГАЛОЧКОЙ "САМО НА СЕБЯ"
+  // Автоматическое управление галочкой "Само на себя"
   const selfTurnCheckbox = document.getElementById('selfTurn');
   if (product === 'book' || product === 'brochure') {
     selfTurnCheckbox.checked = true; 
@@ -459,8 +465,12 @@ function calc() {
     const wasteBlockSheets = platesBlock * WASTE_PER_FORM;
     const totalBlockSheets = cleanBlockSheets + wasteBlockSheets;
 
+    // Округление бумаги до пачек
+    const packsBlock = Math.ceil(totalBlockSheets / SHEETS_PER_PACK);
+    const actualBlockSheets = packsBlock * SHEETS_PER_PACK;
+
     const printCostBlock = cleanBlockSheets * PRINT_PRICES[cBlock];
-    const paperCostBlock = totalBlockSheets * PAPER_PRICE_PER_SHEET[pBlock];
+    const paperCostBlock = actualBlockSheets * PAPER_PRICE_PER_SHEET[pBlock];
     const platesCostBlock = platesBlock * PLATE_PRICE;
 
     // Обложка
@@ -471,8 +481,12 @@ function calc() {
     const wasteCoverSheets = platesCover * WASTE_PER_FORM;
     const totalCoverSheets = cleanCoverSheets + wasteCoverSheets;
 
+    // Округление бумаги до пачек
+    const packsCover = Math.ceil(totalCoverSheets / SHEETS_PER_PACK);
+    const actualCoverSheets = packsCover * SHEETS_PER_PACK;
+
     const printCostCover = cleanCoverSheets * PRINT_PRICES[cCover];
-    const paperCostCover = totalCoverSheets * PAPER_PRICE_PER_SHEET[pCover];
+    const paperCostCover = actualCoverSheets * PAPER_PRICE_PER_SHEET[pCover];
     const lamCostCover = lamCover > 0 ? totalCoverSheets * lamCover : 0;
     const platesCostCover = platesCover * PLATE_PRICE;
 
@@ -493,18 +507,18 @@ function calc() {
            row('Листов А2 на блок (чистых)', fmt(cleanBlockSheets) + ' шт', `${sheetsPerCopy} л. × ${qty} экз.`) +
            row('Бумага на приладку (блок)', fmt(wasteBlockSheets) + ' шт') +
            row('Печать блока', fmt(printCostBlock) + ' ₽', `${cleanBlockSheets} отт. × ${PRINT_PRICES[cBlock]} ₽`) +
-           row('Бумага блока', fmt(paperCostBlock) + ' ₽', `${totalBlockSheets} лист. × ${PAPER_PRICE_PER_SHEET[pBlock]} ₽`) +
+           row('Бумага блока', fmt(paperCostBlock) + ' ₽', `${packsBlock} пач. × ${SHEETS_PER_PACK} л. × ${PAPER_PRICE_PER_SHEET[pBlock]} ₽`) +
            row('Формы блока', fmt(platesCostBlock) + ' ₽', `${platesBlock} шт × ${PLATE_PRICE} ₽`) +
            
            row('Листов А2 на обложку (чистых)', fmt(cleanCoverSheets) + ' шт') +
            row('Бумага на приладку (обложка)', fmt(wasteCoverSheets) + ' шт') +
            row('Печать обложки', fmt(printCostCover) + ' ₽', `${cleanCoverSheets} отт. × ${PRINT_PRICES[cCover]} ₽`) +
-           row('Бумага обложки', fmt(paperCostCover) + ' ₽', `${totalCoverSheets} лист. × ${PAPER_PRICE_PER_SHEET[pCover]} ₽`) +
+           row('Бумага обложки', fmt(paperCostCover) + ' ₽', `${packsCover} пач. × ${SHEETS_PER_PACK} л. × ${PAPER_PRICE_PER_SHEET[pCover]} ₽`) +
            row('Формы обложки', fmt(platesCostCover) + ' ₽', `${platesCover} шт × ${PLATE_PRICE} ₽`) +
-           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽', `${totalCoverSheets} лист. × ${lamCover} ₽`) : '') +
+           (lamCostCover ? row('Ламинация обложки', fmt(lamCostCover) + ' ₽', `${totalCoverSheets} л. × ${lamCover} ₽`) : '') +
            row('Переплет', fmt(bindCost) + ' ₽', `${qty} шт × ${bindPrice} ₽`) +
-           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalBlockSheets + totalCoverSheets} лист. × ${PRICE_CUT} ₽`) : '') +
-           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽', `${totalBlockSheets} лист. × ${PRICE_CREASE} ₽`) : '');
+           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalBlockSheets + totalCoverSheets} л. × ${PRICE_CUT} ₽`) : '') +
+           (creaseCost ? row('Биговка', fmt(creaseCost) + ' ₽', `${totalBlockSheets} л. × ${PRICE_CREASE} ₽`) : '');
 
   } else {
     const format = document.getElementById('leaflet-format').value;
@@ -519,8 +533,12 @@ function calc() {
     const wasteSheets = plates * WASTE_PER_FORM;
     const totalSheets = cleanSheets + wasteSheets;
 
+    // Округление бумаги до пачек
+    const packs = Math.ceil(totalSheets / SHEETS_PER_PACK);
+    const actualSheets = packs * SHEETS_PER_PACK;
+
     const printCost = cleanSheets * PRINT_PRICES[color];
-    const paperCost = totalSheets * PAPER_PRICE_PER_SHEET[paper];
+    const paperCost = actualSheets * PAPER_PRICE_PER_SHEET[paper];
     const platesCost = plates * PLATE_PRICE;
     const cutCost = isCut ? totalSheets * PRICE_CUT : 0;
     const creaseCost = isCrease ? totalSheets * PRICE_CREASE : 0;
@@ -534,10 +552,10 @@ function calc() {
            row('Листов А2 чистых', fmt(cleanSheets) + ' шт') +
            row('Бумага на приладку', fmt(wasteSheets) + ' шт') +
            row('Печать (работа)', fmt(printCost) + ' ₽', `${cleanSheets} отт. × ${PRINT_PRICES[color]} ₽`) +
-           row('Бумага', fmt(paperCost) + ' ₽', `${totalSheets} лист. × ${PAPER_PRICE_PER_SHEET[paper]} ₽`) +
+           row('Бумага (с пачками)', fmt(paperCost) + ' ₽', `${packs} пач. × ${SHEETS_PER_PACK} л. × ${PAPER_PRICE_PER_SHEET[paper]} ₽`) +
            row('Печатные формы', fmt(platesCost) + ' ₽', `${plates} шт × ${PLATE_PRICE} ₽`) +
-           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalSheets} лист. × ${PRICE_CUT} ₽`) : '') +
-           (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost) + ' ₽', `${totalSheets} лист. × ${PRICE_CREASE} ₽`) : '');
+           (cutCost ? row('Резка', fmt(cutCost) + ' ₽', `${totalSheets} л. × ${PRICE_CUT} ₽`) : '') +
+           (creaseCost ? row('Биговка/Фальцовка', fmt(creaseCost) + ' ₽', `${totalSheets} л. × ${PRICE_CREASE} ₽`) : '');
   }
 
   total = Math.round(total / 10) * 10;
